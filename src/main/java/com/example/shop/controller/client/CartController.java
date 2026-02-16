@@ -42,7 +42,8 @@ public class CartController {
 
         double totalPrice = 0;
         for (CartItem item : cartItems) {
-            totalPrice += item.getPrice() * item.getQuantity();
+            // SỬA: Tính tổng tiền theo GIÁ KHUYẾN MÃI (DiscountedPrice) thay vì giá gốc
+            totalPrice += item.getProduct().getDiscountedPrice() * item.getQuantity();
         }
 
         model.addAttribute("cartItems", cartItems);
@@ -52,34 +53,26 @@ public class CartController {
         return "client/cart/show";
     }
 
-    // Thêm sản phẩm vào giỏ hàng
     @PostMapping("/add-product-to-cart/{id}")
     public String addProductToCart(@PathVariable long id,
             @RequestParam("quantity") long quantity,
-            // ĐÃ XÓA: @RequestParam("colorId") long colorId,
             HttpServletRequest request) {
-
         HttpSession session = request.getSession(true);
         String email = (String) session.getAttribute("email");
-
-        // ĐÃ XÓA: tham số colorId trong lời gọi hàm
         this.productService.handleAddProductToCart(email, id, session, quantity);
-
         return "redirect:" + request.getHeader("Referer");
     }
 
-    // Cập nhật số lượng
     @PostMapping("/update-cart-quantity")
     public String updateCartQuantity(@RequestParam("cartItemId") long cartItemId,
             @RequestParam("action") String action,
-            @RequestParam("quantity") long quantity,
+            @RequestParam("quantity") long quantity, // Tham số này cần input có name="quantity" ở JSP
             HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         this.productService.handleUpdateCartQuantity(cartItemId, action, session);
         return "redirect:/cart";
     }
 
-    // Xóa item
     @GetMapping("/delete-cart-item/{id}")
     public String deleteCartItem(@PathVariable long id, HttpServletRequest request) {
         HttpSession session = request.getSession(false);
@@ -87,7 +80,6 @@ public class CartController {
         return "redirect:/cart";
     }
 
-    // Xóa nhiều item
     @GetMapping("/delete-multiple-cart-items")
     public String deleteMultipleCartItems(@RequestParam("ids") List<Long> ids, HttpServletRequest request) {
         HttpSession session = request.getSession(false);

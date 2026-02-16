@@ -52,17 +52,6 @@
                         height: 1.2em;
                         cursor: pointer;
                     }
-
-                    /* Style cho nhãn màu sắc */
-                    .color-tag {
-                        font-size: 0.8rem;
-                        color: #666;
-                        background: #f0f0f0;
-                        padding: 2px 8px;
-                        border-radius: 4px;
-                        display: inline-block;
-                        margin-top: 5px;
-                    }
                 </style>
             </head>
 
@@ -72,12 +61,9 @@
                 <div class="container mt-5 pb-5">
                     <nav aria-label="breadcrumb" class="mb-4">
                         <ol class="breadcrumb mb-0">
-                            <li class="breadcrumb-item">
-                                <a href="/" class="text-decoration-none text-muted">Trang chủ</a>
-                            </li>
-                            <li class="breadcrumb-item active text-primary" aria-current="page">
-                                Giỏ hàng
-                            </li>
+                            <li class="breadcrumb-item"><a href="/" class="text-decoration-none text-muted">Trang
+                                    chủ</a></li>
+                            <li class="breadcrumb-item active text-primary" aria-current="page">Giỏ hàng</li>
                         </ol>
                     </nav>
                     <h3 class="fw-bold mb-5 border-start border-primary border-4 ps-3">GIỎ HÀNG CỦA BẠN</h3>
@@ -113,7 +99,7 @@
                                             <div class="col-md-1 text-center">
                                                 <input class="form-check-input item-checkbox" type="checkbox"
                                                     name="selectedItems" value="${item.id}"
-                                                    data-price="${item.price * item.quantity}"
+                                                    data-price="${item.product.discountedPrice * item.quantity}"
                                                     onclick="updateTotalSummary()">
                                             </div>
 
@@ -127,19 +113,34 @@
                                             <div class="col-md-4">
                                                 <h6 class="fw-bold mb-1">${item.product.name}</h6>
 
-                                                <c:if test="${not empty item.productColor}">
-                                                    <div class="color-tag">
-                                                        <i class="fas fa-palette me-1"></i> Phân loại:
-                                                        <strong>${item.productColor.colorName}</strong>
-                                                    </div>
-                                                </c:if>
-
                                                 <div class="mt-2">
-                                                    <span class="text-danger fw-bold">
-                                                        <fmt:formatNumber value="${item.price}" type="currency"
-                                                            currencySymbol="đ" />
-                                                    </span>
+                                                    <c:choose>
+                                                        <c:when test="${item.product.onSale}">
+                                                            <span class="text-danger fw-bold">
+                                                                <%-- SỬA: maxFractionDigits="2" để giữ số lẻ --%>
+                                                                    <fmt:formatNumber
+                                                                        value="${item.product.discountedPrice}"
+                                                                        type="currency" currencySymbol="đ"
+                                                                        maxFractionDigits="2" />
+                                                            </span>
+                                                            <span
+                                                                class="text-muted text-decoration-line-through small ms-2">
+                                                                <fmt:formatNumber value="${item.product.price}"
+                                                                    type="currency" currencySymbol="đ"
+                                                                    maxFractionDigits="2" />
+                                                            </span>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span class="text-danger fw-bold">
+                                                                <fmt:formatNumber value="${item.product.price}"
+                                                                    type="currency" currencySymbol="đ"
+                                                                    maxFractionDigits="2" />
+                                                            </span>
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </div>
+                                                <div class="small text-muted mt-1">Kho: <span
+                                                        class="fw-bold">${item.product.quantity}</span></div>
                                             </div>
 
                                             <div class="col-md-4">
@@ -149,12 +150,13 @@
                                                         <input type="hidden" name="${_csrf.parameterName}"
                                                             value="${_csrf.token}" />
                                                         <input type="hidden" name="cartItemId" value="${item.id}">
+
                                                         <div class="input-group border rounded-pill overflow-hidden bg-white"
                                                             style="width: 110px;">
                                                             <button
                                                                 class="btn btn-link text-dark text-decoration-none fw-bold"
                                                                 type="submit" name="action" value="minus">-</button>
-                                                            <input type="text"
+                                                            <input type="text" name="quantity"
                                                                 class="form-control border-0 text-center fw-bold bg-transparent"
                                                                 value="${item.quantity}" readonly>
                                                             <button
@@ -162,17 +164,20 @@
                                                                 type="submit" name="action" value="plus">+</button>
                                                         </div>
                                                     </form>
+
                                                     <span class="text-danger fw-bold fs-5">
-                                                        <fmt:formatNumber value="${item.price * item.quantity}"
-                                                            type="currency" currencySymbol="đ" />
+                                                        <%-- SỬA: maxFractionDigits="2" --%>
+                                                            <fmt:formatNumber
+                                                                value="${item.product.discountedPrice * item.quantity}"
+                                                                type="currency" currencySymbol="đ"
+                                                                maxFractionDigits="2" />
                                                     </span>
                                                 </div>
                                             </div>
 
                                             <div class="col-md-1 text-end">
                                                 <a href="/delete-cart-item/${item.id}"
-                                                    class="text-muted text-decoration-none"
-                                                    onclick="return confirm('Xóa sản phẩm này?')">
+                                                    class="text-muted text-decoration-none">
                                                     <i class="far fa-trash-alt fs-5"></i>
                                                 </a>
                                             </div>
@@ -211,8 +216,14 @@
                 <jsp:include page="../layout/footer.jsp" />
 
                 <script>
+                    // SỬA: Cấu hình formatter để KHÔNG LÀM TRÒN và hiển thị tối đa 2 số thập phân
                     const formatCurrency = (amount) => {
-                        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+                        return new Intl.NumberFormat('vi-VN', {
+                            style: 'currency',
+                            currency: 'VND',
+                            minimumFractionDigits: 0, // Nếu là số chẵn thì không hiện .00
+                            maximumFractionDigits: 2  // Tối đa 2 số lẻ
+                        }).format(amount);
                     };
 
                     function updateTotalSummary() {
@@ -224,6 +235,7 @@
                             total += parseFloat(cb.getAttribute('data-price'));
                         });
 
+                        // Hiển thị giá không làm tròn
                         document.getElementById('totalDisplay').innerText = formatCurrency(total);
                         document.getElementById('totalFinal').innerText = formatCurrency(total);
                         btnCheckout.disabled = selectedCheckboxes.length === 0;
@@ -241,9 +253,7 @@
                             alert("Vui lòng chọn ít nhất một sản phẩm để xóa!");
                             return;
                         }
-                        if (confirm("Xóa các sản phẩm đã chọn?")) {
-                            window.location.href = '/delete-multiple-cart-items?ids=' + selectedIds.join(',');
-                        }
+                        window.location.href = '/delete-multiple-cart-items?ids=' + selectedIds.join(',');
                     }
 
                     function handleCheckout() {

@@ -346,36 +346,29 @@
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h4 class="fw-bold mb-0" id="product-section-title">DANH SÁCH SẢN PHẨM</h4>
 
-                        <%--=====SỬA LỖI NÚT LỌC TẠI ĐÂY=====--%>
-                            <div class="sort-options">
-                                <%-- Bước 1: Lấy categoryId từ URL hoặc Attribute --%>
-                                    <c:set var="currentCatId" value="${param.categoryId}" />
-                                    <c:if test="${empty currentCatId}">
-                                        <c:set var="currentCatId" value="${categoryId}" />
-                                    </c:if>
+                        <div class="sort-options">
+                            <c:set var="currentCatId" value="${param.categoryId}" />
+                            <c:if test="${empty currentCatId}">
+                                <c:set var="currentCatId" value="${categoryId}" />
+                            </c:if>
 
-                                    <%-- Bước 2: Tạo chuỗi tham số phụ (giữ lại category và search) --%>
-                                        <c:set var="extraParams" value="" />
-                                        <c:if test="${not empty currentCatId}">
-                                            <c:set var="extraParams"
-                                                value="${extraParams}&categoryId=${currentCatId}" />
-                                        </c:if>
-                                        <c:if test="${not empty param.search}">
-                                            <c:set var="extraParams" value="${extraParams}&search=${param.search}" />
-                                        </c:if>
+                            <c:set var="extraParams" value="" />
+                            <c:if test="${not empty currentCatId}">
+                                <c:set var="extraParams" value="${extraParams}&categoryId=${currentCatId}" />
+                            </c:if>
+                            <c:if test="${not empty param.search}">
+                                <c:set var="extraParams" value="${extraParams}&search=${param.search}" />
+                            </c:if>
 
-                                        <%-- Bước 3: Nút lọc dùng đường dẫn tương đối (?) --%>
-                                            <a href="?sort=price-asc${extraParams}#danh-sach-san-pham"
-                                                class="btn-sort ${param.sort == 'price-asc' ? 'active' : ''}">
-                                                <i class="fas fa-sort-amount-down-alt"></i> Giá Thấp - Cao
-                                            </a>
-                                            <a href="?sort=price-desc${extraParams}#danh-sach-san-pham"
-                                                class="btn-sort ${param.sort == 'price-desc' ? 'active' : ''}">
-                                                <i class="fas fa-sort-amount-down"></i> Giá Cao - Thấp
-                                            </a>
-                            </div>
-                            <%--=====KẾT THÚC SỬA LỖI=====--%>
-
+                            <a href="?sort=price-asc${extraParams}#danh-sach-san-pham"
+                                class="btn-sort ${param.sort == 'price-asc' ? 'active' : ''}">
+                                <i class="fas fa-sort-amount-down-alt"></i> Giá Thấp - Cao
+                            </a>
+                            <a href="?sort=price-desc${extraParams}#danh-sach-san-pham"
+                                class="btn-sort ${param.sort == 'price-desc' ? 'active' : ''}">
+                                <i class="fas fa-sort-amount-down"></i> Giá Cao - Thấp
+                            </a>
+                        </div>
                     </div>
 
                     <c:choose>
@@ -404,7 +397,7 @@
                                 <c:otherwise>
                                     <div id="product-list" class="row row-cols-1 row-cols-md-3 row-cols-lg-5 g-4">
 
-                                        <%-- PHẦN 1: LOOP CÁC SẢN PHẨM CÒN HÀNG (quantity> 0) TRƯỚC --%>
+                                        <%-- PHẦN 1: LOOP CÁC SẢN PHẨM CÒN HÀNG --%>
                                             <c:forEach var="p" items="${products}">
                                                 <c:if test="${p.active && p.quantity > 0}">
                                                     <div class="col product-item">
@@ -434,10 +427,47 @@
                                                                                     có đánh giá</span></c:otherwise>
                                                                         </c:choose>
                                                                     </div>
-                                                                    <p class="product-price mb-0">
-                                                                        <fmt:formatNumber value="${p.price}"
-                                                                            type="currency" currencySymbol="đ" />
-                                                                    </p>
+
+                                                                    <%--===KHU VỰC HIỂN THỊ GIÁ CÓ KHUYẾN MÃI===--%>
+                                                                        <div class="mt-auto">
+                                                                            <c:choose>
+                                                                                <c:when test="${p.onSale}">
+                                                                                    <p
+                                                                                        class="product-price mb-0 fw-bold text-danger">
+                                                                                        <fmt:formatNumber
+                                                                                            value="${p.discountedPrice}"
+                                                                                            type="currency"
+                                                                                            currencySymbol="đ" />
+                                                                                    </p>
+                                                                                    <div class="d-flex align-items-center justify-content-center gap-2"
+                                                                                        style="font-size: 0.85rem;">
+                                                                                        <span
+                                                                                            class="text-muted text-decoration-line-through">
+                                                                                            <fmt:formatNumber
+                                                                                                value="${p.price}"
+                                                                                                type="currency"
+                                                                                                currencySymbol="đ" />
+                                                                                        </span>
+                                                                                        <span
+                                                                                            class="badge bg-danger">-${p.discountPercentage}%</span>
+                                                                                    </div>
+                                                                                </c:when>
+                                                                                <c:otherwise>
+                                                                                    <p class="product-price mb-0">
+                                                                                        <fmt:formatNumber
+                                                                                            value="${p.price}"
+                                                                                            type="currency"
+                                                                                            currencySymbol="đ" />
+                                                                                    </p>
+                                                                                    <div
+                                                                                        style="font-size: 0.85rem; visibility: hidden;">
+                                                                                        <span>Placeholder</span>
+                                                                                    </div>
+                                                                                </c:otherwise>
+                                                                            </c:choose>
+                                                                        </div>
+                                                                        <%--===KẾT THÚC KHU VỰC GIÁ===--%>
+
                                                                 </div>
                                                             </a>
                                                             <div class="card-footer bg-white border-0 pb-3 text-center">
@@ -450,7 +480,7 @@
                                                 </c:if>
                                             </c:forEach>
 
-                                            <%-- PHẦN 2: LOOP CÁC SẢN PHẨM HẾT HÀNG (quantity <=0) SAU --%>
+                                            <%-- PHẦN 2: LOOP CÁC SẢN PHẨM HẾT HÀNG --%>
                                                 <c:forEach var="p" items="${products}">
                                                     <c:if test="${p.active && p.quantity <= 0}">
                                                         <div class="col product-item">
@@ -482,10 +512,48 @@
                                                                                         giá</span></c:otherwise>
                                                                             </c:choose>
                                                                         </div>
-                                                                        <p class="product-price mb-0">
-                                                                            <fmt:formatNumber value="${p.price}"
-                                                                                type="currency" currencySymbol="đ" />
-                                                                        </p>
+
+                                                                        <%--===KHU VỰC HIỂN THỊ GIÁ CÓ KHUYẾN MÃI (Sản
+                                                                            phẩm hết hàng)===--%>
+                                                                            <div class="mt-auto">
+                                                                                <c:choose>
+                                                                                    <c:when test="${p.onSale}">
+                                                                                        <p
+                                                                                            class="product-price mb-0 fw-bold text-danger">
+                                                                                            <fmt:formatNumber
+                                                                                                value="${p.discountedPrice}"
+                                                                                                type="currency"
+                                                                                                currencySymbol="đ" />
+                                                                                        </p>
+                                                                                        <div class="d-flex align-items-center justify-content-center gap-2"
+                                                                                            style="font-size: 0.85rem;">
+                                                                                            <span
+                                                                                                class="text-muted text-decoration-line-through">
+                                                                                                <fmt:formatNumber
+                                                                                                    value="${p.price}"
+                                                                                                    type="currency"
+                                                                                                    currencySymbol="đ" />
+                                                                                            </span>
+                                                                                            <span
+                                                                                                class="badge bg-danger">-${p.discountPercentage}%</span>
+                                                                                        </div>
+                                                                                    </c:when>
+                                                                                    <c:otherwise>
+                                                                                        <p class="product-price mb-0">
+                                                                                            <fmt:formatNumber
+                                                                                                value="${p.price}"
+                                                                                                type="currency"
+                                                                                                currencySymbol="đ" />
+                                                                                        </p>
+                                                                                        <div
+                                                                                            style="font-size: 0.85rem; visibility: hidden;">
+                                                                                            <span>Placeholder</span>
+                                                                                        </div>
+                                                                                    </c:otherwise>
+                                                                                </c:choose>
+                                                                            </div>
+                                                                            <%--===KẾT THÚC===--%>
+
                                                                     </div>
                                                                 </a>
                                                                 <div
@@ -523,7 +591,7 @@
                         // --- 1. CẤU HÌNH SỐ LƯỢNG SẢN PHẨM HIỂN THỊ MẶC ĐỊNH LÀ 15 ---
                         const ITEMS_PER_PAGE = 15;
 
-                        // Slider Best Seller (Giữ nguyên)
+                        // Slider Best Seller
                         const container = document.getElementById('categoryList');
                         if (container) {
                             document.getElementById('slideLeft').onclick = () => container.scrollBy({ left: -400, behavior: 'smooth' });
@@ -535,37 +603,27 @@
                         const loadMoreBtn = document.getElementById('loadMoreBtn');
                         const collapseBtn = document.getElementById('collapseBtn');
 
-                        // Log ra console để kiểm tra
                         console.log("Tổng số sản phẩm tìm thấy:", productItems.length);
 
-                        // Chỉ hiện nút nếu số sản phẩm thực tế lớn hơn 15
                         if (loadMoreBtn && productItems.length > ITEMS_PER_PAGE) {
-
-                            // 1. Hiện nút Xem thêm
                             loadMoreBtn.style.display = 'inline-block';
 
-                            // 2. Ẩn các sản phẩm từ vị trí thứ 15 trở đi (index bắt đầu từ 0 nên là từ index 15)
                             for (let i = ITEMS_PER_PAGE; i < productItems.length; i++) {
                                 productItems[i].classList.add('d-none-custom');
                             }
 
-                            // 3. Sự kiện nút Xem Thêm
                             loadMoreBtn.onclick = function () {
-                                productItems.forEach(item => item.classList.remove('d-none-custom')); // Hiện tất cả
-                                this.style.display = 'none'; // Ẩn nút xem thêm
-                                collapseBtn.style.display = 'inline-block'; // Hiện nút thu gọn
+                                productItems.forEach(item => item.classList.remove('d-none-custom'));
+                                this.style.display = 'none';
+                                collapseBtn.style.display = 'inline-block';
                             };
 
-                            // 4. Sự kiện nút Thu Gọn
                             collapseBtn.onclick = function () {
-                                // Ẩn lại các sản phẩm từ vị trí 15 trở đi
                                 for (let i = ITEMS_PER_PAGE; i < productItems.length; i++) {
                                     productItems[i].classList.add('d-none-custom');
                                 }
-                                this.style.display = 'none'; // Ẩn nút thu gọn
-                                loadMoreBtn.style.display = 'inline-block'; // Hiện nút xem thêm
-
-                                // Cuộn trang lên lại tiêu đề
+                                this.style.display = 'none';
+                                loadMoreBtn.style.display = 'inline-block';
                                 const title = document.getElementById('product-section-title');
                                 if (title) title.scrollIntoView({ behavior: 'smooth' });
                             };

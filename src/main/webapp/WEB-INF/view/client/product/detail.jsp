@@ -232,10 +232,31 @@
                                 <div class="price-section mb-3 border-top pt-3">
                                     <c:choose>
                                         <c:when test="${product.active}">
-                                            <h2 class="text-danger fw-bold d-inline-block mb-0">
-                                                <fmt:formatNumber value="${product.price}" type="currency"
-                                                    currencySymbol="đ" />
-                                            </h2>
+                                            <c:choose>
+                                                <%-- Trường hợp có giảm giá --%>
+                                                    <c:when test="${product.onSale}">
+                                                        <h2 class="text-danger fw-bold d-inline-block mb-0 me-2">
+                                                            <fmt:formatNumber value="${product.discountedPrice}"
+                                                                type="currency" currencySymbol="đ" />
+                                                        </h2>
+                                                        <div class="d-inline-block">
+                                                            <span
+                                                                class="text-muted text-decoration-line-through fs-6 me-1">
+                                                                <fmt:formatNumber value="${product.price}"
+                                                                    type="currency" currencySymbol="đ" />
+                                                            </span>
+                                                            <span
+                                                                class="badge bg-danger">-${product.discountPercentage}%</span>
+                                                        </div>
+                                                    </c:when>
+                                                    <%-- Trường hợp giá thường --%>
+                                                        <c:otherwise>
+                                                            <h2 class="text-danger fw-bold d-inline-block mb-0">
+                                                                <fmt:formatNumber value="${product.price}"
+                                                                    type="currency" currencySymbol="đ" />
+                                                            </h2>
+                                                        </c:otherwise>
+                                            </c:choose>
                                         </c:when>
                                         <c:otherwise>
                                             <h3 class="text-danger fw-bold d-inline-block mb-0 text-uppercase">
@@ -244,7 +265,6 @@
                                         </c:otherwise>
                                     </c:choose>
                                 </div>
-
                                 <div class="mb-4 p-3 bg-light rounded border-start border-primary border-4">
                                     <h6 class="fw-bold small text-uppercase mb-2">Đặc điểm nổi bật:</h6>
                                     <div class="detail-content text-secondary short-desc-content">
@@ -258,10 +278,9 @@
                                     <div class="mb-4">
                                         <div class="d-flex justify-content-between align-items-center mb-2">
                                             <label class="fw-bold small text-uppercase">Số lượng:</label>
-                                            <span id="stock-display" class="text-secondary small">
+                                            <span id="stock-display" class="text-secondary small fw-bold">
                                             </span>
                                         </div>
-
                                         <div class="d-flex gap-2 align-items-center">
                                             <div class="input-group input-group-small">
                                                 <button class="btn btn-outline-secondary" type="button"
@@ -463,8 +482,9 @@
                         element.classList.add('active');
                     }
 
+                    // ===== SỬA: LẤY SỐ LƯỢNG TRỰC TIẾP =====
                     // Lấy số lượng tồn kho trực tiếp từ Product (vì không còn Color)
-                    // Lưu ý: Đảm bảo biến ${product.quantity} tồn tại trong model backend
+                    // Lưu ý: Biến ${product.quantity} được lấy từ Controller
                     const currentStock = ${ product.quantity };
 
                     function changeQty(amt) {
@@ -494,18 +514,21 @@
 
                         if (isProductActive) {
                             if (currentStock > 0) {
-                                stockDisplay.innerText = `(Còn lại: \${currentStock} sản phẩm)`;
+                                stockDisplay.innerText = `Kho: \${currentStock}`;
+                                stockDisplay.classList.add('text-success');
                             } else {
-                                stockDisplay.innerText = "(Tạm hết hàng)";
+                                stockDisplay.innerText = "Hết hàng";
+                                stockDisplay.classList.add('text-danger');
                                 if (btnSubmit) btnSubmit.disabled = true;
                                 if (inputQty) inputQty.disabled = true;
                             }
                         } else {
-                            stockDisplay.innerText = "(Sản phẩm này đã ngừng bán)";
+                            stockDisplay.innerText = "(Ngừng kinh doanh)";
                             if (btnSubmit) btnSubmit.disabled = true;
                             if (inputQty) inputQty.disabled = true;
                         }
                     });
+
                 </script>
             </body>
 
