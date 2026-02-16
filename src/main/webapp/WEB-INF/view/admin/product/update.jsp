@@ -7,8 +7,10 @@
 
             <head>
                 <meta charset="UTF-8">
+                <title>Cập nhật sản phẩm</title>
                 <jsp:include page="../layout/header.jsp" />
                 <style>
+                    /* (Copy style từ create.jsp) */
                     .gallery-wrap {
                         display: flex;
                         flex-wrap: wrap;
@@ -23,6 +25,7 @@
                         border-radius: 8px;
                         overflow: hidden;
                         background: #fff;
+                        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
                     }
 
                     .img-card img {
@@ -34,19 +37,20 @@
 
                     .btn-delete-img {
                         position: absolute;
-                        top: 0;
-                        right: 0;
-                        background: rgba(255, 0, 0, 0.8);
+                        top: 2px;
+                        right: 2px;
+                        background: rgba(220, 53, 69, 0.9);
                         color: white;
                         border: none;
-                        width: 20px;
-                        height: 20px;
-                        font-size: 10px;
+                        width: 22px;
+                        height: 22px;
+                        border-radius: 50%;
+                        font-size: 11px;
+                        cursor: pointer;
                         display: flex;
                         align-items: center;
                         justify-content: center;
                         z-index: 10;
-                        cursor: pointer;
                     }
 
                     .upload-btn-wrapper {
@@ -59,7 +63,7 @@
                         justify-content: center;
                         cursor: pointer;
                         color: #0d6efd;
-                        background: #f8f9fa;
+                        background-color: #f8f9fa;
                     }
 
                     #imageFiles {
@@ -75,6 +79,13 @@
                         background-color: #f8f9fa;
                     }
 
+                    .btn-remove-item {
+                        color: #dc3545;
+                        border: none;
+                        background: transparent;
+                        cursor: pointer;
+                    }
+
                     .cke_notification_warning {
                         display: none !important;
                     }
@@ -88,7 +99,7 @@
                     </jsp:include>
                     <div id="page-content-wrapper">
                         <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom px-4 py-3">
-                            <h4 class="mb-0 fw-bold">Cập nhật Sản phẩm</h4>
+                            <h4 class="mb-0 text-dark fw-bold text-uppercase">Cập nhật Sản phẩm</h4>
                         </nav>
                         <div class="container-fluid px-4 py-4">
                             <form:form action="/admin/product/update" method="POST" modelAttribute="newProduct"
@@ -100,17 +111,25 @@
                                             <div class="card-body p-4">
                                                 <h6 class="fw-bold mb-3 text-primary text-uppercase small">Thông tin
                                                     chung</h6>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-bold small">Tên sản phẩm</label>
+                                                    <form:input path="name" class="form-control" required="true" />
+                                                </div>
+
                                                 <div class="row mb-3">
-                                                    <div class="col-md-8"><label class="form-label fw-bold small">Tên
-                                                            sản phẩm</label>
-                                                        <form:input path="name" class="form-control" required="true" />
-                                                    </div>
-                                                    <div class="col-md-4"><label class="form-label fw-bold small">Giá
-                                                            bán</label>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label fw-bold small">Giá bán (VNĐ)</label>
                                                         <form:input path="price" type="number" class="form-control"
-                                                            required="true" />
+                                                            required="true" min="0" />
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label fw-bold small">Số lượng kho</label>
+                                                        <form:input path="quantity" type="number" class="form-control"
+                                                            required="true" min="0" />
                                                     </div>
                                                 </div>
+
                                                 <div class="mb-3">
                                                     <label class="form-label fw-bold small mb-2">Hình ảnh</label>
                                                     <div class="gallery-wrap" id="gallery">
@@ -130,32 +149,35 @@
                                                         accept="image/*" multiple onchange="handleFileSelect(this)">
                                                     <div id="deleteContainer"></div>
                                                 </div>
+
                                                 <div class="row mb-3">
-                                                    <div class="col-md-6"><label class="form-label fw-bold small">Danh
-                                                            mục</label>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label fw-bold small">Danh mục</label>
                                                         <form:select path="category.id" class="form-select">
                                                             <form:options items="${categories}" itemValue="id"
                                                                 itemLabel="name" />
                                                         </form:select>
                                                     </div>
-                                                    <div class="col-md-6"><label
-                                                            class="form-label fw-bold small">Hãng</label>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label fw-bold small">Hãng sản xuất</label>
                                                         <form:input path="factory" class="form-control" />
                                                     </div>
                                                 </div>
-                                                <div class="mb-3"><label class="form-label fw-bold small">Mô tả
-                                                        ngắn</label>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-bold small">Mô tả ngắn</label>
                                                     <form:textarea path="shortDesc" id="shortDesc" class="form-control"
                                                         rows="2" />
                                                 </div>
-                                                <div class="mb-0"><label class="form-label fw-bold small">Chi
-                                                        tiết</label>
+                                                <div class="mb-0">
+                                                    <label class="form-label fw-bold small">Chi tiết sản phẩm</label>
                                                     <form:textarea path="detailDesc" id="detailDesc"
                                                         class="form-control" rows="5" />
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="col-lg-5">
                                         <div class="card shadow-sm border-0 mb-4">
                                             <div
@@ -192,8 +214,9 @@
                                         <div class="card shadow-sm border-0">
                                             <div class="card-footer bg-white border-0 p-3">
                                                 <button type="submit"
-                                                    class="btn btn-warning w-100 py-2 fw-bold text-white shadow-sm">LƯU
-                                                    THAY ĐỔI</button>
+                                                    class="btn btn-warning w-100 py-2 fw-bold text-white shadow-sm">
+                                                    <i class="fas fa-save me-2"></i>LƯU THAY ĐỔI
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -202,12 +225,14 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="modal fade" id="previewModal" tabindex="-1">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content bg-transparent border-0 text-center"><img id="modalImg" src=""
                                 class="img-fluid rounded shadow"></div>
                     </div>
                 </div>
+
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
                 <script src="https://cdn.ckeditor.com/4.22.1/full/ckeditor.js"></script>
                 <script>
@@ -216,8 +241,7 @@
                     function removeOldImage(id) { if (confirm('Xóa ảnh?')) { document.getElementById('old-img-' + id).remove(); const input = document.createElement('input'); input.type = 'hidden'; input.name = 'deleteImageIds'; input.value = id; document.getElementById('deleteContainer').appendChild(input); } }
                     const dt = new DataTransfer();
                     function handleFileSelect(input) {
-                        const files = input.files;
-                        const gallery = document.getElementById('gallery');
+                        const files = input.files; const gallery = document.getElementById('gallery');
                         Array.from(files).forEach(file => {
                             dt.items.add(file); const reader = new FileReader();
                             reader.onload = e => {
@@ -232,9 +256,6 @@
                     function removeFileFromDT(f) { const newDt = new DataTransfer(); for (let i = 0; i < dt.files.length; i++) { if (dt.files[i] !== f) newDt.items.add(dt.files[i]); } dt.items.clear(); for (let i = 0; i < newDt.files.length; i++) dt.items.add(newDt.files[i]); document.getElementById('imageFiles').files = dt.files; }
                     function removeItem(btn) { btn.closest('.dynamic-row').remove(); }
                     document.getElementById('btnAddSpec').addEventListener('click', () => { document.getElementById('specs-container').insertAdjacentHTML('beforeend', `<div class="row g-2 mb-2 dynamic-row align-items-center"><div class="col-5"><input type="text" name="specNames" class="form-control form-control-sm" placeholder="Tên"></div><div class="col-6"><input type="text" name="specValues" class="form-control form-control-sm" placeholder="Giá trị"></div><div class="col-1 text-center"><button type="button" class="text-danger border-0 bg-transparent" onclick="removeItem(this)"><i class="fas fa-trash-alt"></i></button></div></div>`); });
-
-                    // ĐÃ XÓA: Event listener cho btnAddColor
-
                     function addMultipleSpecs(c) { for (let i = 0; i < c; i++) document.getElementById('btnAddSpec').click(); }
                     function viewImage(s) { document.getElementById('modalImg').src = s; new bootstrap.Modal(document.getElementById('previewModal')).show(); }
                 </script>

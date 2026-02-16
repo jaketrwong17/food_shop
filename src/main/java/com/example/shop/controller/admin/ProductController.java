@@ -1,7 +1,6 @@
 package com.example.shop.controller.admin;
 
 import com.example.shop.domain.Product;
-// ĐÃ XÓA: import com.example.shop.domain.ProductColor;
 import com.example.shop.domain.ProductImage;
 import com.example.shop.domain.ProductSpec;
 import com.example.shop.service.CategoryService;
@@ -57,12 +56,9 @@ public class ProductController {
     public String createProduct(@ModelAttribute("newProduct") Product product,
             @RequestParam("imageFiles") MultipartFile[] files,
             @RequestParam(value = "specNames", required = false) String[] specNames,
-            @RequestParam(value = "specValues", required = false) String[] specValues
-    // ĐÃ XÓA: tham số colorNames và colorQuantities
-    ) {
+            @RequestParam(value = "specValues", required = false) String[] specValues) {
         saveImages(product, files);
         handleSpecs(product, specNames, specValues);
-        // ĐÃ XÓA: handleColors(product, colorNames, colorQuantities);
 
         productService.handleSaveProduct(product);
         return "redirect:/admin/product";
@@ -81,7 +77,6 @@ public class ProductController {
             @RequestParam("imageFiles") MultipartFile[] files,
             @RequestParam(value = "specNames", required = false) String[] specNames,
             @RequestParam(value = "specValues", required = false) String[] specValues,
-            // ĐÃ XÓA: tham số colorNames và colorQuantities
             @RequestParam(value = "deleteImageIds", required = false) List<Long> deleteImageIds) {
 
         Product currentProduct = productService.fetchProductById(product.getId()).get();
@@ -93,6 +88,11 @@ public class ProductController {
 
         currentProduct.setName(product.getName());
         currentProduct.setPrice(product.getPrice());
+
+        // --- THÊM DÒNG NÀY ĐỂ LƯU SỐ LƯỢNG ---
+        currentProduct.setQuantity(product.getQuantity());
+        // --------------------------------------
+
         currentProduct.setCategory(product.getCategory());
         currentProduct.setShortDesc(product.getShortDesc());
         currentProduct.setDetailDesc(product.getDetailDesc());
@@ -101,8 +101,6 @@ public class ProductController {
         // Cập nhật thông số kỹ thuật
         currentProduct.getSpecs().clear();
         handleSpecs(currentProduct, specNames, specValues);
-
-        // ĐÃ XÓA: logic xử lý colors (clear và handleColors)
 
         productService.handleSaveProduct(currentProduct);
         return "redirect:/admin/product";
@@ -133,8 +131,6 @@ public class ProductController {
             }
         }
     }
-
-    // ĐÃ XÓA HOÀN TOÀN HÀM handleColors
 
     private void saveImages(Product product, MultipartFile[] files) {
         if (product.getImages() == null)

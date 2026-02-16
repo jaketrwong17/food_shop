@@ -7,20 +7,16 @@
             <jsp:include page="../layout/header.jsp" />
 
             <style>
-                /* ... (Giữ nguyên các style cũ của bạn) ... */
-
-                /* Thêm style mới cho phần giá nếu cần tinh chỉnh */
+                /* ... (Style cũ của bạn) ... */
                 .price-original {
                     font-size: 0.85rem;
                     color: #6c757d;
-                    /* text-muted */
                     text-decoration: line-through;
                 }
 
                 .price-discount {
                     font-size: 1rem;
                     color: #dc3545;
-                    /* text-danger */
                     font-weight: bold;
                 }
 
@@ -107,6 +103,7 @@
                                                 <th>Ảnh</th>
                                                 <th>Tên sản phẩm</th>
                                                 <th>Giá bán</th>
+                                                <th>Kho</th>
                                                 <th>Danh mục</th>
                                                 <th>Trạng thái</th>
                                                 <th>Hành động</th>
@@ -124,39 +121,40 @@
                                                             </div>
                                                         </c:if>
                                                     </td>
-                                                    <td class="fw-bold text-primary">
-                                                        ${p.name}
-                                                    </td>
+                                                    <td class="fw-bold text-primary">${p.name}</td>
 
                                                     <td>
                                                         <c:choose>
-                                                            <%-- Trường hợp CÓ KHUYẾN MÃI --%>
-                                                                <c:when test="${p.onSale}">
-                                                                    <div class="price-discount">
-                                                                        <fmt:formatNumber value="${p.discountedPrice}"
+                                                            <c:when test="${p.onSale}">
+                                                                <div class="price-discount">
+                                                                    <fmt:formatNumber value="${p.discountedPrice}"
+                                                                        type="currency" currencySymbol="đ" />
+                                                                </div>
+                                                                <div>
+                                                                    <span class="price-original me-1">
+                                                                        <fmt:formatNumber value="${p.price}"
                                                                             type="currency" currencySymbol="đ" />
-                                                                    </div>
-
-                                                                    <div>
-                                                                        <span class="price-original me-1">
-                                                                            <fmt:formatNumber value="${p.price}"
-                                                                                type="currency" currencySymbol="đ" />
-                                                                        </span>
-                                                                        <span class="discount-badge">
-                                                                            -${p.discountPercentage}%
-                                                                        </span>
-                                                                    </div>
-                                                                </c:when>
-
-                                                                <%-- Trường hợp KHÔNG CÓ KHUYẾN MÃI --%>
-                                                                    <c:otherwise>
-                                                                        <div class="text-success fw-bold">
-                                                                            <fmt:formatNumber value="${p.price}"
-                                                                                type="currency" currencySymbol="đ" />
-                                                                        </div>
-                                                                    </c:otherwise>
+                                                                    </span>
+                                                                    <span
+                                                                        class="discount-badge">-${p.discountPercentage}%</span>
+                                                                </div>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <div class="text-success fw-bold">
+                                                                    <fmt:formatNumber value="${p.price}" type="currency"
+                                                                        currencySymbol="đ" />
+                                                                </div>
+                                                            </c:otherwise>
                                                         </c:choose>
                                                     </td>
+
+                                                    <td>
+                                                        <span
+                                                            class="badge ${p.quantity > 0 ? 'bg-info text-dark' : 'bg-danger'}">
+                                                            ${p.quantity}
+                                                        </span>
+                                                    </td>
+
                                                     <td><span class="badge bg-secondary">${p.category.name}</span></td>
                                                     <td>
                                                         <c:choose>
@@ -239,7 +237,6 @@
 
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
                 <script>
-                    // ... (Giữ nguyên script modal ảnh của bạn) ...
                     document.addEventListener("DOMContentLoaded", function () {
                         const imageModalEl = document.getElementById('imageModal');
                         if (imageModalEl) {
