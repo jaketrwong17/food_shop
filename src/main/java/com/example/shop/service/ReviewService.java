@@ -62,4 +62,28 @@ public class ReviewService {
         }
         return false;
     }
+
+    // ==========================================
+    // CÁC HÀM THÊM MỚI CHO CLIENT (SỬA VÀ XÓA CÓ CHECK QUYỀN)
+    // ==========================================
+
+    public void updateReview(long reviewId, String email, String content, int rating) {
+        Review review = reviewRepository.findById(reviewId).orElse(null);
+        // Chỉ cho phép sửa nếu review tồn tại và email người yêu cầu khớp với email tác
+        // giả
+        if (review != null && review.getUser() != null && review.getUser().getEmail().equals(email)) {
+            review.setContent(content);
+            review.setRating(rating);
+            reviewRepository.save(review);
+        }
+    }
+
+    public void deleteReview(long reviewId, String email) {
+        Review review = reviewRepository.findById(reviewId).orElse(null);
+        // Chỉ cho phép xóa nếu review tồn tại và email người yêu cầu khớp với email tác
+        // giả
+        if (review != null && review.getUser() != null && review.getUser().getEmail().equals(email)) {
+            reviewRepository.delete(review);
+        }
+    }
 }

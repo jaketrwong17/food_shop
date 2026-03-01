@@ -9,6 +9,39 @@
                 <title>Thanh toán - 16Home</title>
                 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
                 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+                <style>
+                    /* MÀU CHỦ ĐẠO */
+                    .text-theme {
+                        color: #3c8a2e !important;
+                    }
+
+                    .bg-theme {
+                        background-color: #3c8a2e !important;
+                        color: #fff !important;
+                    }
+
+                    .btn-theme {
+                        background-color: #3c8a2e !important;
+                        color: #fff !important;
+                        border-color: #3c8a2e !important;
+                    }
+
+                    .btn-theme:hover {
+                        background-color: #2d6a22 !important;
+                        color: #fff !important;
+                    }
+
+                    /* Bỏ hiệu ứng xanh dương mặc định của bootstrap form-check */
+                    .form-check-input:checked {
+                        background-color: #3c8a2e;
+                        border-color: #3c8a2e;
+                    }
+
+                    .form-check-input:focus {
+                        box-shadow: 0 0 0 0.25rem rgba(60, 138, 46, 0.25);
+                        border-color: #3c8a2e;
+                    }
+                </style>
             </head>
 
             <body class="bg-light">
@@ -20,7 +53,7 @@
                             <li class="breadcrumb-item">
                                 <a href="/" class="text-decoration-none text-muted">Trang chủ / Giỏ hàng</a>
                             </li>
-                            <li class="breadcrumb-item active text-primary" aria-current="page">
+                            <li class="breadcrumb-item active text-theme" aria-current="page">
                                 Thanh toán
                             </li>
                         </ol>
@@ -85,72 +118,86 @@
                                                         <div>
                                                             <h6 class="my-0 small fw-bold">${item.product.name}</h6>
 
-                                                            <c:if test="${not empty item.productColor}">
-                                                                <small class="text-muted d-block mt-1">
-                                                                    Phân loại: <span
-                                                                        class="text-primary">${item.productColor.colorName}</span>
-                                                                </small>
-                                                            </c:if>
-
                                                             <c:if
                                                                 test="${not empty discountMap and discountMap[item.id] > 0}">
-                                                                <small class="text-success fst-italic">
-                                                                    <i class="fas fa-tag"></i> Giảm:
+                                                                <small class="text-theme fst-italic">
+                                                                    <i class="fas fa-tag"></i> Giảm thêm:
                                                                     <fmt:formatNumber value="${discountMap[item.id]}"
-                                                                        type="currency" currencySymbol="đ" />
+                                                                        type="currency" currencySymbol="đ"
+                                                                        maxFractionDigits="2" />
                                                                 </small>
                                                             </c:if>
                                                         </div>
                                                     </div>
 
                                                     <div class="text-end">
-                                                        <c:set var="itemTotal" value="${item.price * item.quantity}" />
-                                                        <c:if
-                                                            test="${not empty discountMap and discountMap[item.id] > 0}">
-                                                            <div class="text-muted small text-decoration-line-through">
-                                                                <fmt:formatNumber value="${itemTotal}" type="currency"
-                                                                    currencySymbol="đ" />
-                                                            </div>
-                                                            <span class="fw-bold text-success">
-                                                                <fmt:formatNumber
-                                                                    value="${itemTotal - discountMap[item.id]}"
-                                                                    type="currency" currencySymbol="đ" />
-                                                            </span>
-                                                        </c:if>
-                                                        <c:if test="${empty discountMap or discountMap[item.id] == 0}">
-                                                            <span class="text-muted small fw-bold">
-                                                                <fmt:formatNumber value="${itemTotal}" type="currency"
-                                                                    currencySymbol="đ" />
-                                                            </span>
-                                                        </c:if>
+                                                        <c:set var="oldItemTotal"
+                                                            value="${item.product.price * item.quantity}" />
+                                                        <c:set var="newItemTotal"
+                                                            value="${item.product.discountedPrice * item.quantity}" />
+
+                                                        <c:choose>
+                                                            <c:when test="${item.product.onSale}">
+                                                                <div
+                                                                    class="text-muted small text-decoration-line-through">
+                                                                    <fmt:formatNumber value="${oldItemTotal}"
+                                                                        type="currency" currencySymbol="đ"
+                                                                        maxFractionDigits="2" />
+                                                                </div>
+                                                                <div class="fw-bold">
+                                                                    <fmt:formatNumber value="${newItemTotal}"
+                                                                        type="currency" currencySymbol="đ"
+                                                                        maxFractionDigits="2" />
+                                                                </div>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <div class="fw-bold">
+                                                                    <fmt:formatNumber value="${oldItemTotal}"
+                                                                        type="currency" currencySymbol="đ"
+                                                                        maxFractionDigits="2" />
+                                                                </div>
+                                                            </c:otherwise>
+                                                        </c:choose>
                                                     </div>
                                                 </li>
                                             </c:forEach>
                                         </ul>
                                     </div>
 
+                                    <c:set var="realSubtotal" value="0" />
+                                    <c:forEach var="item" items="${displayItems}">
+                                        <c:set var="realSubtotal"
+                                            value="${realSubtotal + (item.product.discountedPrice * item.quantity)}" />
+                                    </c:forEach>
+
+                                    <c:set var="realTotal"
+                                        value="${realSubtotal - (not empty discountAmount ? discountAmount : 0)}" />
+                                    <c:if test="${realTotal < 0}">
+                                        <c:set var="realTotal" value="0" />
+                                    </c:if>
+
                                     <div class="p-4 bg-light border-top">
                                         <div class="input-group mb-3">
                                             <input type="text" class="form-control" id="voucherInput"
                                                 value="${voucherCode}" placeholder="Nhập mã giảm giá">
-                                            <button class="btn btn-outline-primary fw-bold" type="button"
+                                            <button class="btn btn-theme fw-bold" type="button"
                                                 onclick="applyVoucher()">Áp dụng</button>
                                         </div>
 
                                         <div class="d-flex justify-content-between mb-2">
                                             <span class="text-muted">Tạm tính:</span>
                                             <span>
-                                                <fmt:formatNumber value="${originalPrice}" type="currency"
-                                                    currencySymbol="đ" />
+                                                <fmt:formatNumber value="${realSubtotal}" type="currency"
+                                                    currencySymbol="đ" maxFractionDigits="2" />
                                             </span>
                                         </div>
 
                                         <c:if test="${discountAmount > 0}">
-                                            <div class="d-flex justify-content-between mb-2 text-success">
-                                                <span>Giảm giá:</span>
+                                            <div class="d-flex justify-content-between mb-2 text-theme">
+                                                <span>Giảm giá (Voucher):</span>
                                                 <span>-
                                                     <fmt:formatNumber value="${discountAmount}" type="currency"
-                                                        currencySymbol="đ" />
+                                                        currencySymbol="đ" maxFractionDigits="2" />
                                                 </span>
                                             </div>
                                         </c:if>
@@ -158,8 +205,8 @@
                                         <div class="d-flex justify-content-between fw-bold fs-5 border-top pt-2">
                                             <span>Tổng cộng:</span>
                                             <span class="text-danger">
-                                                <fmt:formatNumber value="${totalPrice}" type="currency"
-                                                    currencySymbol="đ" />
+                                                <fmt:formatNumber value="${realTotal}" type="currency"
+                                                    currencySymbol="đ" maxFractionDigits="2" />
                                             </span>
                                         </div>
                                     </div>
@@ -170,7 +217,7 @@
                                             <input class="form-check-input" type="radio" name="paymentMethod" id="cod"
                                                 value="COD" checked>
                                             <label class="form-check-label" for="cod">
-                                                <i class="fas fa-money-bill-wave text-success me-2"></i>Thanh toán khi
+                                                <i class="fas fa-money-bill-wave text-theme me-2"></i>Thanh toán khi
                                                 nhận hàng (COD)
                                             </label>
                                         </div>
@@ -178,12 +225,13 @@
                                             <input class="form-check-input" type="radio" name="paymentMethod"
                                                 id="online" value="VNPAY">
                                             <label class="form-check-label" for="online">
-                                                <i class="fas fa-credit-card me-2"></i>Thanh toán Online qua VNPAY
+                                                <i class="fas fa-credit-card text-primary me-2"></i>Thanh toán Online
+                                                qua VNPAY
                                             </label>
                                         </div>
 
                                         <button type="submit"
-                                            class="btn btn-primary w-100 rounded-pill py-2 fw-bold text-uppercase shadow-sm">
+                                            class="btn btn-theme w-100 rounded-pill py-2 fw-bold text-uppercase shadow-sm">
                                             ĐẶT HÀNG NGAY
                                         </button>
                                     </div>

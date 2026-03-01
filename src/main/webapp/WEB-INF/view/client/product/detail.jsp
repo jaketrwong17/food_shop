@@ -11,6 +11,31 @@
                 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
                 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
                 <style>
+                    /* === MÀU CHỦ ĐẠO THEME (XANH ĐẬM HƠN) === */
+                    .text-theme {
+                        color: #3c8a2e !important;
+                    }
+
+                    .bg-theme {
+                        background-color: #3c8a2e !important;
+                        color: #fff !important;
+                    }
+
+                    .btn-theme {
+                        background-color: #3c8a2e !important;
+                        color: #fff !important;
+                        border-color: #3c8a2e !important;
+                    }
+
+                    .btn-theme:hover {
+                        background-color: #2d6a22 !important;
+                        color: #fff !important;
+                    }
+
+                    .border-theme {
+                        border-color: #3c8a2e !important;
+                    }
+
                     .carousel-inner img {
                         height: 400px;
                         object-fit: contain;
@@ -37,8 +62,10 @@
                     }
 
                     .thumb-item.active {
-                        border-color: #ee4d2d;
-                        box-shadow: 0 0 0 1px #ee4d2d;
+                        border-color: #3c8a2e;
+                        /* Đã đổi sang màu theme đậm */
+                        box-shadow: 0 0 0 1px #3c8a2e;
+                        /* Đã đổi sang màu theme đậm */
                     }
 
                     .input-group-small {
@@ -53,7 +80,8 @@
                     }
 
                     .btn-shopee-small {
-                        background-color: #ee4d2d;
+                        background-color: #3c8a2e;
+                        /* Đã đổi sang màu theme đậm */
                         color: white;
                         border: none;
                         height: 34px;
@@ -63,7 +91,8 @@
                     }
 
                     .btn-shopee-small:hover {
-                        background-color: #d73211;
+                        background-color: #2d6a22;
+                        /* Đã đổi sang màu theme đậm hơn khi hover */
                         color: white;
                     }
 
@@ -159,7 +188,7 @@
                             <li class="breadcrumb-item">
                                 <a href="/" class="text-decoration-none text-muted">Trang chủ</a>
                             </li>
-                            <li class="breadcrumb-item active text-primary" aria-current="page">
+                            <li class="breadcrumb-item active text-theme" aria-current="page">
                                 ${product.category.name}
                             </li>
                         </ol>
@@ -265,7 +294,7 @@
                                         </c:otherwise>
                                     </c:choose>
                                 </div>
-                                <div class="mb-4 p-3 bg-light rounded border-start border-primary border-4">
+                                <div class="mb-4 p-3 bg-light rounded border-start border-theme border-4">
                                     <h6 class="fw-bold small text-uppercase mb-2">Đặc điểm nổi bật:</h6>
                                     <div class="detail-content text-secondary short-desc-content">
                                         <c:out value="${product.shortDesc}" escapeXml="false" />
@@ -276,9 +305,9 @@
                                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 
                                     <div class="mb-4">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <label class="fw-bold small text-uppercase">Số lượng:</label>
-                                            <span id="stock-display" class="text-secondary small fw-bold">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <label class="fw-bold small text-uppercase mb-0 me-2">Số lượng:</label>
+                                            <span id="stock-display" class="text-secondary small">
                                             </span>
                                         </div>
                                         <div class="d-flex gap-2 align-items-center">
@@ -319,8 +348,8 @@
                                 </form>
 
                                 <div class="mt-4 pt-3 border-top d-flex gap-4 small text-muted">
-                                    <span><i class="fas fa-undo-alt text-primary me-1"></i> 30 ngày đổi trả</span>
-                                    <span><i class="fas fa-shield-alt text-primary me-1"></i> Chính hãng 100%</span>
+                                    <span><i class="fas fa-undo-alt text-theme me-1"></i> 30 ngày đổi trả</span>
+                                    <span><i class="fas fa-shield-alt text-theme me-1"></i> Chính hãng 100%</span>
                                 </div>
                             </div>
                         </div>
@@ -330,7 +359,7 @@
                         <div class="col-lg-8">
                             <div class="bg-white p-4 rounded shadow-sm border mb-4">
                                 <h5 class="fw-bold border-bottom pb-3 mb-3 text-uppercase">
-                                    <i class="fas fa-info-circle text-primary me-2"></i>Thông tin sản phẩm
+                                    <i class="fas fa-info-circle text-theme me-2"></i>Thông tin sản phẩm
                                 </h5>
                                 <div class="detail-content">${product.detailDesc}</div>
                             </div>
@@ -344,7 +373,7 @@
                                 <c:if test="${canReview}">
                                     <div class="card bg-light border-0 mb-4">
                                         <div class="card-body">
-                                            <h6 class="fw-bold mb-3 text-primary"><i class="fas fa-pen me-2"></i>Viết
+                                            <h6 class="fw-bold mb-3 text-theme"><i class="fas fa-pen me-2"></i>Viết
                                                 đánh giá của
                                                 bạn</h6>
                                             <form action="/product/add-review" method="POST">
@@ -381,10 +410,9 @@
 
                                                 <div class="mb-3">
                                                     <textarea name="content" class="form-control" rows="3"
-                                                        placeholder="Chia sẻ cảm nhận của bạn về sản phẩm..."
-                                                        required></textarea>
+                                                        placeholder="Chia sẻ cảm nhận của bạn về sản phẩm... (Không bắt buộc)"></textarea>
                                                 </div>
-                                                <button type="submit" class="btn btn-primary px-4">Gửi đánh giá</button>
+                                                <button type="submit" class="btn btn-theme px-4">Gửi đánh giá</button>
                                             </form>
                                         </div>
                                     </div>
@@ -420,7 +448,7 @@
                                         <div class="review-item border-bottom pb-3 mb-3">
                                             <div class="d-flex justify-content-between align-items-start">
                                                 <div class="d-flex align-items-center">
-                                                    <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-3 fw-bold text-primary border"
+                                                    <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-3 fw-bold text-theme border border-theme"
                                                         style="width: 40px; height: 40px;">
                                                         ${rv.user.fullName.charAt(0)}
                                                     </div>
@@ -436,22 +464,162 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <small class="text-muted">
-                                                    <fmt:formatDate value="${rv.createdAt}" pattern="dd/MM/yyyy" />
-                                                </small>
+
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <small class="text-muted">
+                                                        <fmt:formatDate value="${rv.createdAt}" pattern="dd/MM/yyyy" />
+                                                    </small>
+
+                                                    <c:if
+                                                        test="${sessionScope.email != null and sessionScope.email == rv.user.email}">
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-sm text-muted" type="button"
+                                                                data-bs-toggle="dropdown" aria-expanded="false"
+                                                                style="box-shadow: none;">
+                                                                <i class="fas fa-ellipsis-v"></i>
+                                                            </button>
+                                                            <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                                                                <li>
+                                                                    <button class="dropdown-item small" type="button"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#editReviewModal${rv.id}">
+                                                                        <i class="fas fa-pen text-theme me-2"></i>Sửa
+                                                                        đánh giá
+                                                                    </button>
+                                                                </li>
+                                                                <li>
+                                                                    <form action="/product/delete-review" method="POST"
+                                                                        onsubmit="return confirm('Bạn có chắc chắn muốn xóa đánh giá này?');">
+                                                                        <input type="hidden"
+                                                                            name="${_csrf.parameterName}"
+                                                                            value="${_csrf.token}" />
+                                                                        <input type="hidden" name="reviewId"
+                                                                            value="${rv.id}" />
+                                                                        <input type="hidden" name="productId"
+                                                                            value="${product.id}" />
+                                                                        <button type="submit"
+                                                                            class="dropdown-item small text-danger">
+                                                                            <i class="fas fa-trash-alt me-2"></i>Xóa
+                                                                            đánh giá
+                                                                        </button>
+                                                                    </form>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+
+                                                        <%-- Modal Chỉnh Sửa Đánh Giá --%>
+                                                            <div class="modal fade" id="editReviewModal${rv.id}"
+                                                                tabindex="-1" aria-hidden="true">
+                                                                <div class="modal-dialog">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title fw-bold">Sửa đánh giá
+                                                                            </h5>
+                                                                            <button type="button" class="btn-close"
+                                                                                data-bs-dismiss="modal"
+                                                                                aria-label="Close"></button>
+                                                                        </div>
+                                                                        <form action="/product/update-review"
+                                                                            method="POST">
+                                                                            <div class="modal-body">
+                                                                                <input type="hidden"
+                                                                                    name="${_csrf.parameterName}"
+                                                                                    value="${_csrf.token}" />
+                                                                                <input type="hidden" name="reviewId"
+                                                                                    value="${rv.id}" />
+                                                                                <input type="hidden" name="productId"
+                                                                                    value="${product.id}" />
+
+                                                                                <div class="mb-3">
+                                                                                    <label
+                                                                                        class="form-label small text-muted fw-bold">Mức
+                                                                                        độ hài lòng:</label>
+                                                                                    <div class="star-rating-input">
+                                                                                        <input type="radio"
+                                                                                            id="edit_star5_${rv.id}"
+                                                                                            name="rating" value="5"
+                                                                                            ${rv.rating==5 ? 'checked'
+                                                                                            : '' } required />
+                                                                                        <label for="edit_star5_${rv.id}"
+                                                                                            title="Tuyệt vời"><i
+                                                                                                class="fas fa-star"></i></label>
+
+                                                                                        <input type="radio"
+                                                                                            id="edit_star4_${rv.id}"
+                                                                                            name="rating" value="4"
+                                                                                            ${rv.rating==4 ? 'checked'
+                                                                                            : '' } />
+                                                                                        <label for="edit_star4_${rv.id}"
+                                                                                            title="Tốt"><i
+                                                                                                class="fas fa-star"></i></label>
+
+                                                                                        <input type="radio"
+                                                                                            id="edit_star3_${rv.id}"
+                                                                                            name="rating" value="3"
+                                                                                            ${rv.rating==3 ? 'checked'
+                                                                                            : '' } />
+                                                                                        <label for="edit_star3_${rv.id}"
+                                                                                            title="Bình thường"><i
+                                                                                                class="fas fa-star"></i></label>
+
+                                                                                        <input type="radio"
+                                                                                            id="edit_star2_${rv.id}"
+                                                                                            name="rating" value="2"
+                                                                                            ${rv.rating==2 ? 'checked'
+                                                                                            : '' } />
+                                                                                        <label for="edit_star2_${rv.id}"
+                                                                                            title="Tệ"><i
+                                                                                                class="fas fa-star"></i></label>
+
+                                                                                        <input type="radio"
+                                                                                            id="edit_star1_${rv.id}"
+                                                                                            name="rating" value="1"
+                                                                                            ${rv.rating==1 ? 'checked'
+                                                                                            : '' } />
+                                                                                        <label for="edit_star1_${rv.id}"
+                                                                                            title="Rất tệ"><i
+                                                                                                class="fas fa-star"></i></label>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="mb-3">
+                                                                                    <textarea name="content"
+                                                                                        class="form-control" rows="3"
+                                                                                        placeholder="Chia sẻ cảm nhận của bạn về sản phẩm... (Không bắt buộc)">${rv.content}</textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                <button type="button"
+                                                                                    class="btn btn-secondary"
+                                                                                    data-bs-dismiss="modal">Hủy</button>
+                                                                                <button type="submit"
+                                                                                    class="btn btn-theme">Lưu thay
+                                                                                    đổi</button>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                    </c:if>
+                                                </div>
                                             </div>
-                                            <div class="mt-2 ms-5 ps-2 text-secondary" style="font-size: 0.95rem;">
-                                                ${rv.content}
-                                            </div>
+
+                                            <%-- Ẩn phần div text nếu người dùng không nhập gì --%>
+                                                <c:if test="${not empty rv.content}">
+                                                    <div class="mt-2 ms-5 ps-2 text-secondary"
+                                                        style="font-size: 0.95rem;">
+                                                        ${rv.content}
+                                                    </div>
+                                                </c:if>
                                         </div>
                                     </c:forEach>
                                 </div>
+
                             </div>
                         </div>
 
                         <div class="col-lg-4">
                             <div class="specs-box p-3 shadow-sm border bg-white">
-                                <h6 class="fw-bold mb-3 text-primary text-uppercase small"><i
+                                <h6 class="fw-bold mb-3 text-theme text-uppercase small"><i
                                         class="fas fa-list-ul me-2"></i>Cấu
                                     hình chi tiết</h6>
                                 <table class="specs-table">
@@ -482,9 +650,6 @@
                         element.classList.add('active');
                     }
 
-                    // ===== SỬA: LẤY SỐ LƯỢNG TRỰC TIẾP =====
-                    // Lấy số lượng tồn kho trực tiếp từ Product (vì không còn Color)
-                    // Lưu ý: Biến ${product.quantity} được lấy từ Controller
                     const currentStock = ${ product.quantity };
 
                     function changeQty(amt) {
@@ -499,7 +664,6 @@
                             errorMsg.style.display = 'block';
                             setTimeout(() => { errorMsg.style.display = 'none'; }, 2000);
                         }
-                        // Chỉ enable nút submit nếu có hàng
                         if (btnSubmit) {
                             btnSubmit.disabled = (currentStock <= 0);
                         }
@@ -514,8 +678,7 @@
 
                         if (isProductActive) {
                             if (currentStock > 0) {
-                                stockDisplay.innerText = `Kho: \${currentStock}`;
-                                stockDisplay.classList.add('text-success');
+                                stockDisplay.innerText = `(CÒN LẠI: \${currentStock} SẢN PHẨM)`;
                             } else {
                                 stockDisplay.innerText = "Hết hàng";
                                 stockDisplay.classList.add('text-danger');

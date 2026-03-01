@@ -11,6 +11,38 @@
                 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
                 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
                 <style>
+                    /* MÀU CHỦ ĐẠO THEME */
+                    .text-theme {
+                        color: #3c8a2e !important;
+                    }
+
+                    .bg-theme {
+                        background-color: #3c8a2e !important;
+                        color: #fff !important;
+                    }
+
+                    .btn-theme {
+                        background-color: #3c8a2e !important;
+                        color: #fff !important;
+                        border-color: #3c8a2e !important;
+                    }
+
+                    .btn-theme:hover {
+                        background-color: #2d6a22 !important;
+                        color: #fff !important;
+                    }
+
+                    .btn-outline-theme {
+                        color: #3c8a2e !important;
+                        border-color: #3c8a2e !important;
+                        background-color: transparent;
+                    }
+
+                    .btn-outline-theme:hover {
+                        background-color: #3c8a2e !important;
+                        color: #fff !important;
+                    }
+
                     body {
                         background-color: #f5f5fa;
                         min-height: 100vh;
@@ -49,7 +81,8 @@
 
                     .order-card-item:hover {
                         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-                        border-color: ##2A83E9;
+                        /* Đã đổi border-color hover thành màu theme */
+                        border-color: #3c8a2e;
                         transform: translateY(-2px);
                     }
                 </style>
@@ -65,7 +98,7 @@
                                 <li class="breadcrumb-item">
                                     <a href="/" class="text-decoration-none text-muted">Trang chủ</a>
                                 </li>
-                                <li class="breadcrumb-item active text-primary" aria-current="page">
+                                <li class="breadcrumb-item active text-theme" aria-current="page">
                                     Theo dõi đơn hàng
                                 </li>
                             </ol>
@@ -80,7 +113,7 @@
 
                             <div class="col-lg-9">
                                 <div class="content-box">
-                                    <h5 class="fw-bold text-uppercase mb-4 pb-3 border-bottom text-primary">
+                                    <h5 class="fw-bold text-uppercase mb-4 pb-3 border-bottom text-theme">
                                         <i class="fas fa-truck-fast me-2"></i>Đơn hàng đang xử lý
                                     </h5>
 
@@ -89,8 +122,7 @@
                                             <div class="text-center py-5">
                                                 <i class="fas fa-box-open fa-4x text-muted opacity-25 mb-3"></i>
                                                 <p class="text-muted">Không có đơn hàng nào đang xử lý.</p>
-                                                <a href="/" class="btn btn-primary rounded-pill px-4">Tiếp tục mua
-                                                    sắm</a>
+                                                <a href="/" class="btn btn-theme rounded-pill px-4">Tiếp tục mua sắm</a>
                                             </div>
                                         </c:when>
                                         <c:otherwise>
@@ -98,12 +130,11 @@
                                                 <div class="order-card-item">
                                                     <div class="d-flex justify-content-between align-items-center mb-3">
                                                         <div>
-                                                            <span class="fw-bold text-primary me-2">Đơn hàng
+                                                            <span class="fw-bold text-theme me-2">Đơn hàng
                                                                 #${order.id}</span>
                                                             <small class="text-muted"><i class="far fa-clock me-1"></i>
-                                                                <%-- SỬA: Đổi orderDate thành createdAt --%>
-                                                                    <fmt:formatDate value="${order.createdAt}"
-                                                                        pattern="dd/MM/yyyy HH:mm" />
+                                                                <fmt:formatDate value="${order.createdAt}"
+                                                                    pattern="dd/MM/yyyy HH:mm" />
                                                             </small>
                                                         </div>
                                                         <div>
@@ -114,7 +145,7 @@
                                                                     nhận</span>
                                                             </c:if>
                                                             <c:if test="${order.status == 'CONFIRMED'}">
-                                                                <span class="badge bg-primary rounded-pill px-3 py-2"><i
+                                                                <span class="badge bg-theme rounded-pill px-3 py-2"><i
                                                                         class="fas fa-check me-1"></i>Đã xác nhận</span>
                                                             </c:if>
                                                             <c:if test="${order.status == 'SHIPPING'}">
@@ -136,7 +167,7 @@
                                                         </div>
                                                         <div class="d-flex gap-2">
                                                             <a href="/order-detail/${order.id}"
-                                                                class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                                                                class="btn btn-outline-theme btn-sm rounded-pill px-3">
                                                                 Xem chi tiết
                                                             </a>
                                                             <c:if test="${order.status == 'PENDING'}">

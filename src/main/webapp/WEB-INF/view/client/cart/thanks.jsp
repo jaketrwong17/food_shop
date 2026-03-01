@@ -11,6 +11,23 @@
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
             <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
             <style>
+                /* MÀU CHỦ ĐẠO */
+                .text-theme {
+                    color: #3c8a2e !important;
+                }
+
+                .btn-outline-theme {
+                    color: #3c8a2e;
+                    border-color: #3c8a2e;
+                    background-color: transparent;
+                }
+
+                .btn-outline-theme:hover {
+                    color: #fff;
+                    background-color: #3c8a2e;
+                    border-color: #3c8a2e;
+                }
+
                 body {
                     background-color: #f8f9fa;
                 }
@@ -26,15 +43,7 @@
                     transform: translateY(-5px);
                 }
 
-                .btn-home {
-                    background-color: ##2A83E9;
-
-                    border: none;
-                }
-
-                .btn-home:hover {
-                    background-color: #cdcecf;
-                }
+                /* Xóa class .btn-home rườm rà không còn sử dụng */
             </style>
         </head>
 
@@ -44,24 +53,18 @@
 
             <div class="container text-center py-5">
                 <div class="card shadow-lg p-5 mx-auto thank-you-card">
-                    <div class="text-success mb-4">
+                    <div class="text-theme mb-4">
                         <i class="fas fa-check-circle fa-5x"></i>
                     </div>
 
                     <h2 class="fw-bold mb-3 text-uppercase">Đặt hàng thành công!</h2>
                     <p class="text-muted mb-4">
-                        Cảm ơn bạn đã tin tưởng và mua sắm tại <strong>WolfHome</strong>. <br>
+                        Cảm ơn bạn đã tin tưởng và mua sắm tại <strong>16Home</strong>. <br>
                         Đơn hàng của bạn đã được tiếp nhận và đang trong quá trình chuẩn bị để giao đến bạn sớm nhất.
                     </p>
 
-                    <!-- <div class="d-grid gap-2 d-md-block">
-                        <a href="/"
-                            class="btn btn-primary btn-home rounded-pill px-5 py-2 fw-bold text-uppercase shadow-sm text-white">
-                            <i class="fas fa-shopping-bag me-2"></i>Tiếp tục mua sắm
-                        </a>
-                    </div> -->
                     <div class="d-grid gap-2 d-md-block">
-                        <a href="/" class="btn btn-outline-primary w-100 rounded-pill fw-bold">
+                        <a href="/" class="btn btn-outline-theme w-100 rounded-pill fw-bold py-2">
                             <i class="fas fa-shopping-bag me-2"></i>Tiếp tục mua sắm
                         </a>
                     </div>

@@ -11,6 +11,42 @@
                 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
                 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
                 <style>
+                    /* MÀU CHỦ ĐẠO */
+                    .text-theme {
+                        color: #3c8a2e !important;
+                    }
+
+                    .bg-theme {
+                        background-color: #3c8a2e !important;
+                        color: #fff !important;
+                    }
+
+                    .btn-theme {
+                        background-color: #3c8a2e !important;
+                        color: #fff !important;
+                        border-color: #3c8a2e !important;
+                    }
+
+                    .btn-theme:hover {
+                        background-color: #2d6a22 !important;
+                        color: #fff !important;
+                    }
+
+                    .border-theme {
+                        border-color: #3c8a2e !important;
+                    }
+
+                    /* Fix focus ô checkbox */
+                    .form-check-input:checked {
+                        background-color: #3c8a2e;
+                        border-color: #3c8a2e;
+                    }
+
+                    .form-check-input:focus {
+                        box-shadow: 0 0 0 0.25rem rgba(60, 138, 46, 0.25);
+                        border-color: #3c8a2e;
+                    }
+
                     .cart-item {
                         border-radius: 12px;
                         background: #fff;
@@ -34,13 +70,20 @@
                     }
 
                     .btn-checkout {
-                        background-color: #2A83E9;
+                        background-color: #3c8a2e;
+                        /* Đã đổi màu */
                         color: white;
                         border-radius: 50px;
                         font-weight: 600;
                         width: 100%;
                         border: none;
                         padding: 12px;
+                        transition: all 0.3s;
+                    }
+
+                    .btn-checkout:hover:not(:disabled) {
+                        background-color: #2d6a22;
+                        /* Hiệu ứng hover cho nút checkout */
                     }
 
                     .btn-checkout:disabled {
@@ -51,6 +94,17 @@
                         width: 1.2em;
                         height: 1.2em;
                         cursor: pointer;
+                    }
+
+                    /* Fix màu các nút cộng trừ số lượng */
+                    .btn-link:focus,
+                    .btn-link:active {
+                        color: #3c8a2e !important;
+                        box-shadow: none !important;
+                    }
+
+                    .btn-link:hover {
+                        color: #3c8a2e !important;
                     }
                 </style>
             </head>
@@ -63,10 +117,10 @@
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item"><a href="/" class="text-decoration-none text-muted">Trang
                                     chủ</a></li>
-                            <li class="breadcrumb-item active text-primary" aria-current="page">Giỏ hàng</li>
+                            <li class="breadcrumb-item active text-theme" aria-current="page">Giỏ hàng</li>
                         </ol>
                     </nav>
-                    <h3 class="fw-bold mb-5 border-start border-primary border-4 ps-3">GIỎ HÀNG CỦA BẠN</h3>
+                    <h3 class="fw-bold mb-5 border-start border-theme border-4 ps-3">GIỎ HÀNG CỦA BẠN</h3>
 
                     <div class="row g-4">
                         <div class="col-lg-8">
@@ -74,7 +128,7 @@
                                 <div class="text-center bg-white p-5 rounded shadow-sm border">
                                     <i class="fas fa-shopping-basket fa-4x text-light mb-4"></i>
                                     <p class="fs-5 text-muted">Giỏ hàng của bạn đang trống.</p>
-                                    <a href="/" class="btn btn-primary rounded-pill px-5 mt-3 text-decoration-none">Tiếp
+                                    <a href="/" class="btn btn-theme rounded-pill px-5 mt-3 text-decoration-none">Tiếp
                                         tục mua sắm</a>
                                 </div>
                             </c:if>
@@ -205,7 +259,8 @@
                                     onclick="handleCheckout()">
                                     Tiến hành thanh toán
                                 </button>
-                                <a href="/" class="btn btn-link w-100 text-decoration-none text-muted small mt-2">
+                                <a href="/" class="btn btn-link w-100 text-decoration-none text-muted small mt-2"
+                                    onmouseover="this.style.color='#3c8a2e'" onmouseout="this.style.color='#6c757d'">
                                     <i class="fas fa-arrow-left me-1"></i> Tiếp tục mua sắm
                                 </a>
                             </div>

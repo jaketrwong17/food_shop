@@ -5,8 +5,8 @@
 
         <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
             <div class="card-header bg-white border-bottom p-4 text-center">
-                <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-primary bg-opacity-10 text-primary mb-3"
-                    style="width: 60px; height: 60px;">
+                <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3"
+                    style="width: 60px; height: 60px; background-color: #eef5eb; color: #3c8a2e;">
                     <span class="fs-3 fw-bold">${sessionScope.email.substring(0,1).toUpperCase()}</span>
                 </div>
                 <h6 class="fw-bold mb-1 text-dark">
@@ -18,24 +18,29 @@
             <div class="list-group list-group-flush py-2">
                 <a href="/order-history"
                     class="list-group-item list-group-item-action border-0 py-3 px-4 d-flex align-items-center ${act == 'history' ? 'active-menu' : ''}">
-                    <i class="fas fa-history me-3 ${act == 'history' ? 'text-primary' : 'text-secondary'}"
+                    <i class="fas fa-history me-3 ${act == 'history' ? 'text-theme' : 'text-secondary'}"
                         style="width: 20px;"></i>
-                    <span class="${act == 'history' ? 'fw-bold text-primary' : 'text-dark'}">Lịch sử mua hàng</span>
+                    <span class="${act == 'history' ? 'fw-bold text-theme' : 'text-dark'}">Lịch sử mua hàng</span>
                 </a>
 
                 <a href="/order-tracking"
                     class="list-group-item list-group-item-action border-0 py-3 px-4 d-flex align-items-center ${act == 'tracking' ? 'active-menu' : ''}">
-                    <i class="fas fa-truck-fast me-3 ${act == 'tracking' ? 'text-primary' : 'text-secondary'}"
+                    <i class="fas fa-truck-fast me-3 ${act == 'tracking' ? 'text-theme' : 'text-secondary'}"
                         style="width: 20px;"></i>
-                    <span class="${act == 'tracking' ? 'fw-bold text-primary' : 'text-dark'}">Theo dõi đơn hàng</span>
+                    <span class="${act == 'tracking' ? 'fw-bold text-theme' : 'text-dark'}">Theo dõi đơn hàng</span>
                 </a>
             </div>
         </div>
 
         <style>
+            .text-theme {
+                color: #3c8a2e !important;
+            }
+
             .active-menu {
-                background-color: #f0f8ff !important;
-                border-left: 4px solid ##2A83E9 !important;
+                /* Đã đổi nền hover active sang xanh lá nhạt và viền sang xanh lá đậm */
+                background-color: #eef5eb !important;
+                border-left: 4px solid #3c8a2e !important;
             }
 
             .list-group-item-action:hover {

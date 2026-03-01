@@ -11,6 +11,11 @@
                 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
                 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
                 <style>
+                    /* MÀU CHỦ ĐẠO THEME */
+                    .text-theme {
+                        color: #3c8a2e !important;
+                    }
+
                     body {
                         background-color: #f5f5fa;
                         min-height: 100vh;
@@ -57,7 +62,7 @@
                                         chủ</a></li>
                                 <li class="breadcrumb-item"><a href="/order-history"
                                         class="text-decoration-none text-muted">Lịch sử đơn hàng</a></li>
-                                <li class="breadcrumb-item active text-primary" aria-current="page">Chi tiết
+                                <li class="breadcrumb-item active text-theme" aria-current="page">Chi tiết
                                     #${order.id}</li>
                             </ol>
                         </nav>
@@ -73,7 +78,7 @@
                                 <div class="content-box">
                                     <div
                                         class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
-                                        <h5 class="fw-bold text-uppercase text-primary m-0">
+                                        <h5 class="fw-bold text-uppercase text-theme m-0">
                                             <i class="fas fa-file-invoice me-2"></i>Chi tiết đơn hàng
                                         </h5>
                                         <a href="/order-history" class="btn btn-sm btn-light border">
@@ -192,7 +197,7 @@
                                                                 currencySymbol="đ" />
                                                         </td>
                                                         <td class="text-center fw-bold">x${detail.quantity}</td>
-                                                        <td class="text-end fw-bold text-primary">
+                                                        <td class="text-end fw-bold text-theme">
                                                             <fmt:formatNumber value="${detail.price * detail.quantity}"
                                                                 type="currency" currencySymbol="đ" />
                                                         </td>

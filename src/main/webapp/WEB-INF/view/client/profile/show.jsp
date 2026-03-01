@@ -11,6 +11,22 @@
                 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
                 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
                 <style>
+                    /* MÀU CHỦ ĐẠO THEME */
+                    .text-theme {
+                        color: #3c8a2e !important;
+                    }
+
+                    .btn-theme {
+                        background-color: #3c8a2e !important;
+                        color: #fff !important;
+                        border-color: #3c8a2e !important;
+                    }
+
+                    .btn-theme:hover {
+                        background-color: #2d6a22 !important;
+                        color: #fff !important;
+                    }
+
                     body {
                         background-color: #f5f5fa;
                         min-height: 100vh;
@@ -34,6 +50,11 @@
                         color: #6c757d;
                         font-weight: 500;
                     }
+
+                    .form-control:focus {
+                        box-shadow: 0 0 0 0.25rem rgba(60, 138, 46, 0.25);
+                        border-color: #3c8a2e;
+                    }
                 </style>
             </head>
 
@@ -46,7 +67,7 @@
                             <ol class="breadcrumb mb-0">
                                 <li class="breadcrumb-item"><a href="/" class="text-decoration-none text-muted">Trang
                                         chủ</a></li>
-                                <li class="breadcrumb-item active text-primary">Thông tin tài khoản</li>
+                                <li class="breadcrumb-item active text-theme">Thông tin tài khoản</li>
                             </ol>
                         </nav>
 
@@ -59,7 +80,7 @@
 
                             <div class="col-lg-9">
                                 <div class="content-box">
-                                    <h5 class="fw-bold text-uppercase mb-4 pb-3 border-bottom text-primary">
+                                    <h5 class="fw-bold text-uppercase mb-4 pb-3 border-bottom text-theme">
                                         <i class="fas fa-user-circle me-2"></i>Hồ sơ của tôi
                                     </h5>
 
@@ -78,6 +99,7 @@
                                                 aria-label="Close"></button>
                                         </div>
                                     </c:if>
+
                                     <form:form action="/profile" method="post" modelAttribute="user">
                                         <div class="row mb-4 align-items-center">
                                             <label class="col-md-3 text-md-end form-label-custom">Email</label>
@@ -110,7 +132,7 @@
                                         <div class="row mt-5">
                                             <div class="col-md-8 offset-md-3">
                                                 <button type="submit"
-                                                    class="btn btn-primary px-5 rounded-pill fw-bold">Lưu thay
+                                                    class="btn btn-theme px-5 rounded-pill fw-bold">Lưu thay
                                                     đổi</button>
                                             </div>
                                         </div>
@@ -122,7 +144,6 @@
                 </div>
 
                 <jsp:include page="../layout/footer.jsp" />
-
 
             </body>
 

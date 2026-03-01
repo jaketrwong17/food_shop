@@ -9,88 +9,137 @@
             <title>Đổi mật khẩu | 16Home</title>
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
             <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+            <style>
+                /* THÊM CLASS MÀU THEME */
+                .text-theme {
+                    color: #3c8a2e !important;
+                }
+
+                .bg-theme {
+                    background-color: #3c8a2e !important;
+                    color: #fff !important;
+                }
+
+                .btn-theme {
+                    background-color: #3c8a2e !important;
+                    color: #fff !important;
+                    border-color: #3c8a2e !important;
+                }
+
+                .btn-theme:hover {
+                    background-color: #2d6a22 !important;
+                    color: #fff !important;
+                }
+
+                body {
+                    background-color: #f5f5fa;
+                    min-height: 100vh;
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .main-wrapper {
+                    flex: 1;
+                }
+
+                .content-box {
+                    background: #fff;
+                    border-radius: 8px;
+                    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075);
+                    padding: 1.5rem;
+                    min-height: 100%;
+                }
+
+                /* Class cho label giống hệt trang Profile */
+                .form-label-custom {
+                    color: #6c757d;
+                    font-weight: 500;
+                }
+
+                .form-control:focus {
+                    box-shadow: 0 0 0 0.25rem rgba(60, 138, 46, 0.25);
+                    border-color: #3c8a2e;
+                }
+            </style>
         </head>
 
         <body class="bg-light">
 
             <jsp:include page="../layout/header.jsp" />
 
-            <div class="container py-5">
-                <div class="row">
-                    <div class="col-md-3 mb-4">
-                        <div class="card border-0 shadow-sm">
-                            <div class="card-body text-center pt-4 pb-3">
-                                <div class="avatar-placeholder bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
-                                    style="width: 64px; height: 64px; font-size: 24px;">
-                                    <i class="fas fa-user"></i>
-                                </div>
-                                <h6 class="fw-bold mb-0 text-truncate">${pageContext.request.userPrincipal.name}</h6>
-                            </div>
-                            <div class="list-group list-group-flush small">
-                                <a href="/profile" class="list-group-item list-group-item-action py-3 border-0">
-                                    <i class="fas fa-user-circle me-2 text-muted"></i> Thông tin tài khoản
-                                </a>
-                                <a href="/change-password"
-                                    class="list-group-item list-group-item-action py-3 border-0 active fw-bold">
-                                    <i class="fas fa-key me-2"></i> Đổi mật khẩu
-                                </a>
+            <div class="main-wrapper">
+                <div class="container mt-4 mb-5">
+                    <nav aria-label="breadcrumb" class="mb-4">
+                        <ol class="breadcrumb mb-0">
+                            <li class="breadcrumb-item"><a href="/" class="text-decoration-none text-muted">Trang
+                                    chủ</a></li>
+                            <li class="breadcrumb-item active text-theme">Đổi mật khẩu</li>
+                        </ol>
+                    </nav>
 
-                                <form id="logoutFormSide" method="POST" action="/logout" style="display:none;">
-                                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-                                </form>
-
-                                <a href="#" onclick="document.getElementById('logoutFormSide').submit(); return false;"
-                                    class="list-group-item list-group-item-action py-3 border-0 text-danger">
-                                    <i class="fas fa-sign-out-alt me-2"></i> Đăng xuất
-                                </a>
-                            </div>
+                    <div class="row g-4">
+                        <div class="col-lg-3">
+                            <jsp:include page="sidebar.jsp">
+                                <jsp:param name="activePage" value="password" />
+                            </jsp:include>
                         </div>
-                    </div>
 
-                    <div class="col-md-9">
-                        <div class="card border-0 shadow-sm">
-                            <div class="card-header bg-white py-3 border-bottom-0">
-                                <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-lock me-2"></i> Đổi mật khẩu</h5>
-                            </div>
-                            <div class="card-body p-4">
+                        <div class="col-lg-9">
+                            <div class="content-box">
+                                <h5 class="fw-bold text-uppercase mb-4 pb-3 border-bottom text-theme">
+                                    <i class="fas fa-lock me-2"></i>Đổi mật khẩu
+                                </h5>
 
                                 <c:if test="${not empty error}">
-                                    <div class="alert alert-danger rounded-pill px-4 small">
+                                    <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
                                         <i class="fas fa-exclamation-circle me-2"></i> ${error}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                            aria-label="Close"></button>
                                     </div>
                                 </c:if>
                                 <c:if test="${not empty message}">
-                                    <div class="alert alert-success rounded-pill px-4 small">
+                                    <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
                                         <i class="fas fa-check-circle me-2"></i> ${message}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                            aria-label="Close"></button>
                                     </div>
                                 </c:if>
 
                                 <form action="/change-password" method="post">
                                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 
-                                    <div class="mb-3">
-                                        <label class="form-label small text-muted fw-bold">Mật khẩu hiện tại</label>
-                                        <input type="password" name="currentPassword" class="form-control" required
-                                            placeholder="Nhập mật khẩu đang sử dụng">
+                                    <div class="row mb-4 align-items-center">
+                                        <label class="col-md-3 text-md-end form-label-custom">Mật khẩu hiện tại</label>
+                                        <div class="col-md-8">
+                                            <input type="password" name="currentPassword" class="form-control" required
+                                                placeholder="Nhập mật khẩu đang sử dụng">
+                                        </div>
                                     </div>
 
-                                    <div class="mb-3">
-                                        <label class="form-label small text-muted fw-bold">Mật khẩu mới</label>
-                                        <input type="password" name="newPassword" class="form-control" required
-                                            placeholder="Nhập mật khẩu mới">
+                                    <div class="row mb-4 align-items-center">
+                                        <label class="col-md-3 text-md-end form-label-custom">Mật khẩu mới</label>
+                                        <div class="col-md-8">
+                                            <input type="password" name="newPassword" class="form-control" required
+                                                placeholder="Nhập mật khẩu mới">
+                                        </div>
                                     </div>
 
-                                    <div class="mb-4">
-                                        <label class="form-label small text-muted fw-bold">Xác nhận mật khẩu mới</label>
-                                        <input type="password" name="confirmPassword" class="form-control" required
-                                            placeholder="Nhập lại mật khẩu mới">
+                                    <div class="row mb-4 align-items-center">
+                                        <label class="col-md-3 text-md-end form-label-custom">Xác nhận mật khẩu</label>
+                                        <div class="col-md-8">
+                                            <input type="password" name="confirmPassword" class="form-control" required
+                                                placeholder="Nhập lại mật khẩu mới">
+                                        </div>
                                     </div>
 
-                                    <div class="d-flex justify-content-end">
-                                        <button type="submit" class="btn btn-primary px-4 fw-bold">
-                                            <i class="fas fa-save me-2"></i> Lưu thay đổi
-                                        </button>
+                                    <div class="row mt-5">
+                                        <div class="col-md-8 offset-md-3">
+                                            <button type="submit" class="btn btn-theme px-5 rounded-pill fw-bold">
+                                                Lưu thay đổi
+                                            </button>
+                                        </div>
                                     </div>
+
                                 </form>
 
                             </div>

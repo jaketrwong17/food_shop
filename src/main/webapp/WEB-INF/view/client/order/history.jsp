@@ -11,6 +11,27 @@
                 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
                 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
                 <style>
+                    /* MÀU CHỦ ĐẠO THEME */
+                    .text-theme {
+                        color: #3c8a2e !important;
+                    }
+
+                    .bg-theme {
+                        background-color: #3c8a2e !important;
+                        color: #fff !important;
+                    }
+
+                    .btn-theme {
+                        background-color: #3c8a2e !important;
+                        color: #fff !important;
+                        border-color: #3c8a2e !important;
+                    }
+
+                    .btn-theme:hover {
+                        background-color: #2d6a22 !important;
+                        color: #fff !important;
+                    }
+
                     body {
                         background-color: #f5f5fa;
                         min-height: 100vh;
@@ -59,7 +80,7 @@
                                 <li class="breadcrumb-item">
                                     <a href="/" class="text-decoration-none text-muted">Trang chủ</a>
                                 </li>
-                                <li class="breadcrumb-item active text-primary" aria-current="page">
+                                <li class="breadcrumb-item active text-theme" aria-current="page">
                                     Lịch sử mua hàng
                                 </li>
                             </ol>
@@ -74,7 +95,7 @@
 
                             <div class="col-lg-9">
                                 <div class="content-box">
-                                    <h5 class="fw-bold text-uppercase mb-4 pb-3 border-bottom text-primary">
+                                    <h5 class="fw-bold text-uppercase mb-4 pb-3 border-bottom text-theme">
                                         <i class="fas fa-clipboard-list me-2"></i>Lịch sử mua hàng
                                     </h5>
 
@@ -85,8 +106,7 @@
                                                     <i
                                                         class="fas fa-shopping-basket fa-4x text-muted opacity-25 mb-3"></i>
                                                     <p class="text-muted">Bạn chưa mua đơn hàng nào.</p>
-                                                    <a href="/" class="btn btn-primary rounded-pill px-4">Mua sắm
-                                                        ngay</a>
+                                                    <a href="/" class="btn btn-theme rounded-pill px-4">Mua sắm ngay</a>
                                                 </div>
                                             </c:when>
 
@@ -107,7 +127,7 @@
                                                             <tbody>
                                                                 <c:forEach var="order" items="${historyOrders}">
                                                                     <tr>
-                                                                        <td class="text-center fw-bold text-primary">
+                                                                        <td class="text-center fw-bold text-theme">
                                                                             #${order.id}
                                                                         </td>
 
@@ -150,6 +170,13 @@
                                                                                         Đã hủy
                                                                                     </span>
                                                                                 </c:when>
+                                                                                <c:when
+                                                                                    test="${order.status == 'CONFIRMED'}">
+                                                                                    <span
+                                                                                        class="badge rounded-pill bg-theme px-3 py-2">
+                                                                                        Đã xác nhận
+                                                                                    </span>
+                                                                                </c:when>
                                                                                 <c:otherwise>
                                                                                     <span
                                                                                         class="badge rounded-pill bg-warning bg-opacity-10 text-dark px-3 py-2">
@@ -163,7 +190,7 @@
                                                                             <a href="/order-detail/${order.id}"
                                                                                 class="btn btn-sm btn-light border"
                                                                                 title="Xem chi tiết">
-                                                                                <i class="fas fa-eye text-primary"></i>
+                                                                                <i class="fas fa-eye text-theme"></i>
                                                                             </a>
                                                                         </td>
                                                                     </tr>

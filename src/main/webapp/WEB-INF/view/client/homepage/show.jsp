@@ -12,6 +12,38 @@
                 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
                 <style>
+                    /* === 0. MÀU CHỦ ĐẠO THEME === */
+                    .bg-theme {
+                        background-color: #3c8a2e !important;
+                        color: #fff !important;
+                    }
+
+                    .text-theme {
+                        color: #3c8a2e !important;
+                    }
+
+                    .btn-theme {
+                        background-color: #3c8a2e !important;
+                        color: #fff !important;
+                        border-color: #3c8a2e !important;
+                    }
+
+                    .btn-theme:hover {
+                        background-color: #2d6a22 !important;
+                        color: #fff !important;
+                    }
+
+                    .btn-outline-theme {
+                        color: #3c8a2e !important;
+                        border-color: #3c8a2e !important;
+                        background-color: transparent;
+                    }
+
+                    .btn-outline-theme:hover {
+                        background-color: #3c8a2e !important;
+                        color: #fff !important;
+                    }
+
                     /* === 1. CẤU HÌNH CUỘN TRANG MƯỢT MÀ === */
                     html {
                         scroll-behavior: smooth;
@@ -214,13 +246,13 @@
 
                     .btn-sort:hover {
                         background: #f8f9fa;
-                        color: #2A83E9;
+                        color: #3c8a2e;
                     }
 
                     .btn-sort.active {
-                        border-color: #2A83E9;
-                        background: #f0f7ff;
-                        color: #2A83E9;
+                        border-color: #3c8a2e;
+                        background: #eef5eb;
+                        color: #3c8a2e;
                         font-weight: 500;
                     }
 
@@ -262,230 +294,149 @@
 
             <body class="bg-light">
 
-                <jsp:include page="../layout/header.jsp" />
+                <%-- Gọi File Header ở đây --%>
+                    <jsp:include page="../layout/header.jsp" />
 
-                <div class="container-fluid p-0 mb-5">
-                    <div id="homeBannerCarousel" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-indicators">
-                            <button type="button" data-bs-target="#homeBannerCarousel" data-bs-slide-to="0"
-                                class="active"></button>
-                            <button type="button" data-bs-target="#homeBannerCarousel" data-bs-slide-to="1"></button>
-                        </div>
-                        <div class="carousel-inner">
-                            <div class="carousel-item active" data-bs-interval="5000">
-                                <img src="https://theme.hstatic.net/200000946105/1001363519/14/collection_banner.jpg?v=1368"
-                                    class="d-block w-100" style="height: 700px; object-fit: cover;">
+                    <div class="container-fluid p-0 mb-5">
+                        <div id="homeBannerCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-indicators">
+                                <button type="button" data-bs-target="#homeBannerCarousel" data-bs-slide-to="0"
+                                    class="active"></button>
+                                <button type="button" data-bs-target="#homeBannerCarousel"
+                                    data-bs-slide-to="1"></button>
                             </div>
-                            <div class="carousel-item" data-bs-interval="5000">
-                                <img src="https://duytan.com/Data/Sites/1/Banner/banner-spm-t12.jpg"
-                                    class="d-block w-100" style="height: 700px; object-fit: cover;">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active" data-bs-interval="5000">
+                                    <img src="https://theme.hstatic.net/200000946105/1001363519/14/collection_banner.jpg?v=1368"
+                                        class="d-block w-100" style="height: 700px; object-fit: cover;">
+                                </div>
+                                <div class="carousel-item" data-bs-interval="5000">
+                                    <img src="https://duytan.com/Data/Sites/1/Banner/banner-spm-t12.jpg"
+                                        class="d-block w-100" style="height: 700px; object-fit: cover;">
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <section class="container py-4">
-                    <div class="bg-white p-4 rounded-4 shadow-sm position-relative">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <div>
-                                <h4 class="fw-bold mb-0 text-dark">
-                                    <i class="fas fa-crown text-warning me-2"></i>SẢN PHẨM BÁN CHẠY
-                                </h4>
-                                <div class="bg-primary"
-                                    style="height: 3px; width: 45px; border-radius: 2px; margin-top: 5px;"></div>
+                    <section class="container py-4">
+                        <div class="bg-white p-4 rounded-4 shadow-sm position-relative">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div>
+                                    <h4 class="fw-bold mb-0 text-dark">
+                                        <i class="fas fa-crown text-warning me-2"></i>SẢN PHẨM BÁN CHẠY
+                                    </h4>
+                                    <div class="bg-theme"
+                                        style="height: 3px; width: 45px; border-radius: 2px; margin-top: 5px;"></div>
+                                </div>
+                                <div class="hot-trend-badge-new">Hot Trend <i class="fas fa-fire ms-2"></i></div>
                             </div>
-                            <div class="hot-trend-badge-new">Hot Trend <i class="fas fa-fire ms-2"></i></div>
-                        </div>
 
-                        <div class="category-slider-wrapper position-relative">
-                            <button class="btn scroll-btn start-0" id="slideLeft"><i
-                                    class="fas fa-chevron-left"></i></button>
-                            <div class="d-flex gap-4 overflow-auto category-scroll-container" id="categoryList">
-                                <c:forEach var="item" items="${bestSellingProducts}" varStatus="status">
-                                    <c:if test="${item.active}">
-                                        <a href="/product/${item.productId}" class="text-decoration-none text-dark">
-                                            <div class="card best-seller-card p-2" style="min-width: 220px;">
-                                                <div class="ranking-badge 
-                                    ${status.index == 0 ? 'ranking-top-1' : 
-                                      (status.index == 1 ? 'ranking-top-2' : 
-                                      (status.index == 2 ? 'ranking-top-3' : 
-                                      (status.index == 3 ? 'ranking-top-4' : 'ranking-top-others')))}">
-                                                    #${status.index + 1} Best Seller
-                                                </div>
-                                                <div class="bg-white rounded-3 mb-2 d-flex align-items-center justify-content-center"
-                                                    style="height: 180px;">
-                                                    <img src="/images/${not empty item.productImage ? item.productImage : 'default.png'}"
-                                                        style="max-width: 90%; max-height: 90%; object-fit: contain;">
-                                                </div>
-                                                <div class="card-body p-1 text-center">
-                                                    <h6 class="text-dark fw-bold mb-2"
-                                                        style="font-size: 0.9rem; min-height: 2.6em;">
-                                                        ${item.productName}
-                                                    </h6>
-                                                    <div class="price-container">
-                                                        <div class="text-danger fw-bold">
-                                                            <fmt:formatNumber
-                                                                value="${item.totalRevenue / item.quantitySold}"
-                                                                type="currency" currencySymbol="đ" />
+                            <div class="category-slider-wrapper position-relative">
+                                <button class="btn scroll-btn start-0" id="slideLeft"><i
+                                        class="fas fa-chevron-left"></i></button>
+                                <div class="d-flex gap-4 overflow-auto category-scroll-container" id="categoryList">
+                                    <c:forEach var="item" items="${bestSellingProducts}" varStatus="status">
+                                        <c:if test="${item.active}">
+                                            <a href="/product/${item.productId}" class="text-decoration-none text-dark">
+                                                <div class="card best-seller-card p-2" style="min-width: 220px;">
+                                                    <div class="ranking-badge 
+                        ${status.index == 0 ? 'ranking-top-1' : 
+                            (status.index == 1 ? 'ranking-top-2' : 
+                            (status.index == 2 ? 'ranking-top-3' : 
+                            (status.index == 3 ? 'ranking-top-4' : 'ranking-top-others')))}">
+                                                        #${status.index + 1} Best Seller
+                                                    </div>
+                                                    <div class="bg-white rounded-3 mb-2 d-flex align-items-center justify-content-center"
+                                                        style="height: 180px;">
+                                                        <img src="/images/${not empty item.productImage ? item.productImage : 'default.png'}"
+                                                            style="max-width: 90%; max-height: 90%; object-fit: contain;">
+                                                    </div>
+                                                    <div class="card-body p-1 text-center">
+                                                        <h6 class="text-dark fw-bold mb-2"
+                                                            style="font-size: 0.9rem; min-height: 2.6em;">
+                                                            ${item.productName}
+                                                        </h6>
+                                                        <div class="price-container">
+                                                            <div class="text-danger fw-bold">
+                                                                <fmt:formatNumber
+                                                                    value="${item.totalRevenue / item.quantitySold}"
+                                                                    type="currency" currencySymbol="đ" />
+                                                            </div>
+                                                            <small class="text-muted">Đã bán:
+                                                                ${item.quantitySold}</small>
                                                         </div>
-                                                        <small class="text-muted">Đã bán: ${item.quantitySold}</small>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </a>
-                                    </c:if>
-                                </c:forEach>
-                            </div>
-                            <button class="btn scroll-btn end-0" id="slideRight"><i
-                                    class="fas fa-chevron-right"></i></button>
-                        </div>
-                    </div>
-                </section>
-
-                <div class="container my-5" id="danh-sach-san-pham">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h4 class="fw-bold mb-0" id="product-section-title">DANH SÁCH SẢN PHẨM</h4>
-
-                        <div class="sort-options">
-                            <c:set var="currentCatId" value="${param.categoryId}" />
-                            <c:if test="${empty currentCatId}">
-                                <c:set var="currentCatId" value="${categoryId}" />
-                            </c:if>
-
-                            <c:set var="extraParams" value="" />
-                            <c:if test="${not empty currentCatId}">
-                                <c:set var="extraParams" value="${extraParams}&categoryId=${currentCatId}" />
-                            </c:if>
-                            <c:if test="${not empty param.search}">
-                                <c:set var="extraParams" value="${extraParams}&search=${param.search}" />
-                            </c:if>
-
-                            <a href="?sort=price-asc${extraParams}#danh-sach-san-pham"
-                                class="btn-sort ${param.sort == 'price-asc' ? 'active' : ''}">
-                                <i class="fas fa-sort-amount-down-alt"></i> Giá Thấp - Cao
-                            </a>
-                            <a href="?sort=price-desc${extraParams}#danh-sach-san-pham"
-                                class="btn-sort ${param.sort == 'price-desc' ? 'active' : ''}">
-                                <i class="fas fa-sort-amount-down"></i> Giá Cao - Thấp
-                            </a>
-                        </div>
-                    </div>
-
-                    <c:choose>
-                        <%-- TRƯỜNG HỢP 1: KHÔNG CÓ SẢN PHẨM --%>
-                            <c:when test="${empty products}">
-                                <div class="row justify-content-center">
-                                    <div class="col-12 col-md-8 col-lg-6">
-                                        <div class="text-center py-5 bg-white rounded-4 shadow-sm border">
-                                            <div class="mb-3">
-                                                <i class="fas fa-box-open text-muted"
-                                                    style="font-size: 5rem; opacity: 0.3;"></i>
-                                            </div>
-                                            <h5 class="text-muted fw-bold">Không tìm thấy sản phẩm nào!</h5>
-                                            <p class="text-secondary small mb-4">Rất tiếc, chúng tôi không tìm thấy sản
-                                                phẩm phù hợp.</p>
-                                            <a href="/#danh-sach-san-pham"
-                                                class="btn btn-primary rounded-pill px-4 fw-bold">
-                                                <i class="fas fa-arrow-left me-2"></i>Xem tất cả sản phẩm
                                             </a>
+                                        </c:if>
+                                    </c:forEach>
+                                </div>
+                                <button class="btn scroll-btn end-0" id="slideRight"><i
+                                        class="fas fa-chevron-right"></i></button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="container my-5" id="danh-sach-san-pham">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="fw-bold mb-0" id="product-section-title">DANH SÁCH SẢN PHẨM</h4>
+
+                            <div class="sort-options">
+                                <c:set var="currentCatId" value="${param.categoryId}" />
+                                <c:if test="${empty currentCatId}">
+                                    <c:set var="currentCatId" value="${categoryId}" />
+                                </c:if>
+
+                                <c:set var="extraParams" value="" />
+                                <c:if test="${not empty currentCatId}">
+                                    <c:set var="extraParams" value="${extraParams}&categoryId=${currentCatId}" />
+                                </c:if>
+                                <c:if test="${not empty param.search}">
+                                    <c:set var="extraParams" value="${extraParams}&search=${param.search}" />
+                                </c:if>
+
+                                <a href="?sort=price-asc${extraParams}#danh-sach-san-pham"
+                                    class="btn-sort ${param.sort == 'price-asc' ? 'active' : ''}">
+                                    <i class="fas fa-sort-amount-down-alt"></i> Giá Thấp - Cao
+                                </a>
+                                <a href="?sort=price-desc${extraParams}#danh-sach-san-pham"
+                                    class="btn-sort ${param.sort == 'price-desc' ? 'active' : ''}">
+                                    <i class="fas fa-sort-amount-down"></i> Giá Cao - Thấp
+                                </a>
+                            </div>
+                        </div>
+
+                        <c:choose>
+                            <%-- TRƯỜNG HỢP 1: KHÔNG CÓ SẢN PHẨM --%>
+                                <c:when test="${empty products}">
+                                    <div class="row justify-content-center">
+                                        <div class="col-12 col-md-8 col-lg-6">
+                                            <div class="text-center py-5 bg-white rounded-4 shadow-sm border">
+                                                <div class="mb-3">
+                                                    <i class="fas fa-box-open text-muted"
+                                                        style="font-size: 5rem; opacity: 0.3;"></i>
+                                                </div>
+                                                <h5 class="text-muted fw-bold">Không tìm thấy sản phẩm nào!</h5>
+                                                <p class="text-secondary small mb-4">Rất tiếc, chúng tôi không tìm thấy
+                                                    sản phẩm phù hợp.</p>
+                                                <a href="/#danh-sach-san-pham"
+                                                    class="btn btn-theme rounded-pill px-4 fw-bold">
+                                                    <i class="fas fa-arrow-left me-2"></i>Xem tất cả sản phẩm
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </c:when>
+                                </c:when>
 
-                            <%-- TRƯỜNG HỢP 2: CÓ SẢN PHẨM --%>
-                                <c:otherwise>
-                                    <div id="product-list" class="row row-cols-1 row-cols-md-3 row-cols-lg-5 g-4">
+                                <%-- TRƯỜNG HỢP 2: CÓ SẢN PHẨM --%>
+                                    <c:otherwise>
+                                        <div id="product-list" class="row row-cols-1 row-cols-md-3 row-cols-lg-5 g-4">
 
-                                        <%-- PHẦN 1: LOOP CÁC SẢN PHẨM CÒN HÀNG --%>
-                                            <c:forEach var="p" items="${products}">
-                                                <c:if test="${p.active && p.quantity > 0}">
-                                                    <div class="col product-item">
-                                                        <div class="card product-card shadow-sm h-100">
-                                                            <a href="/product/${p.id}"
-                                                                class="text-decoration-none h-100 d-flex flex-column">
-                                                                <div class="img-container">
-                                                                    <img src="/images/${(not empty p.images and not empty p.images[0]) ? p.images[0].imageUrl : 'default.png'}"
-                                                                        alt="${p.name}">
-                                                                </div>
-                                                                <div class="info-section">
-                                                                    <h6 class="text-dark mb-2"
-                                                                        style="min-height: 2.5em;">${p.name}</h6>
-                                                                    <div class="mb-2 small">
-                                                                        <c:choose>
-                                                                            <c:when test="${p.reviewCount > 0}">
-                                                                                <span class="text-warning">
-                                                                                    <c:forEach begin="1"
-                                                                                        end="${p.averageRating.intValue()}">
-                                                                                        <i class="fas fa-star"></i>
-                                                                                    </c:forEach>
-                                                                                    <span
-                                                                                        class="text-muted">(${p.reviewCount})</span>
-                                                                                </span>
-                                                                            </c:when>
-                                                                            <c:otherwise><span class="text-muted">Chưa
-                                                                                    có đánh giá</span></c:otherwise>
-                                                                        </c:choose>
-                                                                    </div>
-
-                                                                    <%--===KHU VỰC HIỂN THỊ GIÁ CÓ KHUYẾN MÃI===--%>
-                                                                        <div class="mt-auto">
-                                                                            <c:choose>
-                                                                                <c:when test="${p.onSale}">
-                                                                                    <p
-                                                                                        class="product-price mb-0 fw-bold text-danger">
-                                                                                        <fmt:formatNumber
-                                                                                            value="${p.discountedPrice}"
-                                                                                            type="currency"
-                                                                                            currencySymbol="đ" />
-                                                                                    </p>
-                                                                                    <div class="d-flex align-items-center justify-content-center gap-2"
-                                                                                        style="font-size: 0.85rem;">
-                                                                                        <span
-                                                                                            class="text-muted text-decoration-line-through">
-                                                                                            <fmt:formatNumber
-                                                                                                value="${p.price}"
-                                                                                                type="currency"
-                                                                                                currencySymbol="đ" />
-                                                                                        </span>
-                                                                                        <span
-                                                                                            class="badge bg-danger">-${p.discountPercentage}%</span>
-                                                                                    </div>
-                                                                                </c:when>
-                                                                                <c:otherwise>
-                                                                                    <p class="product-price mb-0">
-                                                                                        <fmt:formatNumber
-                                                                                            value="${p.price}"
-                                                                                            type="currency"
-                                                                                            currencySymbol="đ" />
-                                                                                    </p>
-                                                                                    <div
-                                                                                        style="font-size: 0.85rem; visibility: hidden;">
-                                                                                        <span>Placeholder</span>
-                                                                                    </div>
-                                                                                </c:otherwise>
-                                                                            </c:choose>
-                                                                        </div>
-                                                                        <%--===KẾT THÚC KHU VỰC GIÁ===--%>
-
-                                                                </div>
-                                                            </a>
-                                                            <div class="card-footer bg-white border-0 pb-3 text-center">
-                                                                <a href="/product/${p.id}"
-                                                                    class="btn btn-outline-primary w-100 rounded-pill btn-sm fw-bold">Xem
-                                                                    ngay</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </c:if>
-                                            </c:forEach>
-
-                                            <%-- PHẦN 2: LOOP CÁC SẢN PHẨM HẾT HÀNG --%>
+                                            <%-- PHẦN 1: LOOP CÁC SẢN PHẨM CÒN HÀNG --%>
                                                 <c:forEach var="p" items="${products}">
-                                                    <c:if test="${p.active && p.quantity <= 0}">
+                                                    <c:if test="${p.active && p.quantity > 0}">
                                                         <div class="col product-item">
                                                             <div class="card product-card shadow-sm h-100">
-                                                                <div class="out-of-stock-label">Hết hàng</div>
                                                                 <a href="/product/${p.id}"
                                                                     class="text-decoration-none h-100 d-flex flex-column">
                                                                     <div class="img-container">
@@ -513,8 +464,7 @@
                                                                             </c:choose>
                                                                         </div>
 
-                                                                        <%--===KHU VỰC HIỂN THỊ GIÁ CÓ KHUYẾN MÃI (Sản
-                                                                            phẩm hết hàng)===--%>
+                                                                        <%--===KHU VỰC HIỂN THỊ GIÁ===--%>
                                                                             <div class="mt-auto">
                                                                                 <c:choose>
                                                                                     <c:when test="${p.onSale}">
@@ -552,14 +502,12 @@
                                                                                     </c:otherwise>
                                                                                 </c:choose>
                                                                             </div>
-                                                                            <%--===KẾT THÚC===--%>
-
                                                                     </div>
                                                                 </a>
                                                                 <div
                                                                     class="card-footer bg-white border-0 pb-3 text-center">
                                                                     <a href="/product/${p.id}"
-                                                                        class="btn btn-outline-primary w-100 rounded-pill btn-sm fw-bold">Xem
+                                                                        class="btn btn-outline-theme w-100 rounded-pill btn-sm fw-bold">Xem
                                                                         ngay</a>
                                                                 </div>
                                                             </div>
@@ -567,69 +515,153 @@
                                                     </c:if>
                                                 </c:forEach>
 
-                                    </div>
+                                                <%-- PHẦN 2: LOOP CÁC SẢN PHẨM HẾT HÀNG --%>
+                                                    <c:forEach var="p" items="${products}">
+                                                        <c:if test="${p.active && p.quantity <= 0}">
+                                                            <div class="col product-item">
+                                                                <div class="card product-card shadow-sm h-100">
+                                                                    <div class="out-of-stock-label">Hết hàng</div>
+                                                                    <a href="/product/${p.id}"
+                                                                        class="text-decoration-none h-100 d-flex flex-column">
+                                                                        <div class="img-container">
+                                                                            <img src="/images/${(not empty p.images and not empty p.images[0]) ? p.images[0].imageUrl : 'default.png'}"
+                                                                                alt="${p.name}">
+                                                                        </div>
+                                                                        <div class="info-section">
+                                                                            <h6 class="text-dark mb-2"
+                                                                                style="min-height: 2.5em;">${p.name}
+                                                                            </h6>
+                                                                            <div class="mb-2 small">
+                                                                                <c:choose>
+                                                                                    <c:when test="${p.reviewCount > 0}">
+                                                                                        <span class="text-warning">
+                                                                                            <c:forEach begin="1"
+                                                                                                end="${p.averageRating.intValue()}">
+                                                                                                <i
+                                                                                                    class="fas fa-star"></i>
+                                                                                            </c:forEach>
+                                                                                            <span
+                                                                                                class="text-muted">(${p.reviewCount})</span>
+                                                                                        </span>
+                                                                                    </c:when>
+                                                                                    <c:otherwise><span
+                                                                                            class="text-muted">Chưa có
+                                                                                            đánh giá</span>
+                                                                                    </c:otherwise>
+                                                                                </c:choose>
+                                                                            </div>
 
-                                    <div class="text-center mt-5 mb-4 d-flex gap-2 justify-content-center">
-                                        <button id="loadMoreBtn" class="btn btn-primary px-5 py-2 rounded-pill fw-bold"
-                                            style="display:none; background:#e3f2fd; color:#2A83E9; border:none;">
-                                            XEM THÊM <i class="fas fa-chevron-down ms-2"></i>
-                                        </button>
-                                        <button id="collapseBtn"
-                                            class="btn btn-outline-secondary px-5 py-2 rounded-pill fw-bold"
-                                            style="display:none;">
-                                            THU GỌN <i class="fas fa-chevron-up ms-2"></i>
-                                        </button>
-                                    </div>
-                                </c:otherwise>
-                    </c:choose>
-                </div>
+                                                                            <div class="mt-auto">
+                                                                                <c:choose>
+                                                                                    <c:when test="${p.onSale}">
+                                                                                        <p
+                                                                                            class="product-price mb-0 fw-bold text-danger">
+                                                                                            <fmt:formatNumber
+                                                                                                value="${p.discountedPrice}"
+                                                                                                type="currency"
+                                                                                                currencySymbol="đ" />
+                                                                                        </p>
+                                                                                        <div class="d-flex align-items-center justify-content-center gap-2"
+                                                                                            style="font-size: 0.85rem;">
+                                                                                            <span
+                                                                                                class="text-muted text-decoration-line-through">
+                                                                                                <fmt:formatNumber
+                                                                                                    value="${p.price}"
+                                                                                                    type="currency"
+                                                                                                    currencySymbol="đ" />
+                                                                                            </span>
+                                                                                            <span
+                                                                                                class="badge bg-danger">-${p.discountPercentage}%</span>
+                                                                                        </div>
+                                                                                    </c:when>
+                                                                                    <c:otherwise>
+                                                                                        <p class="product-price mb-0">
+                                                                                            <fmt:formatNumber
+                                                                                                value="${p.price}"
+                                                                                                type="currency"
+                                                                                                currencySymbol="đ" />
+                                                                                        </p>
+                                                                                        <div
+                                                                                            style="font-size: 0.85rem; visibility: hidden;">
+                                                                                            <span>Placeholder</span>
+                                                                                        </div>
+                                                                                    </c:otherwise>
+                                                                                </c:choose>
+                                                                            </div>
+                                                                        </div>
+                                                                    </a>
+                                                                    <div
+                                                                        class="card-footer bg-white border-0 pb-3 text-center">
+                                                                        <a href="/product/${p.id}"
+                                                                            class="btn btn-outline-theme w-100 rounded-pill btn-sm fw-bold">Xem
+                                                                            ngay</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </c:if>
+                                                    </c:forEach>
 
-                <jsp:include page="../layout/footer.jsp" />
+                                        </div>
 
-                <script>
-                    document.addEventListener("DOMContentLoaded", function () {
-                        // --- 1. CẤU HÌNH SỐ LƯỢNG SẢN PHẨM HIỂN THỊ MẶC ĐỊNH LÀ 15 ---
-                        const ITEMS_PER_PAGE = 15;
+                                        <div class="text-center mt-5 mb-4 d-flex gap-2 justify-content-center">
+                                            <button id="loadMoreBtn" class="btn px-5 py-2 rounded-pill fw-bold"
+                                                style="display:none; background:#eef5eb; color:#3c8a2e; border:none;">
+                                                XEM THÊM <i class="fas fa-chevron-down ms-2"></i>
+                                            </button>
+                                            <button id="collapseBtn"
+                                                class="btn btn-outline-secondary px-5 py-2 rounded-pill fw-bold"
+                                                style="display:none;">
+                                                THU GỌN <i class="fas fa-chevron-up ms-2"></i>
+                                            </button>
+                                        </div>
+                                    </c:otherwise>
+                        </c:choose>
+                    </div>
 
-                        // Slider Best Seller
-                        const container = document.getElementById('categoryList');
-                        if (container) {
-                            document.getElementById('slideLeft').onclick = () => container.scrollBy({ left: -400, behavior: 'smooth' });
-                            document.getElementById('slideRight').onclick = () => container.scrollBy({ left: 400, behavior: 'smooth' });
-                        }
+                    <jsp:include page="../layout/footer.jsp" />
 
-                        // --- 2. Logic Xem Thêm / Thu Gọn ---
-                        const productItems = document.querySelectorAll('.product-item');
-                        const loadMoreBtn = document.getElementById('loadMoreBtn');
-                        const collapseBtn = document.getElementById('collapseBtn');
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            // --- CẤU HÌNH SỐ LƯỢNG SẢN PHẨM HIỂN THỊ MẶC ĐỊNH LÀ 15 ---
+                            const ITEMS_PER_PAGE = 15;
 
-                        console.log("Tổng số sản phẩm tìm thấy:", productItems.length);
-
-                        if (loadMoreBtn && productItems.length > ITEMS_PER_PAGE) {
-                            loadMoreBtn.style.display = 'inline-block';
-
-                            for (let i = ITEMS_PER_PAGE; i < productItems.length; i++) {
-                                productItems[i].classList.add('d-none-custom');
+                            // Slider Best Seller
+                            const container = document.getElementById('categoryList');
+                            if (container) {
+                                document.getElementById('slideLeft').onclick = () => container.scrollBy({ left: -400, behavior: 'smooth' });
+                                document.getElementById('slideRight').onclick = () => container.scrollBy({ left: 400, behavior: 'smooth' });
                             }
 
-                            loadMoreBtn.onclick = function () {
-                                productItems.forEach(item => item.classList.remove('d-none-custom'));
-                                this.style.display = 'none';
-                                collapseBtn.style.display = 'inline-block';
-                            };
+                            // Logic Xem Thêm / Thu Gọn
+                            const productItems = document.querySelectorAll('.product-item');
+                            const loadMoreBtn = document.getElementById('loadMoreBtn');
+                            const collapseBtn = document.getElementById('collapseBtn');
 
-                            collapseBtn.onclick = function () {
+                            if (loadMoreBtn && productItems.length > ITEMS_PER_PAGE) {
+                                loadMoreBtn.style.display = 'inline-block';
+
                                 for (let i = ITEMS_PER_PAGE; i < productItems.length; i++) {
                                     productItems[i].classList.add('d-none-custom');
                                 }
-                                this.style.display = 'none';
-                                loadMoreBtn.style.display = 'inline-block';
-                                const title = document.getElementById('product-section-title');
-                                if (title) title.scrollIntoView({ behavior: 'smooth' });
-                            };
-                        }
-                    });
-                </script>
+
+                                loadMoreBtn.onclick = function () {
+                                    productItems.forEach(item => item.classList.remove('d-none-custom'));
+                                    this.style.display = 'none';
+                                    collapseBtn.style.display = 'inline-block';
+                                };
+
+                                collapseBtn.onclick = function () {
+                                    for (let i = ITEMS_PER_PAGE; i < productItems.length; i++) {
+                                        productItems[i].classList.add('d-none-custom');
+                                    }
+                                    this.style.display = 'none';
+                                    loadMoreBtn.style.display = 'inline-block';
+                                    const title = document.getElementById('product-section-title');
+                                    if (title) title.scrollIntoView({ behavior: 'smooth' });
+                                };
+                            }
+                        });
+                    </script>
             </body>
 
             </html>

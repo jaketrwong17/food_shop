@@ -61,6 +61,20 @@ public class Product implements Serializable {
     public Product() {
     }
 
+    // ... các code cũ ở trên
+
+    // --- LIÊN KẾT VỚI BẢNG BRAND (HÃNG SẢN XUẤT) ---
+    @ManyToOne
+    @JoinColumn(name = "brand_id")
+    private Brand brand;
+
+    // --- THÊM XUẤT XỨ ---
+    // Xuất xứ thường chỉ cần dùng String là đủ (VD: "Việt Nam", "Trung Quốc", "Mỹ")
+    // Không nhất thiết phải tạo bảng riêng trừ khi bạn muốn quản lý chặt chẽ danh
+    // sách Quốc gia.
+    private String origin;
+
+    // ... các code cũ ở dưới
     // --- LOGIC TÍNH GIÁ KHUYẾN MÃI (Transient: Không lưu vào DB) ---
 
     // Tính giá thực tế sau khi giảm (Dùng để bán và hiển thị)

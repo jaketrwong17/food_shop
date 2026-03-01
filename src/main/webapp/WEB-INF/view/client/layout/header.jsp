@@ -3,16 +3,46 @@
         <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
             <style>
+                /* Class đồng bộ màu chủ đạo xanh đậm */
+                .text-theme {
+                    color: #3c8a2e !important;
+                }
+
+                .bg-theme {
+                    background-color: #3c8a2e !important;
+                    color: #fff !important;
+                }
+
+                /* === GHI ĐÈ HIỆU ỨNG CLICK (ACTIVE/FOCUS) MẶC ĐỊNH CỦA BOOTSTRAP === */
+                /* Đổi nền khi bấm vào menu thành xám nhạt, chữ màu xanh lá */
+                .dropdown-item:active,
+                .dropdown-item:focus {
+                    background-color: #f8f9fa !important;
+                    color: #3c8a2e !important;
+                }
+
+                /* Đảm bảo icon bên trong menu cũng đổi sang màu xanh lá khi bấm */
+                .dropdown-item:active i,
+                .dropdown-item:focus i {
+                    color: #3c8a2e !important;
+                }
+
+                /* Bỏ viền bóng mờ (glow) màu xanh dương khi click vào các nút hoặc form */
+                .btn:focus,
+                .form-control:focus,
+                .dropdown-toggle:focus {
+                    box-shadow: none !important;
+                    outline: none !important;
+                }
+
+                /* ==================================================================== */
+
                 .coupon-ticker-wrap {
-                    background-color: #237fe7;
-
-
+                    background-color: #3c8a2e;
                     width: 100%;
                     position: relative;
                     z-index: 1;
-
                 }
-
 
                 .ticker-viewport {
                     overflow: hidden;
@@ -21,18 +51,15 @@
                     display: flex;
                     align-items: center;
                     position: relative;
-
                     -webkit-mask-image: linear-gradient(to right, transparent, black 20px, black 95%, transparent);
                     mask-image: linear-gradient(to right, transparent, black 20px, black 95%, transparent);
                 }
-
 
                 .coupon-ticker-content {
                     display: inline-block;
                     padding-left: 100%;
                     animation: ticker-scroll 120s linear infinite;
                 }
-
 
                 .coupon-ticker-content:hover {
                     animation-play-state: paused;
@@ -64,43 +91,31 @@
                     opacity: 0.9;
                 }
 
-
                 header.sticky-top {
                     z-index: 1020 !important;
-
                     position: sticky;
                     top: 0;
                 }
 
-
                 .dropdown-menu {
                     z-index: 1030 !important;
-
                 }
 
-
                 .btn-register-custom {
-                    color: #0d6efd !important;
-
+                    color: #3c8a2e !important;
                     background-color: #fff;
                     transition: all 0.3s ease;
                 }
 
-
                 .btn-login-hover:hover {
-                    color: #2A83E9 !important;
-
+                    color: #3c8a2e !important;
                     background-color: #fff !important;
-
                     border-color: #fff !important;
-
                 }
 
                 .btn-auth {
                     min-width: 120px;
-
                     display: inline-flex;
-
                     justify-content: center;
                     align-items: center;
                 }
@@ -108,20 +123,17 @@
                 .custom-logo {
                     display: inline-block;
                     border-bottom: 3px solid #ffc107;
-
                     line-height: 1.2;
-
                     padding-bottom: 2px;
                 }
 
                 .custom-logo:hover {
                     color: inherit;
-
                     opacity: 0.8;
                 }
             </style>
 
-            <header class="navbar navbar-expand-lg navbar-dark py-3 sticky-top" style="background-color: #2A83E9;">
+            <header class="navbar navbar-expand-lg navbar-dark py-3 sticky-top" style="background-color: #3c8a2e;">
                 <div class="container">
                     <a class="navbar-brand fw-bold fs-2 custom-logo" href="/">
                         16Home<span class="text-warning">.</span>
@@ -136,7 +148,7 @@
                         <div class="d-flex flex-grow-1 mx-lg-4 my-2 my-lg-0">
 
                             <div class="dropdown me-2">
-                                <button class="btn btn-primary border-white dropdown-toggle rounded-pill w-100"
+                                <button class="btn bg-theme border-white dropdown-toggle rounded-pill w-100"
                                     type="button" id="dropdownMenuCategory" data-bs-toggle="dropdown"
                                     aria-expanded="false">
                                     <i class="fas fa-bars me-2"></i>Danh mục
@@ -182,7 +194,7 @@
                                 <input class="form-control rounded-pill pe-5" type="search" name="search" placeholder=""
                                     value="${param.keyword}">
                                 <button
-                                    class="btn btn-link position-absolute end-0 top-50 translate-middle-y me-2 text-primary"
+                                    class="btn btn-link position-absolute end-0 top-50 translate-middle-y me-2 text-theme"
                                     type="submit">
                                     <i class="fas fa-search"></i>
                                 </button>
@@ -193,7 +205,7 @@
                             <a href="/cart" class="text-white text-decoration-none position-relative me-2">
                                 <i class="fas fa-shopping-cart fs-4"></i>
                                 <span
-                                    class="badge bg-warning text-dark rounded-pill position-absolute top-0 start-100 translate-middle">
+                                    class="badge bg-warning text-dark rounded-pill position-absolute top-0 start-100 translate-middle shadow-sm">
                                     ${sessionScope.sum != null ? sessionScope.sum : 0}
                                 </span>
                             </a>
@@ -204,9 +216,8 @@
                                         class="btn btn-outline-light rounded-pill fw-bold btn-sm btn-auth btn-login-hover">
                                         Đăng nhập
                                     </a>
-
                                     <a href="/register"
-                                        class="btn btn-light text-primary rounded-pill fw-bold btn-sm btn-auth">
+                                        class="btn btn-light text-theme rounded-pill fw-bold btn-sm btn-auth">
                                         Đăng ký
                                     </a>
                                 </c:when>
@@ -216,7 +227,7 @@
                                             class="btn btn-link text-white text-decoration-none dropdown-toggle d-flex align-items-center"
                                             type="button" id="userDropdown" data-bs-toggle="dropdown"
                                             aria-expanded="false">
-                                            <div class="bg-warning rounded-circle d-flex justify-content-center align-items-center text-dark fw-bold me-2"
+                                            <div class="bg-warning rounded-circle d-flex justify-content-center align-items-center text-dark fw-bold me-2 shadow-sm"
                                                 style="width: 35px; height: 35px;">
                                                 <i class="fas fa-user"></i>
                                             </div>
@@ -239,10 +250,10 @@
                                                 </li>
                                             </c:if>
                                             <li><a class="dropdown-item py-2" href="/profile"><i
-                                                        class="fas fa-id-card me-2 text-primary"></i> Thông tin tài
+                                                        class="fas fa-id-card me-2 text-theme"></i> Thông tin tài
                                                     khoản</a></li>
                                             <li><a class="dropdown-item py-2" href="/order-history"><i
-                                                        class="fas fa-box-open me-2 text-success"></i> Quản lý đơn
+                                                        class="fas fa-box-open me-2 text-theme"></i> Quản lý đơn
                                                     hàng</a></li>
                                             <li>
                                                 <hr class="dropdown-divider">
@@ -253,8 +264,7 @@
                                                         <input type="hidden" name="${_csrf.parameterName}"
                                                             value="${_csrf.token}" />
                                                     </c:if>
-                                                    <button type="submit"
-                                                        class="dropdown-item py-2 text-danger fw-bold">
+                                                    <button type="submit" class="dropdown-item py-2 text-theme fw-bold">
                                                         <i class="fas fa-sign-out-alt me-2"></i> Đăng xuất
                                                     </button>
                                                 </form>
@@ -267,26 +277,3 @@
                     </div>
                 </div>
             </header>
-
-            <div class="coupon-ticker-wrap">
-                <div class="container">
-                    <div class="ticker-viewport">
-                        <div class="coupon-ticker-content">
-                            <c:forEach begin="1" end="10">
-                                <span class="coupon-item">
-                                    <i class="fas fa-check-circle"></i> Sản phẩm chính hãng
-                                </span>
-                                <span class="coupon-item">
-                                    <i class="fas fa-phone-alt"></i> Tổng đài: 0968 733 752
-                                </span>
-                                <span class="coupon-item">
-                                    <i class="fas fa-shipping-fast"></i> Giao hàng tận nơi
-                                </span>
-                                <span class="coupon-item">
-                                    <i class="fas fa-sync-alt"></i> Đổi trả 7 ngày
-                                </span>
-                            </c:forEach>
-                        </div>
-                    </div>
-                </div>
-            </div>
