@@ -15,7 +15,8 @@
                 </div>
                 <h3 class="fw-bold text-danger">Kích hoạt thất bại!</h3>
                 <p class="text-muted mt-3">Liên kết xác thực không hợp lệ hoặc tài khoản đã được kích hoạt trước đó.</p>
-                <a href="/register" class="btn btn-warning mt-3 rounded-pill px-4 text-white">Đăng ký lại</a>
+                <a href="/register" class="btn mt-3 rounded-pill px-4 text-white"
+                    style="background-color: #3c8a2e;">Đăng ký lại</a>
             </div>
         </div>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">

@@ -136,7 +136,7 @@
             <header class="navbar navbar-expand-lg navbar-dark py-3 sticky-top" style="background-color: #3c8a2e;">
                 <div class="container">
                     <a class="navbar-brand fw-bold fs-2 custom-logo" href="/">
-                        16Home<span class="text-warning">.</span>
+                        GreenFood<span class="text-warning">.</span>
                     </a>
 
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -264,7 +264,8 @@
                                                         <input type="hidden" name="${_csrf.parameterName}"
                                                             value="${_csrf.token}" />
                                                     </c:if>
-                                                    <button type="submit" class="dropdown-item py-2 text-theme fw-bold">
+                                                    <button type="submit"
+                                                        class="dropdown-item py-2 text-danger fw-bold">
                                                         <i class="fas fa-sign-out-alt me-2"></i> Đăng xuất
                                                     </button>
                                                 </form>

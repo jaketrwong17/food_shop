@@ -3,6 +3,8 @@ package com.example.shop.controller.client;
 import com.example.shop.domain.Product;
 import com.example.shop.domain.Voucher;
 import com.example.shop.domain.dto.TopProductDTO;
+import com.example.shop.service.BannerService; // IMPORT THÊM BANNER SERVICE
+import com.example.shop.service.BrandService;
 import com.example.shop.service.CategoryService;
 import com.example.shop.service.ProductService;
 import com.example.shop.service.VoucherService;
@@ -24,13 +26,20 @@ public class HomePageController {
     private final ProductService productService;
     private final CategoryService categoryService;
     private final VoucherService voucherService;
+    private final BrandService brandService;
+    private final BannerService bannerService; // KHAI BÁO THÊM BIẾN
 
+    // BỔ SUNG BANNER SERVICE VÀO CONSTRUCTOR
     public HomePageController(ProductService productService,
             CategoryService categoryService,
-            VoucherService voucherService) {
+            VoucherService voucherService,
+            BrandService brandService,
+            BannerService bannerService) {
         this.productService = productService;
         this.categoryService = categoryService;
         this.voucherService = voucherService;
+        this.brandService = brandService;
+        this.bannerService = bannerService;
     }
 
     @GetMapping("/")
@@ -38,6 +47,8 @@ public class HomePageController {
             HttpServletRequest request,
             @RequestParam(required = false) String search,
             @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) Long brandId,
+            @RequestParam(required = false) String origin,
             @RequestParam(required = false) String sort) {
 
         HttpSession session = request.getSession(true);
@@ -47,8 +58,8 @@ public class HomePageController {
 
         List<Product> products;
 
-        if (search != null || categoryId != null) {
-            products = productService.getAllProducts(search, categoryId, sort);
+        if (search != null || categoryId != null || brandId != null || origin != null || sort != null) {
+            products = productService.getAllProducts(search, categoryId, brandId, origin, sort);
         } else {
             Pageable pageable = PageRequest.of(0, 100);
             Page<Product> pageProducts = productService.getAllProductsWithPaging(pageable, sort);
@@ -61,7 +72,11 @@ public class HomePageController {
         model.addAttribute("bestSellingProducts", bestSellingProducts);
         model.addAttribute("products", products);
         model.addAttribute("categories", categoryService.getAllCategories(null));
+        model.addAttribute("brands", brandService.getAllBrands());
         model.addAttribute("vouchers", vouchers);
+
+        // DÒNG NÀY RẤT QUAN TRỌNG ĐỂ HIỂN THỊ BANNER RA NGOÀI TRANG CHỦ
+        model.addAttribute("banners", bannerService.getActiveBanners());
 
         return "client/homepage/show";
     }

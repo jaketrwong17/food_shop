@@ -26,6 +26,11 @@
                 <i class="fas fa-tags me-2"></i> Danh mục
             </a>
 
+            <a href="/admin/brand"
+                class="list-group-item list-group-item-action ${param.active == 'brand' ? 'active' : ''}">
+                <i class="fas fa-copyright me-2"></i> Thương hiệu
+            </a>
+
             <a href="/admin/order"
                 class="list-group-item list-group-item-action ${param.active == 'order' ? 'active' : ''}">
                 <i class="fas fa-shopping-cart me-2"></i> Đơn hàng
@@ -50,7 +55,15 @@
                 class="list-group-item list-group-item-action ${param.active == 'promotion' ? 'active' : ''}">
                 <i class="fas fa-bullhorn me-2"></i> Khuyến mãi
             </a>
+            <a href="/admin/banner"
+                class="list-group-item list-group-item-action ${param.active == 'banner' ? 'active' : ''}">
+                <i class="fas fa-image me-2"></i> Banner
+            </a>
 
+            <a href="/admin/policy"
+                class="list-group-item list-group-item-action ${param.active == 'policy' ? 'active' : ''}">
+                <i class="fas fa-shield-alt me-2"></i> Chính sách
+            </a>
             <div class="mt-auto p-4">
                 <form id="logoutForm" method="POST" action="/logout" style="display:none;">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />

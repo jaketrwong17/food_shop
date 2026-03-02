@@ -25,7 +25,8 @@
                 }
 
                 .btn-primary-custom {
-                    background-color: #2A83E9;
+                    background-color: #3c8a2e;
+                    /* Đã đổi màu */
                     border: none;
                     border-radius: 50px;
                     padding: 12px;
@@ -34,7 +35,8 @@
                 }
 
                 .btn-primary-custom:hover {
-                    background-color: #1c68c4;
+                    background-color: #2d6a22;
+                    /* Đã đổi màu */
                 }
 
                 .form-control {
@@ -51,7 +53,7 @@
                 <div class="text-center mb-4">
                     <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center"
                         style="width: 80px; height: 80px;">
-                        <i class="fas fa-lock fa-2x" style="color: #2A83E9;"></i>
+                        <i class="fas fa-lock fa-2x" style="color: #3c8a2e;"></i>
                     </div>
                 </div>
                 <h3 class="text-center mb-2 fw-bold" style="color: #333;">Quên mật khẩu?</h3>

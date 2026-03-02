@@ -64,7 +64,8 @@ public class ProductService {
         return products;
     }
 
-    public List<Product> getAllProducts(String keyword, Long categoryId, String status) {
+    // Đã thay thế hàm cũ bằng hàm mới có nhận thêm tham số brandId
+    public List<Product> getAllProducts(String keyword, Long categoryId, Long brandId, String status) {
         List<Product> products;
 
         if (keyword != null && !keyword.isEmpty() && categoryId != null) {
@@ -77,16 +78,48 @@ public class ProductService {
             products = productRepository.findAll();
         }
 
-        if ("active".equals(status)) {
-            products = products.stream().filter(Product::isActive).toList();
-        } else if ("inactive".equals(status)) {
-            products = products.stream().filter(p -> !p.isActive()).toList();
+        // Lọc bằng Stream kết hợp Trạng thái và Thương hiệu
+        return products.stream()
+                .filter(p -> "all".equals(status) ||
+                        ("active".equals(status) && p.isActive()) ||
+                        ("inactive".equals(status) && !p.isActive()))
+                .filter(p -> brandId == null || (p.getBrand() != null && p.getBrand().getId() == brandId))
+                .toList();
+    }
+
+    // === HÀM MỚI THÊM: PHỤC VỤ TÍNH NĂNG LỌC NGOÀI TRANG CHỦ ===
+    public List<Product> getAllProducts(String keyword, Long categoryId, Long brandId, String origin, String sort) {
+        List<Product> products;
+
+        if (keyword != null && !keyword.isEmpty() && categoryId != null) {
+            products = productRepository.findByNameContainingIgnoreCaseAndCategoryId(keyword, categoryId);
+        } else if (keyword != null && !keyword.isEmpty()) {
+            products = productRepository.findByNameContainingIgnoreCase(keyword);
+        } else if (categoryId != null) {
+            products = productRepository.findByCategoryId(categoryId);
+        } else {
+            products = productRepository.findAll();
         }
 
-        // ĐÃ XÓA vòng lặp enrichProductQuantity
-
-        return products;
+        return products.stream()
+                // Lọc theo Brand (Nếu có chọn)
+                .filter(p -> brandId == null || (p.getBrand() != null && p.getBrand().getId() == brandId))
+                // Lọc theo Origin (Nếu có chọn)
+                .filter(p -> origin == null || origin.isEmpty()
+                        || (p.getOrigin() != null && p.getOrigin().equalsIgnoreCase(origin)))
+                // Xử lý sắp xếp (Sort)
+                .sorted((p1, p2) -> {
+                    if ("price-asc".equals(sort)) {
+                        return Double.compare(p1.getPrice(), p2.getPrice());
+                    } else if ("price-desc".equals(sort)) {
+                        return Double.compare(p2.getPrice(), p1.getPrice());
+                    }
+                    // Mặc định hiển thị sản phẩm mới nhất lên đầu
+                    return Long.compare(p2.getId(), p1.getId());
+                })
+                .toList();
     }
+    // ==========================================================
 
     public Product handleSaveProduct(Product product) {
         return productRepository.save(product);
@@ -281,5 +314,9 @@ public class ProductService {
             product.setActive(!product.isActive());
             productRepository.save(product);
         }
+    }
+
+    public long countLowStockProducts(long threshold) {
+        return productRepository.countByQuantityLessThanEqual(threshold);
     }
 }

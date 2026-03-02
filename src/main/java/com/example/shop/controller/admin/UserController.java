@@ -20,10 +20,20 @@ public class UserController {
     }
 
     @GetMapping("/admin/user")
-    public String getUserPage(Model model, @RequestParam(value = "keyword", required = false) String keyword) {
-        List<User> users = userService.getAllUsers();
+    public String getUserPage(Model model,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String role,
+            @RequestParam(required = false) Boolean locked) {
+
+        // Lấy danh sách user theo bộ lọc
+        List<User> users = userService.searchUsers(keyword, role, locked);
+
         model.addAttribute("users", users);
+        model.addAttribute("roles", userService.getAllRoles()); // Để hiện dropdown role
         model.addAttribute("keyword", keyword);
+        model.addAttribute("selectedRole", role);
+        model.addAttribute("selectedLocked", locked);
+
         return "admin/user/show";
     }
 

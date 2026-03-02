@@ -1,6 +1,7 @@
 package com.example.shop.domain;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Formula; // BỔ SUNG IMPORT NÀY
 import java.util.List;
 
 @Entity
@@ -22,6 +23,16 @@ public class Category {
     @OneToMany(mappedBy = "category")
     private List<Product> products;
 
+    // --- BỔ SUNG BIẾN TÍNH TOÁN SỐ LƯỢNG SẢN PHẨM ---
+    @Formula("(SELECT COUNT(p.id) FROM products p WHERE p.category_id = id)")
+    private int productCount;
+
+    // --- GETTER CHO SỐ LƯỢNG ---
+    public int getProductCount() {
+        return productCount;
+    }
+
+    // --- CÁC GETTER & SETTER CŨ ---
     public long getId() {
         return id;
     }

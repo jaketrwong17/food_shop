@@ -14,13 +14,9 @@
                 <div id="page-content-wrapper">
                     <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom px-4 py-3">
                         <div class="d-flex justify-content-between align-items-center w-100 flex-wrap gap-3">
-
                             <h4 class="mb-0 text-dark fw-bold">Quản lý Danh mục</h4>
-
-
                         </div>
                     </nav>
-
 
                     <div class="container-fluid px-4 py-4">
                         <div class="card shadow-sm border-0 rounded-3">
@@ -29,10 +25,15 @@
                                     <div class="col-md-9">
                                         <form action="/admin/category" method="GET"
                                             class="d-flex gap-2 align-items-center">
-                                            <input type="text" name="keyword" class="form-control" placeholder=""
-                                                value="${keyword}" style="max-width: 400px;">
+                                            <input type="text" name="keyword" class="form-control"
+                                                placeholder="Tìm kiếm..." value="${keyword}" style="max-width: 400px;">
                                             <button class="btn btn-outline-primary ms-2"><i class="fas fa-search"></i>
                                             </button>
+                                            <a href="/admin/category"
+                                                class="btn btn-outline-secondary d-flex align-items-center justify-content-center shadow-none"
+                                                style="width: 38px; height: 38px; border-radius: 6px;" title="Làm mới">
+                                                <i class="fas fa-sync-alt" style="font-size: 0.8rem;"></i>
+                                            </a>
                                         </form>
                                     </div>
                                     <div class="col-md-3 text-end">
@@ -57,7 +58,7 @@
                                                     <th style="width: 80px;">ID</th>
                                                     <th style="width: 120px;">Biểu tượng</th>
                                                     <th>Tên danh mục</th>
-                                                    <th>Mô tả</th>
+                                                    <th class="text-center">Số lượng SP</th>
                                                     <th style="width: 180px;">Thao tác</th>
                                                 </tr>
                                             </thead>
@@ -79,7 +80,14 @@
                                                             </c:if>
                                                         </td>
                                                         <td class="fw-bold text-primary">${cat.name}</td>
-                                                        <td class="text-muted">${cat.description}</td>
+
+                                                        <td class="text-center">
+                                                            <span
+                                                                class="badge bg-info text-dark rounded-pill px-3 py-2 fw-bold">
+                                                                ${cat.productCount}
+                                                            </span>
+                                                        </td>
+
                                                         <td>
                                                             <a href="/admin/category/update/${cat.id}"
                                                                 class="btn btn-sm btn-warning text-white me-2">
@@ -87,7 +95,7 @@
                                                             </a>
                                                             <a href="/admin/category/delete/${cat.id}"
                                                                 class="btn btn-sm btn-danger"
-                                                                onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục [${cat.name}]?')">
+                                                                onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục [${cat.name}]? \nCảnh báo: Các sản phẩm thuộc danh mục này cũng có thể bị ảnh hưởng!')">
                                                                 <i class="fas fa-trash-alt"></i>
                                                             </a>
                                                         </td>

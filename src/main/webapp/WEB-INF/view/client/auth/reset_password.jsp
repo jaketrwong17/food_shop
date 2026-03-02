@@ -24,7 +24,8 @@
                 }
 
                 .btn-primary-custom {
-                    background-color: #2A83E9;
+                    background-color: #3c8a2e;
+                    /* Đã đổi màu */
                     border: none;
                     border-radius: 50px;
                     padding: 12px;
@@ -33,7 +34,8 @@
                 }
 
                 .btn-primary-custom:hover {
-                    background-color: #1c68c4;
+                    background-color: #2d6a22;
+                    /* Đã đổi màu */
                 }
 
                 .form-control {
@@ -48,8 +50,7 @@
 
         <body>
             <div class="card card-custom bg-white">
-                <h3 class="text-center mb-4 fw-bold" style="color: #2A83E9;">Đặt lại mật khẩu</h3>
-
+                <h3 class="text-center mb-4 fw-bold" style="color: #3c8a2e;">Đặt lại mật khẩu</h3>
                 <c:if test="${not empty error}">
                     <div class="alert alert-danger text-center small rounded-pill">${error}</div>
                 </c:if>

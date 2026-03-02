@@ -83,12 +83,17 @@
                                 752</strong></p>
                     </div>
 
-                    <div class="col-lg-3">
-                        <h6 class="fw-bold mb-3">Thông tin và chính sách</h6>
-                        <ul class="list-unstyled text-secondary fs-sm">
-                            <li><a href="#" class="text-reset text-decoration-none">Giới thiệu 16Home</a></li>
-                            <li><a href="#" class="text-reset text-decoration-none">Chính sách bảo hành</a></li>
-                            <li><a href="#" class="text-reset text-decoration-none">Hình thức thanh toán</a></li>
+                    <div class="col-md-3">
+                        <h6 class="text-white fw-bold mb-3">Thông tin và chính sách</h6>
+                        <ul class="list-unstyled">
+                            <c:forEach var="p" items="${globalPolicies}">
+                                <li class="mb-2">
+                                    <a href="/policy/${p.id}"
+                                        class="text-white text-decoration-none text-opacity-75 hover-opacity-100">
+                                        ${p.name}
+                                    </a>
+                                </li>
+                            </c:forEach>
                         </ul>
                     </div>
 
@@ -119,7 +124,7 @@
 
                             <div class="d-flex gap-2 align-items-center mb-2">
                                 <i class="fas fa-envelope text-white fs-5"></i>
-                                <p class="reason mb-0 text-white">support@16home.vn</p>
+                                <p class="reason mb-0 text-white">support@greenfood.vn</p>
                             </div>
 
                             <div class="d-flex gap-2 justify-content-start align-items-center mb-2">
@@ -153,8 +158,8 @@
                     </div>
                     <hr class="my-4 border-secondary">
 
-                    <div class="d-flex justify-content-between flex-wrap align-items-center">
-                        <p class="text-secondary small mb-0">© 2024 Bản quyền thuộc về 16Home.</p>
+                    <div class="d-flex justify-content-center flex-wrap align-items-center">
+                        <p class="text-secondary small mb-0">© 2026 Cửa hàng cung cấp thực phẩm GreenFood.</p>
                     </div>
                 </div>
         </footer>

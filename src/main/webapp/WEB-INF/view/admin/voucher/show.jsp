@@ -79,7 +79,11 @@
                                                 value="${keyword}" style="max-width: 400px;">
                                             <button class="btn btn-outline-primary ms-2"><i
                                                     class="fas fa-search"></i></button>
-
+                                            <a href="/admin/voucher"
+                                                class="btn btn-outline-secondary d-flex align-items-center justify-content-center shadow-none"
+                                                style="width: 38px; height: 38px; border-radius: 6px;" title="Làm mới">
+                                                <i class="fas fa-sync-alt" style="font-size: 0.8rem;"></i>
+                                            </a>
                                         </form>
                                     </div>
                                     <div class="col-md-3 text-end">

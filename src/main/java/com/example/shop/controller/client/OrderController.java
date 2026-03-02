@@ -376,4 +376,5 @@ public class OrderController {
         model.addAttribute("categories", categoryService.getAllCategories(null));
         return "client/order/detail";
     }
+
 }

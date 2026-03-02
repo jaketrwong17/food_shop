@@ -226,4 +226,40 @@ public class OrderService {
     public long countAllOrders() {
         return orderRepository.countByStatus("COMPLETED");
     }
+
+    public long countOrdersByStatus(String status) {
+        return orderRepository.countByStatus(status);
+    }
+
+    public List<Object[]> getRevenueLast7Days() {
+        return orderRepository.getRevenueLast7Days();
+    }
+
+    public List<Object[]> getRevenueThisMonth() {
+        return orderRepository.getRevenueThisMonth();
+    }
+
+    public List<Object[]> getRevenueThisYear() {
+        return orderRepository.getRevenueThisYear();
+    }
+
+    public Double calculateTotalRevenue(java.time.LocalDateTime start, java.time.LocalDateTime end) {
+        return orderRepository.calculateTotalRevenueByDateRange(start, end);
+    }
+
+    public long countOrders(java.time.LocalDateTime start, java.time.LocalDateTime end) {
+        return orderRepository.countOrdersByDateRange(start, end);
+    }
+
+    public long countOrdersByStatus(String status, java.time.LocalDateTime start, java.time.LocalDateTime end) {
+        return orderRepository.countOrdersByStatusAndDateRange(status, start, end);
+    }
+
+    public List<Object[]> getRevenueChart(java.time.LocalDateTime start, java.time.LocalDateTime end) {
+        return orderRepository.getRevenueChartByDateRange(start, end);
+    }
+
+    public List<Order> getAllOrders(String keyword, String status) {
+        return orderRepository.searchOrders(keyword, status);
+    }
 }

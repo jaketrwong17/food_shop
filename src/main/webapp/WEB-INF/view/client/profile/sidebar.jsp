@@ -36,6 +36,7 @@
                         <span class="${act == 'password' ? 'fw-bold text-theme' : 'text-dark'}">Đổi mật khẩu</span>
                     </a>
 
+
                     <form action="/logout" method="post" class="m-0">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                         <button type="submit"

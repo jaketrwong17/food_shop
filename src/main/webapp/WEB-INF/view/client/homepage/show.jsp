@@ -7,7 +7,7 @@
 
             <head>
                 <meta charset="UTF-8">
-                <title>16Home - Cửa hàng trực tuyến</title>
+                <title>GreenFood - Cửa hàng trực tuyến</title>
                 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
                 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
@@ -223,7 +223,7 @@
                         }
                     }
 
-                    /* ==================== SORT OPTIONS & SLIDER ==================== */
+                    /* ==================== SORT & FILTER OPTIONS ==================== */
                     .sort-options {
                         display: flex;
                         gap: 12px;
@@ -254,6 +254,32 @@
                         background: #eef5eb;
                         color: #3c8a2e;
                         font-weight: 500;
+                    }
+
+                    /* CSS BỘ LỌC TAGS */
+                    .filter-tag {
+                        display: inline-flex;
+                        align-items: center;
+                        background-color: #fff;
+                        border: 1px solid #d1d5db;
+                        color: #333;
+                        font-size: 0.85rem;
+                        padding: 4px 12px;
+                        border-radius: 50px;
+                        text-decoration: none;
+                        transition: 0.2s;
+                    }
+
+                    .filter-tag:hover {
+                        background-color: #f8f9fa;
+                        border-color: #adb5bd;
+                        color: #000;
+                    }
+
+                    .filter-tag i {
+                        font-size: 0.75rem;
+                        color: #6c757d;
+                        margin-left: 6px;
                     }
 
                     .category-scroll-container {
@@ -297,23 +323,88 @@
                 <%-- Gọi File Header ở đây --%>
                     <jsp:include page="../layout/header.jsp" />
 
-                    <div class="container-fluid p-0 mb-5">
-                        <div id="homeBannerCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="container mt-4 mb-4">
+                        <div id="homeBannerCarousel" class="carousel slide shadow-sm" data-bs-ride="carousel"
+                            style="border-radius: 12px; overflow: hidden;">
+
                             <div class="carousel-indicators">
-                                <button type="button" data-bs-target="#homeBannerCarousel" data-bs-slide-to="0"
-                                    class="active"></button>
-                                <button type="button" data-bs-target="#homeBannerCarousel"
-                                    data-bs-slide-to="1"></button>
+                                <c:choose>
+                                    <c:when test="${not empty banners}">
+                                        <c:forEach var="banner" items="${banners}" varStatus="status">
+                                            <button type="button" data-bs-target="#homeBannerCarousel"
+                                                data-bs-slide-to="${status.index}"
+                                                class="${status.first ? 'active' : ''}"></button>
+                                        </c:forEach>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <button type="button" data-bs-target="#homeBannerCarousel" data-bs-slide-to="0"
+                                            class="active"></button>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
+
                             <div class="carousel-inner">
-                                <div class="carousel-item active" data-bs-interval="5000">
-                                    <img src="https://theme.hstatic.net/200000946105/1001363519/14/collection_banner.jpg?v=1368"
-                                        class="d-block w-100" style="height: 700px; object-fit: cover;">
-                                </div>
-                                <div class="carousel-item" data-bs-interval="5000">
-                                    <img src="https://duytan.com/Data/Sites/1/Banner/banner-spm-t12.jpg"
-                                        class="d-block w-100" style="height: 700px; object-fit: cover;">
-                                </div>
+                                <c:choose>
+                                    <c:when test="${not empty banners}">
+                                        <c:forEach var="banner" items="${banners}" varStatus="status">
+                                            <div class="carousel-item ${status.first ? 'active' : ''}"
+                                                data-bs-interval="4000">
+                                                <c:choose>
+                                                    <c:when test="${not empty banner.link}">
+                                                        <a href="${banner.link}">
+                                                            <img src="/images/${banner.imageUrl}" class="d-block w-100"
+                                                                style="height: 380px; object-fit: cover;">
+                                                        </a>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <img src="/images/${banner.imageUrl}" class="d-block w-100"
+                                                            style="height: 380px; object-fit: cover;">
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </div>
+                                        </c:forEach>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="carousel-item active" data-bs-interval="4000">
+                                            <img src="https://theme.hstatic.net/200000946105/1001363519/14/collection_banner.jpg?v=1368"
+                                                class="d-block w-100" style="height: 380px; object-fit: cover;">
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+
+                            <button class="carousel-control-prev" type="button" data-bs-target="#homeBannerCarousel"
+                                data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon bg-dark rounded-circle bg-opacity-50"
+                                    aria-hidden="true" style="width: 2.5rem; height: 2.5rem; padding: 1.2rem;"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#homeBannerCarousel"
+                                data-bs-slide="next">
+                                <span class="carousel-control-next-icon bg-dark rounded-circle bg-opacity-50"
+                                    aria-hidden="true" style="width: 2.5rem; height: 2.5rem; padding: 1.2rem;"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+
+                        </div>
+                    </div>
+
+                    <div class="container mb-4">
+                        <div class="bg-white p-3 rounded-4 shadow-sm border">
+                            <div class="d-flex gap-4 overflow-auto category-scroll-container position-relative">
+                                <c:forEach var="b" items="${brands}">
+                                    <a href="?brandId=${b.id}#danh-sach-san-pham"
+                                        class="text-center text-decoration-none text-dark d-flex flex-column align-items-center"
+                                        style="min-width: 80px; transition: 0.2s;">
+
+                                        <div class="bg-white rounded-circle mb-2 border hover-shadow"
+                                            style="width: 60px; height: 60px; overflow: hidden; transition: border-color 0.2s;">
+                                            <img src="/images/${not empty b.logoUrl ? b.logoUrl : 'default-brand.png'}"
+                                                style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                                        </div>
+                                        <span class="small fw-bold">${b.name}</span>
+                                    </a>
+                                </c:forEach>
                             </div>
                         </div>
                     </div>
@@ -338,35 +429,37 @@
                                     <c:forEach var="item" items="${bestSellingProducts}" varStatus="status">
                                         <c:if test="${item.active}">
                                             <a href="/product/${item.productId}" class="text-decoration-none text-dark">
-                                                <div class="card best-seller-card p-2" style="min-width: 220px;">
-                                                    <div class="ranking-badge 
-                        ${status.index == 0 ? 'ranking-top-1' : 
-                            (status.index == 1 ? 'ranking-top-2' : 
-                            (status.index == 2 ? 'ranking-top-3' : 
-                            (status.index == 3 ? 'ranking-top-4' : 'ranking-top-others')))}">
-                                                        #${status.index + 1} Best Seller
-                                                    </div>
-                                                    <div class="bg-white rounded-3 mb-2 d-flex align-items-center justify-content-center"
-                                                        style="height: 180px;">
-                                                        <img src="/images/${not empty item.productImage ? item.productImage : 'default.png'}"
-                                                            style="max-width: 90%; max-height: 90%; object-fit: contain;">
-                                                    </div>
-                                                    <div class="card-body p-1 text-center">
-                                                        <h6 class="text-dark fw-bold mb-2"
-                                                            style="font-size: 0.9rem; min-height: 2.6em;">
-                                                            ${item.productName}
-                                                        </h6>
-                                                        <div class="price-container">
-                                                            <div class="text-danger fw-bold">
-                                                                <fmt:formatNumber
-                                                                    value="${item.totalRevenue / item.quantitySold}"
-                                                                    type="currency" currencySymbol="đ" />
+                                                <%-- KHÓA CỨNG CHIỀU RỘNG Ở ĐÂY --%>
+                                                    <div class="card best-seller-card p-2"
+                                                        style="min-width: 220px; width: 220px; max-width: 220px; flex-shrink: 0;">
+                                                        <div class="ranking-badge 
+                                        ${status.index == 0 ? 'ranking-top-1' : 
+                                            (status.index == 1 ? 'ranking-top-2' : 
+                                            (status.index == 2 ? 'ranking-top-3' : 
+                                            (status.index == 3 ? 'ranking-top-4' : 'ranking-top-others')))}">
+                                                            #${status.index + 1} Best Seller
+                                                        </div>
+                                                        <div class="bg-white rounded-3 mb-2 d-flex align-items-center justify-content-center"
+                                                            style="height: 180px;">
+                                                            <img src="/images/${not empty item.productImage ? item.productImage : 'default.png'}"
+                                                                style="max-width: 90%; max-height: 90%; object-fit: contain;">
+                                                        </div>
+                                                        <div class="card-body p-1 text-center">
+                                                            <h6 class="text-dark fw-bold mb-2"
+                                                                style="font-size: 0.9rem; min-height: 2.6em;">
+                                                                ${item.productName}
+                                                            </h6>
+                                                            <div class="price-container">
+                                                                <div class="text-danger fw-bold">
+                                                                    <fmt:formatNumber
+                                                                        value="${item.totalRevenue / item.quantitySold}"
+                                                                        type="currency" currencySymbol="đ" />
+                                                                </div>
+                                                                <small class="text-muted">Đã bán:
+                                                                    ${item.quantitySold}</small>
                                                             </div>
-                                                            <small class="text-muted">Đã bán:
-                                                                ${item.quantitySold}</small>
                                                         </div>
                                                     </div>
-                                                </div>
                                             </a>
                                         </c:if>
                                     </c:forEach>
@@ -378,8 +471,81 @@
                     </section>
 
                     <div class="container my-5" id="danh-sach-san-pham">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h4 class="fw-bold mb-0" id="product-section-title">DANH SÁCH SẢN PHẨM</h4>
+
+                        <h4 class="fw-bold mb-3" id="product-section-title">DANH SÁCH SẢN PHẨM</h4>
+
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                            <span class="btn btn-outline-primary rounded-pill btn-sm fw-bold" style="cursor: default;">
+                                <i class="fas fa-filter" style="color: white; -webkit-text-stroke: 1.5px #0d6efd;"></i>
+                                Lọc
+                            </span>
+
+                            <c:if test="${not empty param.brandId}">
+                                <c:forEach var="b" items="${brands}">
+                                    <c:if test="${b.id == param.brandId}">
+                                        <a href="?sort=${param.sort}&origin=${param.origin}&categoryId=${param.categoryId}#danh-sach-san-pham"
+                                            class="filter-tag">
+                                            Hãng: ${b.name} <i class="fas fa-times"></i>
+                                        </a>
+                                    </c:if>
+                                </c:forEach>
+                            </c:if>
+
+                            <c:if test="${not empty param.origin}">
+                                <a href="?sort=${param.sort}&brandId=${param.brandId}&categoryId=${param.categoryId}#danh-sach-san-pham"
+                                    class="filter-tag">
+                                    Xuất xứ: ${param.origin} <i class="fas fa-times"></i>
+                                </a>
+                            </c:if>
+
+                            <c:if test="${not empty param.brandId or not empty param.origin}">
+                                <a href="?sort=${param.sort}&categoryId=${param.categoryId}#danh-sach-san-pham"
+                                    class="text-primary small text-decoration-none ms-2 fw-bold">Xóa tất cả</a>
+                            </c:if>
+                        </div>
+
+                        <div
+                            class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3 border-bottom pb-3">
+
+                            <div class="d-flex gap-2">
+                                <div class="dropdown">
+                                    <button class="btn btn-outline-secondary rounded-pill btn-sm dropdown-toggle px-3"
+                                        type="button" data-bs-toggle="dropdown">
+                                        Thương hiệu
+                                    </button>
+                                    <ul class="dropdown-menu shadow-sm border-0">
+                                        <c:forEach var="b" items="${brands}">
+                                            <li><a class="dropdown-item ${param.brandId == b.id ? 'active' : ''}"
+                                                    href="?brandId=${b.id}&origin=${param.origin}&sort=${param.sort}&categoryId=${param.categoryId}#danh-sach-san-pham">${b.name}</a>
+                                            </li>
+                                        </c:forEach>
+                                    </ul>
+                                </div>
+
+                                <div class="dropdown">
+                                    <button class="btn btn-outline-secondary rounded-pill btn-sm dropdown-toggle px-3"
+                                        type="button" data-bs-toggle="dropdown">
+                                        Xuất xứ
+                                    </button>
+                                    <ul class="dropdown-menu shadow-sm border-0">
+                                        <li><a class="dropdown-item ${param.origin == 'Việt Nam' ? 'active' : ''}"
+                                                href="?origin=Việt Nam&brandId=${param.brandId}&sort=${param.sort}&categoryId=${param.categoryId}#danh-sach-san-pham">Việt
+                                                Nam</a></li>
+                                        <li><a class="dropdown-item ${param.origin == 'Mỹ' ? 'active' : ''}"
+                                                href="?origin=Mỹ&brandId=${param.brandId}&sort=${param.sort}&categoryId=${param.categoryId}#danh-sach-san-pham">Mỹ</a>
+                                        </li>
+                                        <li><a class="dropdown-item ${param.origin == 'Đức' ? 'active' : ''}"
+                                                href="?origin=Đức&brandId=${param.brandId}&sort=${param.sort}&categoryId=${param.categoryId}#danh-sach-san-pham">Đức</a>
+                                        </li>
+                                        <li><a class="dropdown-item ${param.origin == 'Hàn Quốc' ? 'active' : ''}"
+                                                href="?origin=Hàn Quốc&brandId=${param.brandId}&sort=${param.sort}&categoryId=${param.categoryId}#danh-sach-san-pham">Hàn
+                                                Quốc</a></li>
+                                        <li><a class="dropdown-item ${param.origin == 'Nhật Bản' ? 'active' : ''}"
+                                                href="?origin=Nhật Bản&brandId=${param.brandId}&sort=${param.sort}&categoryId=${param.categoryId}#danh-sach-san-pham">Nhật
+                                                Bản</a></li>
+                                    </ul>
+                                </div>
+                            </div>
 
                             <div class="sort-options">
                                 <c:set var="currentCatId" value="${param.categoryId}" />
@@ -393,6 +559,12 @@
                                 </c:if>
                                 <c:if test="${not empty param.search}">
                                     <c:set var="extraParams" value="${extraParams}&search=${param.search}" />
+                                </c:if>
+                                <c:if test="${not empty param.brandId}">
+                                    <c:set var="extraParams" value="${extraParams}&brandId=${param.brandId}" />
+                                </c:if>
+                                <c:if test="${not empty param.origin}">
+                                    <c:set var="extraParams" value="${extraParams}&origin=${param.origin}" />
                                 </c:if>
 
                                 <a href="?sort=price-asc${extraParams}#danh-sach-san-pham"
@@ -625,7 +797,7 @@
                             // --- CẤU HÌNH SỐ LƯỢNG SẢN PHẨM HIỂN THỊ MẶC ĐỊNH LÀ 15 ---
                             const ITEMS_PER_PAGE = 15;
 
-                            // Slider Best Seller
+                            // Slider Best Seller & Brand Strip
                             const container = document.getElementById('categoryList');
                             if (container) {
                                 document.getElementById('slideLeft').onclick = () => container.scrollBy({ left: -400, behavior: 'smooth' });

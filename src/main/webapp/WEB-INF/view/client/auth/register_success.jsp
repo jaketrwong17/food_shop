@@ -26,13 +26,15 @@
             }
 
             .icon-box {
-                color: #2A83E9;
+                color: #3c8a2e;
+                /* Đã đổi màu */
                 font-size: 5rem;
                 margin-bottom: 20px;
             }
 
             .btn-custom {
-                background-color: #2A83E9;
+                background-color: #3c8a2e;
+                /* Đã đổi màu */
                 color: white;
                 border-radius: 50px;
                 padding: 10px 30px;
@@ -43,7 +45,8 @@
             }
 
             .btn-custom:hover {
-                background-color: #1c68c4;
+                background-color: #2d6a22;
+                /* Đã đổi màu */
                 color: white;
             }
         </style>

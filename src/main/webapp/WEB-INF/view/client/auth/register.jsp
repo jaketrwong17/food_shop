@@ -38,11 +38,11 @@
                     }
 
                     .image-section {
-                        background-image: url('https://img.freepik.com/free-vector/sign-up-concept-illustration_114360-7965.jpg?w=740');
-                        background-size: cover;
+                        background-image: url('${pageContext.request.contextPath}/resources/images/register.png');
+                        background-size: contain;
+                        background-repeat: no-repeat;
                         background-position: center;
                         min-height: 600px;
-                        /* Tăng chiều cao lên chút vì form dài hơn */
                         position: relative;
                     }
 
@@ -52,11 +52,11 @@
                         left: 0;
                         right: 0;
                         bottom: 0;
-                        background: rgba(42, 131, 233, 0.05);
+                        background: rgba(60, 138, 46, 0.05);
                     }
 
                     .btn-primary-custom {
-                        background-color: #2A83E9;
+                        background-color: #3c8a2e;
                         border: none;
                         border-radius: 50px;
                         padding: 12px 20px;
@@ -69,9 +69,9 @@
                     }
 
                     .btn-primary-custom:hover {
-                        background-color: #1c68c4;
+                        background-color: #2d6a22;
                         transform: translateY(-2px);
-                        box-shadow: 0 5px 15px rgba(42, 131, 233, 0.3);
+                        box-shadow: 0 5px 15px rgba(60, 138, 46, 0.3);
                     }
 
                     .form-control {
@@ -80,12 +80,11 @@
                         background-color: #f8f9fa;
                         border: 1px solid #eee;
                         margin-bottom: 15px;
-                        /* Khoảng cách giữa các ô input */
                     }
 
                     .form-control:focus {
                         box-shadow: none;
-                        border-color: #2A83E9;
+                        border-color: #3c8a2e;
                         background-color: white;
                     }
 
@@ -104,9 +103,9 @@
                     }
 
                     .social-btn:hover {
-                        background-color: #2A83E9;
+                        background-color: #3c8a2e;
                         color: white;
-                        border-color: #2A83E9;
+                        border-color: #3c8a2e;
                     }
 
                     .divider {
@@ -152,7 +151,7 @@
 
                             <div class="col-md-6 form-section">
                                 <div class="text-center mb-4">
-                                    <h3 class="fw-bold mb-1" style="color: #2A83E9;">ĐĂNG KÝ</h3>
+                                    <h3 class="fw-bold mb-1" style="color: #3c8a2e;">ĐĂNG KÝ</h3>
                                     <p class="text-muted small">Tạo tài khoản mới hoàn toàn miễn phí</p>
                                 </div>
 
@@ -169,6 +168,7 @@
 
                                     <form:input path="lastName" class="form-control" placeholder="Tên"
                                         required="true" />
+
                                     <form:input path="email" type="email" class="form-control"
                                         placeholder="Địa chỉ Email" required="true" />
 
@@ -186,10 +186,9 @@
                                     <p class="small text-muted mb-0">
                                         Đã có tài khoản?
                                         <a href="/login" class="fw-bold text-decoration-none"
-                                            style="color: #2A83E9;">Đăng nhập ngay</a>
+                                            style="color: #3c8a2e;">Đăng nhập ngay</a>
                                     </p>
                                 </div>
-
 
                             </div>
                         </div>

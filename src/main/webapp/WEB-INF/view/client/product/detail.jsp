@@ -7,7 +7,7 @@
 
             <head>
                 <meta charset="UTF-8">
-                <title>${product.name} - 16Home</title>
+                <title>${product.name} - GreenFood</title>
                 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
                 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
                 <style>
@@ -348,8 +348,24 @@
                                 </form>
 
                                 <div class="mt-4 pt-3 border-top d-flex gap-4 small text-muted">
-                                    <span><i class="fas fa-undo-alt text-theme me-1"></i> 30 ngày đổi trả</span>
-                                    <span><i class="fas fa-shield-alt text-theme me-1"></i> Chính hãng 100%</span>
+                                    <span>
+                                        <i class="fas fa-tag text-theme me-1"></i> Thương hiệu:
+                                        <span class="text-dark">
+                                            <c:choose>
+                                                <c:when test="${not empty product.brand}">${product.brand.name}</c:when>
+                                                <c:otherwise>Đang cập nhật</c:otherwise>
+                                            </c:choose>
+                                        </span>
+                                    </span>
+                                    <span>
+                                        <i class="fas fa-globe-asia text-theme me-1"></i> Xuất xứ:
+                                        <span class="text-dark">
+                                            <c:choose>
+                                                <c:when test="${not empty product.origin}">${product.origin}</c:when>
+                                                <c:otherwise>Đang cập nhật</c:otherwise>
+                                            </c:choose>
+                                        </span>
+                                    </span>
                                 </div>
                             </div>
                         </div>

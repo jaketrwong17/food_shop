@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.annotations.Formula;
+
 @Entity
 @Table(name = "brands")
 public class Brand implements Serializable {
@@ -74,5 +76,16 @@ public class Brand implements Serializable {
 
     public void setProducts(List<Product> products) {
         this.products = products;
+    }
+    // ... các biến cũ (id, name, logoUrl, description...)
+
+    @Formula("(SELECT COUNT(p.id) FROM products p WHERE p.brand_id = id)")
+    private int productCount;
+
+    // ...
+
+    // Thêm Getter ở cuối file
+    public int getProductCount() {
+        return productCount;
     }
 }

@@ -7,7 +7,7 @@
 
             <head>
                 <meta charset="UTF-8">
-                <title>Chi tiết đơn hàng #${order.id} - 16Home</title>
+                <title>Chi tiết đơn hàng #${order.id} - GreenFood</title>
                 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
                 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
                 <style>
@@ -62,8 +62,8 @@
                                         chủ</a></li>
                                 <li class="breadcrumb-item"><a href="/order-history"
                                         class="text-decoration-none text-muted">Lịch sử đơn hàng</a></li>
-                                <li class="breadcrumb-item active text-theme" aria-current="page">Chi tiết
-                                    #${order.id}</li>
+                                <li class="breadcrumb-item active text-theme" aria-current="page">Chi tiết #${order.id}
+                                </li>
                             </ol>
                         </nav>
 
@@ -173,16 +173,22 @@
 
                                                                 <div>
                                                                     <p class="mb-1 fw-bold text-dark">
-                                                                        ${detail.product.name}</p>
+                                                                        ${not empty detail.product ? detail.product.name
+                                                                        : 'Sản phẩm không xác định'}
+                                                                    </p>
 
-                                                                    <c:if test="${not empty detail.selectedColor}">
-                                                                        <div class="mb-1">
-                                                                            <small class="text-muted">Phân loại: <strong
-                                                                                    class="text-dark">${detail.selectedColor}</strong></small>
-                                                                        </div>
-                                                                    </c:if>
+                                                                    <c:catch var="colorError">
+                                                                        <c:if test="${not empty detail.selectedColor}">
+                                                                            <div class="mb-1">
+                                                                                <small class="text-muted">Phân loại:
+                                                                                    <strong
+                                                                                        class="text-dark">${detail.selectedColor}</strong></small>
+                                                                            </div>
+                                                                        </c:if>
+                                                                    </c:catch>
 
-                                                                    <c:if test="${order.status == 'COMPLETED'}">
+                                                                    <c:if
+                                                                        test="${order.status == 'COMPLETED' and not empty detail.product.id}">
                                                                         <a href="/product/${detail.product.id}#review-section"
                                                                             class="text-warning text-decoration-none small review-link">
                                                                             <i class="fas fa-star me-1"></i> Đánh giá
@@ -193,13 +199,31 @@
                                                             </div>
                                                         </td>
                                                         <td class="text-center text-muted">
-                                                            <fmt:formatNumber value="${detail.price}" type="currency"
-                                                                currencySymbol="đ" />
+                                                            <c:choose>
+                                                                <c:when test="${not empty detail.price}">
+                                                                    <fmt:formatNumber value="${detail.price}"
+                                                                        type="currency" currencySymbol="đ" />
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <span class="text-danger small">Lỗi giá</span>
+                                                                </c:otherwise>
+                                                            </c:choose>
                                                         </td>
-                                                        <td class="text-center fw-bold">x${detail.quantity}</td>
+                                                        <td class="text-center fw-bold">
+                                                            x${not empty detail.quantity ? detail.quantity : 0}
+                                                        </td>
                                                         <td class="text-end fw-bold text-theme">
-                                                            <fmt:formatNumber value="${detail.price * detail.quantity}"
-                                                                type="currency" currencySymbol="đ" />
+                                                            <c:choose>
+                                                                <c:when
+                                                                    test="${not empty detail.price and not empty detail.quantity}">
+                                                                    <fmt:formatNumber
+                                                                        value="${detail.price * detail.quantity}"
+                                                                        type="currency" currencySymbol="đ" />
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <span class="text-danger small">Lỗi tính toán</span>
+                                                                </c:otherwise>
+                                                            </c:choose>
                                                         </td>
                                                     </tr>
                                                 </c:forEach>
@@ -212,15 +236,17 @@
                                             <div class="d-flex justify-content-between align-items-center mb-2">
                                                 <span class="text-muted">Tổng tiền hàng:</span>
                                                 <span class="fw-bold">
-                                                    <fmt:formatNumber value="${order.totalPrice}" type="currency"
-                                                        currencySymbol="đ" />
+                                                    <fmt:formatNumber
+                                                        value="${not empty order.totalPrice ? order.totalPrice : 0}"
+                                                        type="currency" currencySymbol="đ" />
                                                 </span>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <span class="h5 fw-bold text-dark">Thành tiền:</span>
                                                 <span class="h4 fw-bold text-danger">
-                                                    <fmt:formatNumber value="${order.totalPrice}" type="currency"
-                                                        currencySymbol="đ" />
+                                                    <fmt:formatNumber
+                                                        value="${not empty order.totalPrice ? order.totalPrice : 0}"
+                                                        type="currency" currencySymbol="đ" />
                                                 </span>
                                             </div>
                                         </div>

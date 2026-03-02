@@ -148,9 +148,35 @@
                                                         </form:select>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label class="form-label fw-bold small">Hãng sản xuất</label>
-                                                        <form:input path="factory" class="form-control" />
+                                                        <label class="form-label fw-bold small">Thương hiệu</label>
+                                                        <select name="brand.id" class="form-select">
+                                                            <option value="0">-- Chọn thương hiệu --</option>
+                                                            <c:forEach var="b" items="${brands}">
+                                                                <option value="${b.id}">${b.name}</option>
+                                                            </c:forEach>
+                                                        </select>
                                                     </div>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-bold small">Xuất xứ</label>
+                                                    <form:input path="origin" class="form-control" list="countryList"
+                                                        placeholder="Nhập hoặc tìm kiếm xuất xứ..." />
+                                                    <datalist id="countryList">
+                                                        <option value="Việt Nam"></option>
+                                                        <option value="Trung Quốc"></option>
+                                                        <option value="Hàn Quốc"></option>
+                                                        <option value="Nhật Bản"></option>
+                                                        <option value="Đài Loan"></option>
+                                                        <option value="Thái Lan"></option>
+                                                        <option value="Malaysia"></option>
+                                                        <option value="Mỹ"></option>
+                                                        <option value="Đức"></option>
+                                                        <option value="Pháp"></option>
+                                                        <option value="Anh"></option>
+                                                        <option value="Ý"></option>
+                                                        <option value="Nga"></option>
+                                                    </datalist>
                                                 </div>
 
                                                 <div class="mb-3">
@@ -185,13 +211,15 @@
                                                     <div class="row g-2 mb-2 dynamic-row align-items-center">
                                                         <div class="col-5"><input type="text" name="specNames"
                                                                 class="form-control form-control-sm"
-                                                                placeholder="Tên thông số"></div>
+                                                                placeholder="Tên thông số">
+                                                        </div>
                                                         <div class="col-6"><input type="text" name="specValues"
                                                                 class="form-control form-control-sm"
                                                                 placeholder="Giá trị"></div>
                                                         <div class="col-1 text-center"><button type="button"
                                                                 class="btn-remove-item" onclick="removeItem(this)"><i
-                                                                    class="fas fa-times-circle"></i></button></div>
+                                                                    class="fas fa-times-circle"></i></button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -225,24 +253,55 @@
                     CKEDITOR.replace('shortDesc');
                     CKEDITOR.replace('detailDesc');
                     const dt = new DataTransfer();
+
+                    /* HÀM NÀY ĐÃ ĐƯỢC SỬA ĐỂ HIỂN THỊ ĐÚNG ẢNH */
                     function handleFileSelect(input) {
-                        const files = input.files; const gallery = document.getElementById('gallery');
+                        const files = input.files;
+                        const gallery = document.getElementById('gallery');
                         Array.from(files).forEach(file => {
-                            dt.items.add(file); const reader = new FileReader();
+                            dt.items.add(file);
+                            const reader = new FileReader();
                             reader.onload = e => {
-                                const div = document.createElement('div'); div.className = 'img-card';
-                                div.innerHTML = `<img src="\${e.target.result}" onclick="viewImage(this.src)"><button type="button" class="btn-delete-img"><i class="fas fa-times"></i></button>`;
-                                div.querySelector('.btn-delete-img').onclick = () => { div.remove(); removeFileFromDT(file); };
+                                const div = document.createElement('div');
+                                div.className = 'img-card';
+
+                                const img = document.createElement('img');
+                                img.src = e.target.result;
+                                img.onclick = function () { viewImage(this.src); };
+
+                                const btnDelete = document.createElement('button');
+                                btnDelete.type = 'button';
+                                btnDelete.className = 'btn-delete-img';
+                                btnDelete.innerHTML = '<i class="fas fa-times"></i>';
+                                btnDelete.onclick = () => {
+                                    div.remove();
+                                    removeFileFromDT(file);
+                                };
+
+                                div.appendChild(img);
+                                div.appendChild(btnDelete);
                                 gallery.insertBefore(div, gallery.lastElementChild);
-                            }; reader.readAsDataURL(file);
+                            };
+                            reader.readAsDataURL(file);
                         });
                         input.files = dt.files;
                     }
-                    function removeFileFromDT(f) { const newDt = new DataTransfer(); for (let i = 0; i < dt.files.length; i++) { if (dt.files[i] !== f) newDt.items.add(dt.files[i]); } dt.items.clear(); for (let i = 0; i < newDt.files.length; i++) dt.items.add(newDt.files[i]); document.getElementById('imageFiles').files = dt.files; }
-                    function removeItem(btn) { const container = btn.closest('.card-body').querySelector('div[id$="-container"]'); if (container.children.length > 1) btn.closest('.dynamic-row').remove(); }
+
+                    function removeFileFromDT(f) {
+                        const newDt = new DataTransfer();
+                        for (let i = 0; i < dt.files.length; i++) { if (dt.files[i] !== f) newDt.items.add(dt.files[i]); } dt.items.clear();
+                        for (let i = 0; i < newDt.files.length; i++) dt.items.add(newDt.files[i]); document.getElementById('imageFiles').files = dt.files;
+                    }
+                    function removeItem(btn) {
+                        const container = btn.closest('.card-body').querySelector('div[id$="-container"]');
+                        if (container.children.length > 1) btn.closest('.dynamic-row').remove();
+                    }
                     document.getElementById('btnAddSpec').addEventListener('click', () => { document.getElementById('specs-container').insertAdjacentHTML('beforeend', `<div class="row g-2 mb-2 dynamic-row align-items-center"><div class="col-5"><input type="text" name="specNames" class="form-control form-control-sm" placeholder="Tên"></div><div class="col-6"><input type="text" name="specValues" class="form-control form-control-sm" placeholder="Giá trị"></div><div class="col-1 text-center"><button type="button" class="btn-remove-item" onclick="removeItem(this)"><i class="fas fa-times-circle"></i></button></div></div>`); });
                     function addMultipleSpecs(c) { for (let i = 0; i < c; i++) document.getElementById('btnAddSpec').click(); }
-                    function viewImage(s) { document.getElementById('modalImg').src = s; new bootstrap.Modal(document.getElementById('previewModal')).show(); }
+                    function viewImage(s) {
+                        document.getElementById('modalImg').src = s;
+                        new bootstrap.Modal(document.getElementById('previewModal')).show();
+                    }
                 </script>
             </body>
 

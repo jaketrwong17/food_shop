@@ -9,6 +9,7 @@ import com.example.shop.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReviewService {
@@ -45,9 +46,11 @@ public class ReviewService {
         return this.reviewRepository.findAll();
     }
 
-    public List<Review> searchReviews(String keyword) {
-        return this.reviewRepository.findByContentContainingOrUserFullNameContainingOrProductNameContaining(keyword,
-                keyword, keyword);
+    // ==========================================
+    // ĐÃ SỬA: Hỗ trợ lọc theo cả keyword và rating
+    // ==========================================
+    public List<Review> searchReviews(String keyword, Integer rating) {
+        return this.reviewRepository.searchReviews(keyword, rating);
     }
 
     public void deleteReview(long id) {
@@ -69,8 +72,6 @@ public class ReviewService {
 
     public void updateReview(long reviewId, String email, String content, int rating) {
         Review review = reviewRepository.findById(reviewId).orElse(null);
-        // Chỉ cho phép sửa nếu review tồn tại và email người yêu cầu khớp với email tác
-        // giả
         if (review != null && review.getUser() != null && review.getUser().getEmail().equals(email)) {
             review.setContent(content);
             review.setRating(rating);
@@ -80,8 +81,6 @@ public class ReviewService {
 
     public void deleteReview(long reviewId, String email) {
         Review review = reviewRepository.findById(reviewId).orElse(null);
-        // Chỉ cho phép xóa nếu review tồn tại và email người yêu cầu khớp với email tác
-        // giả
         if (review != null && review.getUser() != null && review.getUser().getEmail().equals(email)) {
             reviewRepository.delete(review);
         }

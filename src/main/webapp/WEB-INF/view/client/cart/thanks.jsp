@@ -7,7 +7,7 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Đặt hàng thành công - 16Home</title>
+            <title>Đặt hàng thành công - GreenFood</title>
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
             <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
             <style>
@@ -59,7 +59,7 @@
 
                     <h2 class="fw-bold mb-3 text-uppercase">Đặt hàng thành công!</h2>
                     <p class="text-muted mb-4">
-                        Cảm ơn bạn đã tin tưởng và mua sắm tại <strong>16Home</strong>. <br>
+                        Cảm ơn bạn đã tin tưởng và mua sắm tại <strong>GreenFood</strong>. <br>
                         Đơn hàng của bạn đã được tiếp nhận và đang trong quá trình chuẩn bị để giao đến bạn sớm nhất.
                     </p>
 

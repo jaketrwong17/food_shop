@@ -7,7 +7,7 @@
 
             <head>
                 <meta charset="UTF-8">
-                <title>Giỏ hàng - 16Home</title>
+                <title>Giỏ hàng - GreenFood</title>
                 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
                 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
                 <style>
@@ -96,14 +96,14 @@
                         cursor: pointer;
                     }
 
-                    /* Fix màu các nút cộng trừ số lượng */
-                    .btn-link:focus,
-                    .btn-link:active {
+                    /* Fix màu các nút cộng trừ số lượng (Chỉ khoanh vùng trong giỏ hàng) */
+                    .input-group .btn-link:focus,
+                    .input-group .btn-link:active {
                         color: #3c8a2e !important;
                         box-shadow: none !important;
                     }
 
-                    .btn-link:hover {
+                    .input-group .btn-link:hover {
                         color: #3c8a2e !important;
                     }
                 </style>

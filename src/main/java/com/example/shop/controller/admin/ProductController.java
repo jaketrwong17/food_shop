@@ -3,6 +3,7 @@ package com.example.shop.controller.admin;
 import com.example.shop.domain.Product;
 import com.example.shop.domain.ProductImage;
 import com.example.shop.domain.ProductSpec;
+import com.example.shop.service.BrandService;
 import com.example.shop.service.CategoryService;
 import com.example.shop.service.ProductService;
 import com.example.shop.service.UploadService;
@@ -22,24 +23,31 @@ public class ProductController {
     private final ProductService productService;
     private final CategoryService categoryService;
     private final UploadService uploadService;
+    private final BrandService brandService;
 
     public ProductController(ProductService productService, CategoryService categoryService,
-            UploadService uploadService) {
+            UploadService uploadService, BrandService brandService) {
         this.productService = productService;
         this.categoryService = categoryService;
         this.uploadService = uploadService;
+        this.brandService = brandService;
     }
 
     @GetMapping
     public String getProductPage(Model model,
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) Long brandId, // MỚI THÊM LỌC THEO HÃNG
             @RequestParam(required = false, defaultValue = "all") String status) {
 
-        model.addAttribute("products", productService.getAllProducts(keyword, categoryId, status));
+        // Cập nhật hàm getAllProducts truyền thêm brandId
+        model.addAttribute("products", productService.getAllProducts(keyword, categoryId, brandId, status));
         model.addAttribute("categories", categoryService.getAllCategories(null));
+        model.addAttribute("brands", brandService.getAllBrands()); // Gửi danh sách hãng xuống View
+
         model.addAttribute("keyword", keyword);
         model.addAttribute("categoryId", categoryId);
+        model.addAttribute("brandId", brandId);
         model.addAttribute("status", status);
 
         return "admin/product/show";
@@ -49,6 +57,7 @@ public class ProductController {
     public String getCreatePage(Model model) {
         model.addAttribute("newProduct", new Product());
         model.addAttribute("categories", categoryService.getAllCategories(null));
+        model.addAttribute("brands", brandService.getAllBrands());
         return "admin/product/create";
     }
 
@@ -57,6 +66,11 @@ public class ProductController {
             @RequestParam("imageFiles") MultipartFile[] files,
             @RequestParam(value = "specNames", required = false) String[] specNames,
             @RequestParam(value = "specValues", required = false) String[] specValues) {
+
+        if (product.getBrand() != null && product.getBrand().getId() == 0) {
+            product.setBrand(null);
+        }
+
         saveImages(product, files);
         handleSpecs(product, specNames, specValues);
 
@@ -69,6 +83,7 @@ public class ProductController {
         Product currentProduct = productService.fetchProductById(id).get();
         model.addAttribute("newProduct", currentProduct);
         model.addAttribute("categories", categoryService.getAllCategories(null));
+        model.addAttribute("brands", brandService.getAllBrands());
         return "admin/product/update";
     }
 
@@ -88,17 +103,19 @@ public class ProductController {
 
         currentProduct.setName(product.getName());
         currentProduct.setPrice(product.getPrice());
-
-        // --- THÊM DÒNG NÀY ĐỂ LƯU SỐ LƯỢNG ---
         currentProduct.setQuantity(product.getQuantity());
-        // --------------------------------------
-
         currentProduct.setCategory(product.getCategory());
+
+        if (product.getBrand() != null && product.getBrand().getId() == 0) {
+            currentProduct.setBrand(null);
+        } else {
+            currentProduct.setBrand(product.getBrand());
+        }
+
+        currentProduct.setOrigin(product.getOrigin());
         currentProduct.setShortDesc(product.getShortDesc());
         currentProduct.setDetailDesc(product.getDetailDesc());
-        currentProduct.setFactory(product.getFactory());
 
-        // Cập nhật thông số kỹ thuật
         currentProduct.getSpecs().clear();
         handleSpecs(currentProduct, specNames, specValues);
 

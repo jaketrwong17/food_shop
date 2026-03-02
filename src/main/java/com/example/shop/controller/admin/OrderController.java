@@ -63,14 +63,21 @@ public class OrderController {
         return "redirect:/admin/order";
     }
 
-    // Hiển thị danh sách đơn hàng và tìm kiếm theo từ khóa
+    // =======================================================================
+    // ĐÃ SỬA CHỖ NÀY: Xóa 2 hàm bị xung đột và gộp thành 1 hàm chuẩn xác
+    // =======================================================================
     @GetMapping("/admin/order")
     public String getOrderPage(Model model,
-            @RequestParam(value = "keyword", required = false) String keyword) {
-        List<Order> orders = orderService.getAllOrders(keyword);
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String status) {
+
+        // Gọi hàm từ Service truyền cả keyword và status vào để lọc
+        List<Order> orders = orderService.getAllOrders(keyword, status);
 
         model.addAttribute("orders", orders);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("status", status); // Đẩy lại status xuống view để giữ nguyên Dropdown
+
         return "admin/order/show";
     }
 

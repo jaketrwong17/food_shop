@@ -67,11 +67,6 @@ public class Product implements Serializable {
     @ManyToOne
     @JoinColumn(name = "brand_id")
     private Brand brand;
-
-    // --- THÊM XUẤT XỨ ---
-    // Xuất xứ thường chỉ cần dùng String là đủ (VD: "Việt Nam", "Trung Quốc", "Mỹ")
-    // Không nhất thiết phải tạo bảng riêng trừ khi bạn muốn quản lý chặt chẽ danh
-    // sách Quốc gia.
     private String origin;
 
     // ... các code cũ ở dưới
@@ -253,4 +248,33 @@ public class Product implements Serializable {
         }
         return "";
     }
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
+
+    public void setAverageRating(double averageRating) {
+        this.averageRating = averageRating;
+    }
+
+    public void setReviewCount(int reviewCount) {
+        this.reviewCount = reviewCount;
+    }
+
+    public Brand getBrand() {
+        return brand;
+    }
+
+    public void setBrand(Brand brand) {
+        this.brand = brand;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
+
 }

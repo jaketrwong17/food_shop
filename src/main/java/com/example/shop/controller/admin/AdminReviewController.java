@@ -17,22 +17,19 @@ public class AdminReviewController {
         this.reviewService = reviewService;
     }
 
-    @GetMapping("/admin/review")
-    public String getReviewPage(Model model, @RequestParam(value = "keyword", required = false) String keyword) {
-        List<Review> reviews;
-        if (keyword != null && !keyword.isEmpty()) {
-            reviews = reviewService.searchReviews(keyword);
-        } else {
-            reviews = reviewService.getAllReviews();
-        }
-        model.addAttribute("reviews", reviews);
-        model.addAttribute("keyword", keyword);
-        return "admin/review/show";
-    }
-
     @PostMapping("/admin/review/delete/{id}")
     public String deleteReview(@PathVariable long id) {
         reviewService.deleteReview(id);
         return "redirect:/admin/review";
+    }
+
+    @GetMapping("/admin/review")
+    public String getReviewPage(Model model,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Integer rating) {
+        List<Review> reviews = reviewService.searchReviews(keyword, rating);
+        model.addAttribute("reviews", reviews);
+        model.addAttribute("keyword", keyword);
+        return "admin/review/show";
     }
 }

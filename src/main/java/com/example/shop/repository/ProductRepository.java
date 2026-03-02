@@ -49,4 +49,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "GROUP BY p.id, p.name, p.active " + // Thêm p.active vào Group By
             "ORDER BY SUM(od.quantity) DESC")
     List<TopProductDTO> findBestSellingProducts(Pageable pageable);
+
+    // Thêm hàm đếm sản phẩm có số lượng nhỏ hơn hoặc bằng một mức nào đó
+    long countByQuantityLessThanEqual(long quantity);
 }

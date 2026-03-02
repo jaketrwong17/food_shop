@@ -247,4 +247,13 @@ public class UserService {
     public long countAllUsers() {
         return userRepository.count();
     }
+
+    // Thêm vào trong class UserService
+    public List<User> searchUsers(String keyword, String roleName, Boolean status) {
+        return userRepository.searchUsers(keyword, roleName, status);
+    }
+
+    public List<Role> getAllRoles() {
+        return roleRepository.findAll();
+    }
 }
