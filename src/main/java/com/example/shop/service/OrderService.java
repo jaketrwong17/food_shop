@@ -24,7 +24,6 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final CartItemRepository cartItemRepository;
     private final VoucherRepository voucherRepository;
-    // ĐÃ XÓA: private final ProductColorRepository productColorRepository;
     private final UserRepository userRepository;
 
     public OrderService(OrderRepository orderRepository,
@@ -33,7 +32,6 @@ public class OrderService {
             ProductRepository productRepository,
             CartItemRepository cartItemRepository,
             VoucherRepository voucherRepository,
-            // ĐÃ XÓA tham số ProductColorRepository
             UserRepository userRepository) {
         this.orderRepository = orderRepository;
         this.orderDetailRepository = orderDetailRepository;
@@ -41,7 +39,6 @@ public class OrderService {
         this.productRepository = productRepository;
         this.cartItemRepository = cartItemRepository;
         this.voucherRepository = voucherRepository;
-        // ĐÃ XÓA gán this.productColorRepository
         this.userRepository = userRepository;
     }
 
@@ -107,12 +104,9 @@ public class OrderService {
         List<CartItem> cartItems = cart.getCartItems();
         List<CartItem> itemsToOrder = new ArrayList<>();
 
-        // 1. Lọc sản phẩm được chọn và kiểm tra tồn kho (Logic mới không dùng Color)
         for (CartItem item : cartItems) {
             if (cartItemIds.contains(item.getId())) {
                 Product product = item.getProduct();
-
-                // Kiểm tra số lượng tồn kho của chính Product
                 if (product.getQuantity() < item.getQuantity()) {
                     throw new Exception("Sản phẩm " + product.getName()
                             + " không đủ số lượng (Chỉ còn " + product.getQuantity() + ").");
@@ -126,8 +120,14 @@ public class OrderService {
 
         double originalTotal = 0;
         double totalDiscount = 0;
+
         for (CartItem item : itemsToOrder) {
-            originalTotal += item.getPrice() * item.getQuantity();
+            // Lấy giá trị khuyến mại thực tế của sản phẩm
+            double actualPrice = item.getPrice();
+            if (item.getProduct().getDiscountedPrice() > 0) {
+                actualPrice = item.getProduct().getDiscountedPrice();
+            }
+            originalTotal += actualPrice * item.getQuantity();
         }
 
         if (voucherCode != null && !voucherCode.isEmpty()) {
@@ -162,12 +162,16 @@ public class OrderService {
             OrderDetail orderDetail = new OrderDetail();
             orderDetail.setOrder(order);
             orderDetail.setProduct(item.getProduct());
-            orderDetail.setPrice(item.getPrice());
+
+            // Lưu đơn giá đúng vào DB
+            double actualPrice = item.getPrice();
+            if (item.getProduct().getDiscountedPrice() > 0) {
+                actualPrice = item.getProduct().getDiscountedPrice();
+            }
+            orderDetail.setPrice(actualPrice);
+
             orderDetail.setQuantity(item.getQuantity());
 
-            // ĐÃ XÓA: Logic set SelectedColor
-
-            // Trừ tồn kho trực tiếp vào Product
             Product product = item.getProduct();
             product.setQuantity(product.getQuantity() - item.getQuantity());
             this.productRepository.save(product);

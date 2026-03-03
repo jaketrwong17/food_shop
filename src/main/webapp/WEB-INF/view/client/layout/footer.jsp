@@ -77,10 +77,10 @@
                 <div class="row gy-4">
                     <div class="col-lg-3">
                         <h6 class="fw-bold mb-3">Tổng đài hỗ trợ miễn phí</h6>
-                        <p class="mb-1 text-secondary">Tư vấn mua hàng: <strong class="text-white">0968 733 752</strong>
+                        <p class="mb-1 text-secondary">Tư vấn mua hàng: <strong class="text-white">0968 733 xxx</strong>
                         </p>
                         <p class="mb-1 text-secondary">Góp ý, khiếu nại: <strong class="text-white">0968 733
-                                752</strong></p>
+                                xxx</strong></p>
                     </div>
 
                     <div class="col-md-3">
@@ -101,19 +101,19 @@
                         <h6 class="fw-bold mb-3">Kết nối với chúng tôi</h6>
                         <div class="d-flex gap-3 justify-content-center justify-content-lg-start align-items-center">
 
-                            <a href="https://www.facebook.com/duong.anh.752713" class="text-decoration-none">
+                            <a href="" class="text-decoration-none">
                                 <div class="fb_tk-box">
                                     <i class="fab fa-facebook fs-3 text-primary"></i>
                                 </div>
                             </a>
 
-                            <a href="https://www.tiktok.com/@duonganh162005" class="text-decoration-none">
+                            <a href="" class="text-decoration-none">
                                 <div class="fb_tk-box">
                                     <i class="fab fa-tiktok fs-3 text-white"></i>
                                 </div>
                             </a>
 
-                            <a href="https://www.instagram.com/mitiudayroi_16" class="text-decoration-none">
+                            <a href="" class="text-decoration-none">
                                 <div class="insta-box">
                                     <i class="fab fa-instagram"></i>
                                 </div>
@@ -137,7 +137,7 @@
                             <div class="d-flex gap-2 justify-content-start align-items-center mb-2">
                                 <i class="fas fa-phone text-white fs-5"></i>
                                 <p class="reason mb-0 text-white">
-                                    0968 733 752
+                                    0968 733 xxx
                                 </p>
                             </div>
 

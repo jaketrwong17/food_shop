@@ -141,6 +141,16 @@
                                         </div>
                                     </div>
 
+                                    <c:set var="rawSubtotal" value="0" />
+                                    <c:forEach var="item" items="${orderDetails}">
+                                        <c:set var="rawSubtotal"
+                                            value="${rawSubtotal + (item.price * item.quantity)}" />
+                                    </c:forEach>
+                                    <c:set var="totalVoucherDiscount" value="${rawSubtotal - order.totalPrice}" />
+                                    <c:if test="${totalVoucherDiscount < 1}">
+                                        <c:set var="totalVoucherDiscount" value="0" />
+                                    </c:if>
+
                                     <div class="table-responsive">
                                         <table class="table table-custom align-middle mb-0">
                                             <thead>
@@ -153,6 +163,17 @@
                                             </thead>
                                             <tbody>
                                                 <c:forEach var="detail" items="${orderDetails}">
+
+                                                    <c:set var="itemLineTotal"
+                                                        value="${detail.price * detail.quantity}" />
+                                                    <c:set var="itemVoucherDiscount" value="0" />
+                                                    <c:if test="${totalVoucherDiscount > 0 and rawSubtotal > 0}">
+                                                        <c:set var="itemVoucherDiscount"
+                                                            value="${(itemLineTotal / rawSubtotal) * totalVoucherDiscount}" />
+                                                    </c:if>
+                                                    <c:set var="finalItemTotal"
+                                                        value="${itemLineTotal - itemVoucherDiscount}" />
+
                                                     <tr>
                                                         <td>
                                                             <div class="d-flex align-items-center">
@@ -187,6 +208,19 @@
                                                                         </c:if>
                                                                     </c:catch>
 
+                                                                    <c:if test="${itemVoucherDiscount > 0}">
+                                                                        <div class="mt-1">
+                                                                            <small class="text-theme fst-italic">
+                                                                                <i class="fas fa-tag"></i> Voucher giảm:
+                                                                                -
+                                                                                <fmt:formatNumber
+                                                                                    value="${itemVoucherDiscount}"
+                                                                                    type="currency" currencySymbol="đ"
+                                                                                    maxFractionDigits="2" />
+                                                                            </small>
+                                                                        </div>
+                                                                    </c:if>
+
                                                                     <c:if
                                                                         test="${order.status == 'COMPLETED' and not empty detail.product.id}">
                                                                         <a href="/product/${detail.product.id}#review-section"
@@ -198,30 +232,49 @@
                                                                 </div>
                                                             </div>
                                                         </td>
-                                                        <td class="text-center text-muted">
+
+                                                        <td class="text-center">
                                                             <c:choose>
                                                                 <c:when test="${not empty detail.price}">
-                                                                    <fmt:formatNumber value="${detail.price}"
-                                                                        type="currency" currencySymbol="đ" />
+                                                                    <c:if test="${detail.product.price > detail.price}">
+                                                                        <span
+                                                                            class="text-muted text-decoration-line-through small d-block">
+                                                                            <fmt:formatNumber
+                                                                                value="${detail.product.price}"
+                                                                                type="currency" currencySymbol="đ" />
+                                                                        </span>
+                                                                    </c:if>
+                                                                    <span class="fw-bold text-dark">
+                                                                        <fmt:formatNumber value="${detail.price}"
+                                                                            type="currency" currencySymbol="đ" />
+                                                                    </span>
                                                                 </c:when>
                                                                 <c:otherwise>
                                                                     <span class="text-danger small">Lỗi giá</span>
                                                                 </c:otherwise>
                                                             </c:choose>
                                                         </td>
+
                                                         <td class="text-center fw-bold">
                                                             x${not empty detail.quantity ? detail.quantity : 0}
                                                         </td>
+
                                                         <td class="text-end fw-bold text-theme">
                                                             <c:choose>
-                                                                <c:when
-                                                                    test="${not empty detail.price and not empty detail.quantity}">
-                                                                    <fmt:formatNumber
-                                                                        value="${detail.price * detail.quantity}"
-                                                                        type="currency" currencySymbol="đ" />
+                                                                <c:when test="${itemVoucherDiscount > 0}">
+                                                                    <span
+                                                                        class="text-muted text-decoration-line-through small d-block">
+                                                                        <fmt:formatNumber value="${itemLineTotal}"
+                                                                            type="currency" currencySymbol="đ" />
+                                                                    </span>
+                                                                    <span class="fw-bold text-theme">
+                                                                        <fmt:formatNumber value="${finalItemTotal}"
+                                                                            type="currency" currencySymbol="đ" />
+                                                                    </span>
                                                                 </c:when>
                                                                 <c:otherwise>
-                                                                    <span class="text-danger small">Lỗi tính toán</span>
+                                                                    <fmt:formatNumber value="${itemLineTotal}"
+                                                                        type="currency" currencySymbol="đ" />
                                                                 </c:otherwise>
                                                             </c:choose>
                                                         </td>
@@ -234,19 +287,20 @@
                                     <div class="row mt-4 pt-3 border-top">
                                         <div class="col-md-6 offset-md-6">
                                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                                <span class="text-muted">Tổng tiền hàng:</span>
+                                                <span class="text-muted">Tổng tiền hàng (Đã sale):</span>
                                                 <span class="fw-bold">
-                                                    <fmt:formatNumber
-                                                        value="${not empty order.totalPrice ? order.totalPrice : 0}"
-                                                        type="currency" currencySymbol="đ" />
+                                                    <fmt:formatNumber value="${rawSubtotal}" type="currency"
+                                                        currencySymbol="đ" maxFractionDigits="2" />
                                                 </span>
                                             </div>
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <span class="h5 fw-bold text-dark">Thành tiền:</span>
-                                                <span class="h4 fw-bold text-danger">
+
+                                            <div
+                                                class="d-flex justify-content-between align-items-center pt-2 border-top mt-2">
+                                                <span class="h5 fw-bold text-dark mb-0">Tổng cộng:</span>
+                                                <span class="h4 fw-bold text-danger mb-0">
                                                     <fmt:formatNumber
                                                         value="${not empty order.totalPrice ? order.totalPrice : 0}"
-                                                        type="currency" currencySymbol="đ" />
+                                                        type="currency" currencySymbol="đ" maxFractionDigits="2" />
                                                 </span>
                                             </div>
                                         </div>

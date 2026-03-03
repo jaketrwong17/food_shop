@@ -8,7 +8,7 @@
 
                 <head>
                     <meta charset="UTF-8">
-                    <title>Tạo mới khuyến mãi</title>
+                    <title>Tạo mới khuyến mại</title>
                     <jsp:include page="../layout/header.jsp" />
                     <style>
                         /* (Giữ nguyên CSS cũ của bạn) */

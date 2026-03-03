@@ -49,7 +49,6 @@ public class SecurityConfig {
         return authProvider;
     }
 
-    // Vẫn giữ ProductService để lấy thông tin giỏ hàng lúc login thường
     @Bean
     public AuthenticationSuccessHandler customSuccessHandler(ProductService productService) {
         return (request, response, authentication) -> {
@@ -67,7 +66,6 @@ public class SecurityConfig {
             }
             session.setAttribute("role", role);
 
-            // Tự động đếm và lưu số lượng giỏ hàng vào session khi đăng nhập thành công
             Cart cart = productService.fetchCartByUserEmail(email);
             int sum = (cart != null) ? cart.getSum() : 0;
             session.setAttribute("sum", sum);
@@ -84,7 +82,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()))
                 .authorizeHttpRequests(authorize -> authorize
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE).permitAll()
-                        // Đã thêm /policy/** để người dùng xem được trang chi tiết chính sách
+
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/product/**", "/client/**",
                                 "/resources/**", "/policy/**")
                         .permitAll()

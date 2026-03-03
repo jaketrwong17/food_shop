@@ -38,7 +38,7 @@
                                     </div>
                                     <div class="col-md-3 text-end">
                                         <a href="/admin/category/create" class="btn btn-success fw-bold">
-                                            <i class="fas fa-plus me-1"></i> THÊM DANH MỤC
+                                            <i class="fas fa-plus me-1"></i> THÊM MỚI
                                         </a>
                                     </div>
                                 </div>

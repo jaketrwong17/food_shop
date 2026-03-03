@@ -41,7 +41,7 @@
                                 <div class="d-flex gap-2">
                                 </div>
                                 <a href="/admin/policy/create" class="btn btn-success fw-bold text-nowrap">
-                                    <i class="fas fa-plus me-1"></i> THÊM CHÍNH SÁCH
+                                    <i class="fas fa-plus me-1"></i> THÊM MỚI
                                 </a>
                             </div>
 

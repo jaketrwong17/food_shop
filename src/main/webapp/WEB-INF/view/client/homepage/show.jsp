@@ -353,12 +353,12 @@
                                                     <c:when test="${not empty banner.link}">
                                                         <a href="${banner.link}">
                                                             <img src="/images/${banner.imageUrl}" class="d-block w-100"
-                                                                style="height: 380px; object-fit: cover;">
+                                                                style="height: 400px; object-fit: cover;">
                                                         </a>
                                                     </c:when>
                                                     <c:otherwise>
                                                         <img src="/images/${banner.imageUrl}" class="d-block w-100"
-                                                            style="height: 380px; object-fit: cover;">
+                                                            style="height: 400px; object-fit: cover;">
                                                     </c:otherwise>
                                                 </c:choose>
                                             </div>
@@ -366,8 +366,7 @@
                                     </c:when>
                                     <c:otherwise>
                                         <div class="carousel-item active" data-bs-interval="4000">
-                                            <img src="https://theme.hstatic.net/200000946105/1001363519/14/collection_banner.jpg?v=1368"
-                                                class="d-block w-100" style="height: 380px; object-fit: cover;">
+                                            <img src="" class="d-block w-100" style="height: 400px; object-fit: cover;">
                                         </div>
                                     </c:otherwise>
                                 </c:choose>
@@ -414,12 +413,12 @@
                             <div class="d-flex justify-content-between align-items-center mb-4">
                                 <div>
                                     <h4 class="fw-bold mb-0 text-dark">
-                                        <i class="fas fa-crown text-warning me-2"></i>SẢN PHẨM BÁN CHẠY
+                                        <i class="fas fa-crown text-warning me-2"></i>SẢN PHẨM NỔI BẬT
                                     </h4>
                                     <div class="bg-theme"
                                         style="height: 3px; width: 45px; border-radius: 2px; margin-top: 5px;"></div>
                                 </div>
-                                <div class="hot-trend-badge-new">Hot Trend <i class="fas fa-fire ms-2"></i></div>
+
                             </div>
 
                             <div class="category-slider-wrapper position-relative">

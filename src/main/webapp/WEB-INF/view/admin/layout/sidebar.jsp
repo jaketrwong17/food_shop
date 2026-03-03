@@ -1,11 +1,27 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-    <div id="sidebar-wrapper">
+    <style>
+        /* Ẩn scrollbar cho Chrome, Safari và Opera */
+        #sidebar-wrapper::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Ẩn scrollbar cho IE, Edge và Firefox */
+        #sidebar-wrapper {
+            -ms-overflow-style: none;
+            /* IE và Edge */
+            scrollbar-width: none;
+            /* Firefox */
+        }
+    </style>
+
+    <div id="sidebar-wrapper" class="d-flex flex-column flex-shrink-0"
+        style="width: 260px; min-height: 100vh; overflow-y: auto;">
         <div class="sidebar-heading">
             <i class="fas fa-rocket me-2"></i> Admin Pro
         </div>
 
-        <div class="list-group list-group-flush mt-3">
+        <div class="list-group list-group-flush mt-3 flex-grow-1 d-flex flex-column">
             <a href="/" class="list-group-item list-group-item-action text-primary fw-bold">
                 <i class="fas fa-external-link-alt me-2"></i> Xem Website
             </a>
@@ -64,6 +80,7 @@
                 class="list-group-item list-group-item-action ${param.active == 'policy' ? 'active' : ''}">
                 <i class="fas fa-shield-alt me-2"></i> Chính sách
             </a>
+
             <div class="mt-auto p-4">
                 <form id="logoutForm" method="POST" action="/logout" style="display:none;">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />

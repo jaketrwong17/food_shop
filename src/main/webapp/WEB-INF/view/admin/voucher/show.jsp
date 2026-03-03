@@ -88,7 +88,7 @@
                                     </div>
                                     <div class="col-md-3 text-end">
                                         <a href="/admin/voucher/create" class="btn btn-success fw-bold px-3">
-                                            <i class="fas fa-plus me-1"></i> THÊM MÃ MỚI
+                                            <i class="fas fa-plus me-1"></i> THÊM MỚI
                                         </a>
                                     </div>
                                 </div>

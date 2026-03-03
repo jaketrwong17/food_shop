@@ -48,52 +48,147 @@
                                 <div class="col-md-8">
                                     <div class="card shadow-sm border-0 rounded-3">
                                         <div class="card-header bg-white fw-bold">Danh sách sản phẩm</div>
+
+                                        <c:set var="rawSubtotal" value="0" />
+                                        <c:forEach var="item" items="${orderDetails}">
+                                            <c:set var="rawSubtotal"
+                                                value="${rawSubtotal + (item.price * item.quantity)}" />
+                                        </c:forEach>
+                                        <c:set var="totalVoucherDiscount" value="${rawSubtotal - order.totalPrice}" />
+                                        <c:if test="${totalVoucherDiscount < 1}">
+                                            <c:set var="totalVoucherDiscount" value="0" />
+                                        </c:if>
+
                                         <div class="card-body p-0">
-                                            <table class="table table-hover align-middle mb-0">
-                                                <thead class="bg-light">
-                                                    <tr>
-                                                        <th class="ps-4">Sản phẩm</th>
-                                                        <th class="text-center">Số lượng</th>
-                                                        <th class="text-end pe-4">Thành tiền</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <c:forEach var="detail" items="${orderDetails}">
+                                            <div class="table-responsive">
+                                                <table class="table table-hover align-middle mb-0">
+                                                    <thead class="bg-light">
                                                         <tr>
-                                                            <td class="ps-4">
-                                                                <div class="d-flex align-items-center">
-                                                                    <img src="/images/${detail.product.images[0].imageUrl}"
-                                                                        class="rounded border" width="50" height="50"
-                                                                        style="object-fit: cover;">
-                                                                    <div class="ms-3">
-                                                                        <h6 class="mb-0 text-primary">
-                                                                            ${detail.product.name}</h6>
-                                                                        <small class="text-muted">Đơn giá:
-                                                                            <fmt:formatNumber value="${detail.price}"
-                                                                                type="currency" currencySymbol="đ" />
-                                                                        </small>
+                                                            <th class="ps-4" style="width: 45%;">Sản phẩm</th>
+                                                            <th class="text-center">Đơn giá</th>
+                                                            <th class="text-center">Số lượng</th>
+                                                            <th class="text-end pe-4">Thành tiền</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <c:forEach var="detail" items="${orderDetails}">
+
+                                                            <c:set var="itemLineTotal"
+                                                                value="${detail.price * detail.quantity}" />
+                                                            <c:set var="itemVoucherDiscount" value="0" />
+                                                            <c:if
+                                                                test="${totalVoucherDiscount > 0 and rawSubtotal > 0}">
+                                                                <c:set var="itemVoucherDiscount"
+                                                                    value="${(itemLineTotal / rawSubtotal) * totalVoucherDiscount}" />
+                                                            </c:if>
+                                                            <c:set var="finalItemTotal"
+                                                                value="${itemLineTotal - itemVoucherDiscount}" />
+
+                                                            <tr>
+                                                                <td class="ps-4 py-3">
+                                                                    <div class="d-flex align-items-center">
+                                                                        <c:choose>
+                                                                            <c:when
+                                                                                test="${not empty detail.product.images and not empty detail.product.images[0].imageUrl}">
+                                                                                <img src="/images/${detail.product.images[0].imageUrl}"
+                                                                                    class="rounded border shadow-sm"
+                                                                                    width="50" height="50"
+                                                                                    style="object-fit: cover;">
+                                                                            </c:when>
+                                                                            <c:otherwise>
+                                                                                <div style="width: 50px; height: 50px;"
+                                                                                    class="rounded border bg-light d-flex justify-content-center align-items-center small text-muted">
+                                                                                    No Img</div>
+                                                                            </c:otherwise>
+                                                                        </c:choose>
+
+                                                                        <div class="ms-3">
+                                                                            <h6 class="mb-0 text-primary">
+                                                                                ${detail.product.name}</h6>
+
+                                                                            <c:if test="${itemVoucherDiscount > 0}">
+                                                                                <small
+                                                                                    class="text-success fst-italic mt-1 d-block">
+                                                                                    <i class="fas fa-tag"></i> Giảm
+                                                                                    thêm:
+                                                                                    <fmt:formatNumber
+                                                                                        value="${itemVoucherDiscount}"
+                                                                                        type="currency"
+                                                                                        currencySymbol="đ"
+                                                                                        maxFractionDigits="2" />
+                                                                                </small>
+                                                                            </c:if>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="text-center fw-bold">x${detail.quantity}</td>
-                                                            <td class="text-end pe-4 fw-bold text-danger">
-                                                                <fmt:formatNumber
-                                                                    value="${detail.price * detail.quantity}"
-                                                                    type="currency" currencySymbol="đ" />
+                                                                </td>
+
+                                                                <td class="text-center">
+                                                                    <c:choose>
+                                                                        <c:when
+                                                                            test="${detail.product.price > detail.price}">
+                                                                            <span
+                                                                                class="text-muted text-decoration-line-through small d-block">
+                                                                                <fmt:formatNumber
+                                                                                    value="${detail.product.price}"
+                                                                                    type="currency"
+                                                                                    currencySymbol="đ" />
+                                                                            </span>
+                                                                        </c:when>
+                                                                    </c:choose>
+                                                                    <span class="fw-bold text-dark">
+                                                                        <fmt:formatNumber value="${detail.price}"
+                                                                            type="currency" currencySymbol="đ" />
+                                                                    </span>
+                                                                </td>
+
+                                                                <td class="text-center fw-bold">x${detail.quantity}</td>
+
+                                                                <td class="text-end pe-4">
+                                                                    <c:choose>
+                                                                        <c:when test="${itemVoucherDiscount > 0}">
+                                                                            <span
+                                                                                class="text-muted text-decoration-line-through small d-block">
+                                                                                <fmt:formatNumber
+                                                                                    value="${itemLineTotal}"
+                                                                                    type="currency"
+                                                                                    currencySymbol="đ" />
+                                                                            </span>
+                                                                            <span class="fw-bold text-danger">
+                                                                                <fmt:formatNumber
+                                                                                    value="${finalItemTotal}"
+                                                                                    type="currency"
+                                                                                    currencySymbol="đ" />
+                                                                            </span>
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            <span class="fw-bold text-danger">
+                                                                                <fmt:formatNumber
+                                                                                    value="${itemLineTotal}"
+                                                                                    type="currency"
+                                                                                    currencySymbol="đ" />
+                                                                            </span>
+                                                                        </c:otherwise>
+                                                                    </c:choose>
+                                                                </td>
+                                                            </tr>
+                                                        </c:forEach>
+                                                    </tbody>
+
+                                                    <tfoot class="bg-light border-top">
+
+                                                        <tr>
+                                                            <td colspan="3" class="text-end fw-bold pt-2 border-top">
+                                                                TỔNG CỘNG:</td>
+                                                            <td
+                                                                class="text-end pe-4 fw-bold text-danger fs-5 pt-2 border-top">
+                                                                <fmt:formatNumber value="${order.totalPrice}"
+                                                                    type="currency" currencySymbol="đ"
+                                                                    maxFractionDigits="2" />
                                                             </td>
                                                         </tr>
-                                                    </c:forEach>
-                                                </tbody>
-                                                <tfoot class="bg-light">
-                                                    <tr>
-                                                        <td colspan="2" class="text-end fw-bold pt-3">TỔNG CỘNG:</td>
-                                                        <td class="text-end pe-4 fw-bold text-danger fs-5 pt-3">
-                                                            <fmt:formatNumber value="${order.totalPrice}"
-                                                                type="currency" currencySymbol="đ" />
-                                                        </td>
-                                                    </tr>
-                                                </tfoot>
-                                            </table>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -106,6 +201,7 @@
                     </div>
                 </div>
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+                <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
             </body>
 
             </html>

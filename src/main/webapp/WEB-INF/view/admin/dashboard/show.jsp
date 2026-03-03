@@ -347,7 +347,7 @@
                 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 
                 <script>
-                    // HÀM LẤY ĐÚNG MÚI GIỜ VIỆT NAM
+                    // HÀM LẤY ĐÚNG MÚI GIỜ VIỆT NAM (Trả về YYYY-MM-DD vì HTML input type="date" BẮT BUỘC nhận format này)
                     function formatDateLocal(date) {
                         const year = date.getFullYear();
                         const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -357,7 +357,6 @@
 
                     // LỌC THỜI GIAN VÀ CHỐNG GIẬT SCROLL
                     function setFilterRange(type) {
-                        // Lưu vị trí scroll hiện tại để khi load lại trang không bị giật lên đầu
                         sessionStorage.setItem('scrollPosition', window.scrollY);
 
                         const today = new Date();
@@ -366,7 +365,7 @@
                         document.getElementById('rangeInput').value = type;
 
                         if (type === 'today') {
-                            // Giữ nguyên start/end
+                            // Giữ nguyên
                         } else if (type === 'this_week') {
                             const day = today.getDay();
                             const diff = today.getDate() - day + (day === 0 ? -6 : 1);
@@ -382,7 +381,6 @@
                         document.getElementById('filterForm').submit();
                     }
 
-                    // Khôi phục scroll mượt mà
                     window.addEventListener('load', function () {
                         let scrollPos = sessionStorage.getItem('scrollPosition');
                         if (scrollPos) {
@@ -391,16 +389,50 @@
                         }
                     });
 
-                    // BIỂU ĐỒ DOANH THU
+                    // ==========================================
+                    // XỬ LÝ DỮ LIỆU TỪ JAVA SANG JAVASCRIPT AN TOÀN
+                    // ==========================================
+
+                    // 1. Nhận chuỗi dạng "[Giá trị 1, Giá trị 2]" từ Backend và bỏ đi dấu ngoặc vuông []
+                    let rawLabels = "${chartLabels}".replace(/^\[|\]$/g, '');
+                    let rawData = "${chartData}".replace(/^\[|\]$/g, '');
+
+                    let parsedLabels = [];
+                    let parsedData = [];
+
+                    if (rawLabels && rawLabels.trim() !== "") {
+                        // Tách chuỗi thành mảng các nhãn
+                        let parts = rawLabels.split(',');
+                        parsedLabels = parts.map(p => {
+                            let labelStr = p.trim();
+                            // KIỂM TRA & FORMAT LẠI NGÀY SANG CHUẨN VIỆT NAM (Ngày/Tháng/Năm)
+                            // Nếu chuỗi có dạng YYYY-MM-DD (Ví dụ: 2026-03-01)
+                            if (labelStr.match(/^\d{4}-\d{2}-\d{2}$/)) {
+                                let dateParts = labelStr.split('-');
+                                return dateParts[2] + '/' + dateParts[1] + '/' + dateParts[0];
+                            }
+                            return labelStr;
+                        });
+                    } else {
+                        parsedLabels = ['Chưa có dữ liệu'];
+                    }
+
+                    if (rawData && rawData.trim() !== "") {
+                        parsedData = rawData.split(',').map(Number);
+                    } else {
+                        parsedData = [0];
+                    }
+
+                    // ĐÃ SỬA: BIỂU ĐỒ DOANH THU 
                     const ctxRevenue = document.getElementById('revenueChart');
                     if (ctxRevenue) {
                         new Chart(ctxRevenue, {
                             type: 'line',
                             data: {
-                                labels: [${ not empty chartLabels? chartLabels: "'Chưa có dữ liệu'" }],
+                                labels: parsedLabels,
                                 datasets: [{
                                     label: 'Doanh thu (VNĐ)',
-                                    data: [${ not empty chartData? chartData: "0" }],
+                                    data: parsedData,
                                     borderColor: '#0d6efd',
                                     backgroundColor: 'rgba(13, 110, 253, 0.1)',
                                     tension: 0.4,
@@ -419,18 +451,25 @@
                         });
                     }
 
-                    // BIỂU ĐỒ TRẠNG THÁI
+                    // ĐÃ SỬA: BIỂU ĐỒ TRẠNG THÁI (Đưa % xuống chú thích)
                     const ctxStatus = document.getElementById('statusChart');
                     if (ctxStatus) {
                         const statusData = [${ completedOrdersCount }, ${ shippingOrdersCount }, ${ pendingOrdersCount }, ${ cancelledOrdersCount }];
                         const totalOrders = statusData.reduce((a, b) => a + b, 0);
+
+                        // Tính toán % và ghép vào mảng nhãn (labels) để hiển thị bên dưới
+                        const originalLabels = ['Hoàn thành', 'Đang giao', 'Chờ xử lý', 'Đã hủy'];
+                        const labelsWithPercent = originalLabels.map((label, index) => {
+                            const percent = totalOrders > 0 ? (statusData[index] * 100 / totalOrders).toFixed(1) : 0;
+                            return label + " : " + percent + "%";
+                        });
 
                         if (typeof ChartDataLabels !== 'undefined') { Chart.register(ChartDataLabels); }
 
                         new Chart(ctxStatus, {
                             type: 'pie',
                             data: {
-                                labels: ['Hoàn thành', 'Đang giao', 'Chờ xử lý', 'Đã hủy'],
+                                labels: labelsWithPercent,
                                 datasets: [{
                                     data: statusData,
                                     backgroundColor: ['#198754', '#0dcaf0', '#ffc107', '#dc3545'],
@@ -440,13 +479,12 @@
                             options: {
                                 responsive: true, maintainAspectRatio: false,
                                 plugins: {
-                                    legend: { position: 'bottom', labels: { padding: 20, usePointStyle: true, pointStyle: 'circle' } },
+                                    legend: {
+                                        position: 'bottom',
+                                        labels: { padding: 20, usePointStyle: true, pointStyle: 'circle' }
+                                    },
                                     datalabels: {
-                                        color: '#fff', font: { weight: 'bold', size: 14 },
-                                        formatter: (value, ctx) => {
-                                            if (value === 0 || totalOrders === 0) return '';
-                                            return (value * 100 / totalOrders).toFixed(1) + "%";
-                                        }
+                                        display: false // Ẩn % bên trong hình tròn
                                     }
                                 }
                             }

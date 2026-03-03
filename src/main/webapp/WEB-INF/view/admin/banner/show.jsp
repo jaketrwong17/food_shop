@@ -22,7 +22,7 @@
                         <div class="card shadow-sm border-0 rounded-3">
                             <div class="card-header bg-white py-3 text-end">
                                 <a href="/admin/banner/create" class="btn btn-success fw-bold">
-                                    <i class="fas fa-plus me-1"></i> THÊM BANNER
+                                    <i class="fas fa-plus me-1"></i> THÊM MỚI
                                 </a>
                             </div>
                             <div class="card-body p-0">

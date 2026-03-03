@@ -14,7 +14,7 @@
 
                     <div id="page-content-wrapper">
                         <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom px-4 py-3">
-                            <h4 class="mb-0 text-dark fw-bold text-uppercase">Danh Sách Khuyến Mãi</h4>
+                            <h4 class="mb-0 text-dark fw-bold ">Quản lý khuyến mại</h4>
                         </nav>
 
                         <div class="container-fluid px-4 py-4">
@@ -22,8 +22,8 @@
                                 <div
                                     class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
                                     <h6 class="m-0 fw-bold text-primary">Tất cả chương trình</h6>
-                                    <a href="/admin/promotion/create" class="btn btn-primary fw-bold">
-                                        <i class="fas fa-plus me-1"></i> Tạo Mới
+                                    <a href="/admin/promotion/create" class="btn btn-success fw-bold px-3">
+                                        <i class="fas fa-plus me-1"></i> THÊM MỚI
                                     </a>
                                 </div>
 
@@ -113,7 +113,7 @@
                                             <c:if test="${empty promotions}">
                                                 <tr>
                                                     <td colspan="7" class="text-center py-4 text-muted">Chưa có chương
-                                                        trình khuyến mãi nào.</td>
+                                                        trình khuyến mại nào.</td>
                                                 </tr>
                                             </c:if>
                                         </tbody>

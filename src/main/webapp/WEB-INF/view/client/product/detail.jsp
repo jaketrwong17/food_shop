@@ -375,7 +375,7 @@
                         <div class="col-lg-8">
                             <div class="bg-white p-4 rounded shadow-sm border mb-4">
                                 <h5 class="fw-bold border-bottom pb-3 mb-3 text-uppercase">
-                                    <i class="fas fa-info-circle text-theme me-2"></i>Thông tin sản phẩm
+                                    <i class="fas fa-info-circle text-theme me-2"></i>Mô tả sản phẩm
                                 </h5>
                                 <div class="detail-content">${product.detailDesc}</div>
                             </div>
@@ -636,8 +636,7 @@
                         <div class="col-lg-4">
                             <div class="specs-box p-3 shadow-sm border bg-white">
                                 <h6 class="fw-bold mb-3 text-theme text-uppercase small"><i
-                                        class="fas fa-list-ul me-2"></i>Cấu
-                                    hình chi tiết</h6>
+                                        class="fas fa-list-ul me-2"></i>Thông tin chi tiết</h6>
                                 <table class="specs-table">
                                     <tbody>
                                         <c:forEach var="s" items="${product.specs}">
