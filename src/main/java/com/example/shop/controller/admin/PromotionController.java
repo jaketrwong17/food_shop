@@ -1,6 +1,7 @@
 package com.example.shop.controller.admin;
 
 import com.example.shop.domain.Promotion;
+import com.example.shop.service.BrandService;
 import com.example.shop.service.CategoryService;
 import com.example.shop.service.ProductService;
 import com.example.shop.service.PromotionService;
@@ -17,12 +18,14 @@ public class PromotionController {
     private final PromotionService promotionService;
     private final ProductService productService;
     private final CategoryService categoryService;
+    private final BrandService brandService;
 
     public PromotionController(PromotionService promotionService, ProductService productService,
-            CategoryService categoryService) {
+            CategoryService categoryService, BrandService brandService) {
         this.promotionService = promotionService;
         this.productService = productService;
         this.categoryService = categoryService;
+        this.brandService = brandService;
     }
 
     @GetMapping
@@ -36,33 +39,36 @@ public class PromotionController {
         model.addAttribute("newPromotion", new Promotion());
         model.addAttribute("products", productService.getAllProducts(null, null));
         model.addAttribute("categories", categoryService.getAllCategories(null));
+        model.addAttribute("brands", brandService.getAllBrands());
         return "admin/promotion/create";
     }
 
     @PostMapping("/create")
     public String createPromotion(@ModelAttribute("newPromotion") Promotion promotion,
-            @RequestParam(value = "selectedProducts", required = false) List<Long> selectedProducts) {
-        promotionService.savePromotion(promotion, selectedProducts);
+            @RequestParam(value = "selectedProducts", required = false) List<Long> selectedProducts,
+            @RequestParam(value = "selectedBrands", required = false) List<Long> selectedBrands) {
+        promotionService.savePromotion(promotion, selectedProducts, selectedBrands);
         return "redirect:/admin/promotion";
     }
 
     @GetMapping("/update/{id}")
     public String getUpdatePage(@PathVariable long id, Model model) {
         Promotion promotion = promotionService.getPromotionById(id);
-        if (promotion == null) {
+        if (promotion == null)
             return "redirect:/admin/promotion";
-        }
 
         model.addAttribute("newPromotion", promotion);
         model.addAttribute("products", productService.getAllProducts(null, null));
         model.addAttribute("categories", categoryService.getAllCategories(null));
+        model.addAttribute("brands", brandService.getAllBrands());
 
         return "admin/promotion/update";
     }
 
     @PostMapping("/update")
     public String updatePromotion(@ModelAttribute("newPromotion") Promotion promotion,
-            @RequestParam(value = "selectedProducts", required = false) List<Long> selectedProducts) {
+            @RequestParam(value = "selectedProducts", required = false) List<Long> selectedProducts,
+            @RequestParam(value = "selectedBrands", required = false) List<Long> selectedBrands) {
 
         Promotion currentPromotion = promotionService.getPromotionById(promotion.getId());
         if (currentPromotion != null) {
@@ -73,7 +79,7 @@ public class PromotionController {
             currentPromotion.setEndDate(promotion.getEndDate());
             currentPromotion.setActive(promotion.isActive());
 
-            promotionService.savePromotion(currentPromotion, selectedProducts);
+            promotionService.savePromotion(currentPromotion, selectedProducts, selectedBrands);
         }
         return "redirect:/admin/promotion";
     }
@@ -84,7 +90,7 @@ public class PromotionController {
         return "redirect:/admin/promotion";
     }
 
-    // --- LOGIC MỚI: ROUTE CHO NÚT BẬT/TẮT ---
+    // --- LOGIC MỚI: BẬT/TẮT NHANH ---
     @GetMapping("/toggle-status/{id}")
     public String toggleStatus(@PathVariable long id) {
         promotionService.toggleStatus(id);

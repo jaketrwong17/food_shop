@@ -1,7 +1,10 @@
 package com.example.shop.controller.admin;
 
 import com.example.shop.domain.Order;
+import com.example.shop.domain.OrderDetail; // MỚI THÊM
+import com.example.shop.domain.Product; // MỚI THÊM
 import com.example.shop.service.OrderService;
+import com.example.shop.service.ProductService; // MỚI THÊM
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,9 +18,12 @@ import java.util.Optional;
 public class OrderController {
 
     private final OrderService orderService;
+    private final ProductService productService; // MỚI THÊM
 
-    public OrderController(OrderService orderService) {
+    // SỬA: Thêm ProductService vào Constructor
+    public OrderController(OrderService orderService, ProductService productService) {
         this.orderService = orderService;
+        this.productService = productService;
     }
 
     // Xử lý cập nhật trạng thái đơn hàng bằng Ajax
@@ -28,6 +34,8 @@ public class OrderController {
         Optional<Order> orderOptional = orderService.getOrderById(id);
         if (orderOptional.isPresent()) {
             Order order = orderOptional.get();
+            String oldStatus = order.getStatus(); // Lấy trạng thái cũ trước khi cập nhật
+
             order.setStatus(status);
 
             if ("COMPLETED".equals(status)) {
@@ -35,6 +43,36 @@ public class OrderController {
             } else {
                 order.setCompletedAt(null);
             }
+
+            // === BẮT ĐẦU SỬA: HOÀN KHO KHI ADMIN HỦY ĐƠN ===
+            if ("CANCELLED".equals(status) && !"CANCELLED".equals(oldStatus)) {
+                if (order.getOrderDetails() != null) {
+                    for (OrderDetail detail : order.getOrderDetails()) {
+                        Product p = detail.getProduct();
+                        // 1. Cộng lại số lượng vào kho
+                        p.setQuantity(p.getQuantity() + detail.getQuantity());
+                        // 2. Trừ đi lượt đã bán (không để âm)
+                        long newSold = p.getSold() - detail.getQuantity();
+                        p.setSold(newSold < 0 ? 0 : newSold);
+
+                        productService.handleSaveProduct(p); // Lưu lại thông tin sản phẩm
+                    }
+                }
+            }
+
+            // === BẮT ĐẦU SỬA: TRỪ LẠI KHO NẾU ADMIN KHÔI PHỤC ĐƠN TỪ TRẠNG THÁI HỦY ===
+            if (!"CANCELLED".equals(status) && "CANCELLED".equals(oldStatus)) {
+                if (order.getOrderDetails() != null) {
+                    for (OrderDetail detail : order.getOrderDetails()) {
+                        Product p = detail.getProduct();
+                        p.setQuantity(p.getQuantity() - detail.getQuantity());
+                        p.setSold(p.getSold() + detail.getQuantity());
+
+                        productService.handleSaveProduct(p);
+                    }
+                }
+            }
+            // === KẾT THÚC SỬA ===
 
             orderService.handleSaveOrder(order);
             return ResponseEntity.ok("success");

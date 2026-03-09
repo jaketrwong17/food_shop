@@ -33,20 +33,21 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     long count();
 
-    // === SỬA QUERY DƯỚI ĐÂY (Thêm p.active vào SELECT và GROUP BY) ===
+    // === ĐÃ FIX LỖI NHÂN BẢN DỮ LIỆU (CARTESIAN PRODUCT) ===
+    // Dùng Subquery để lấy ảnh thay vì LEFT JOIN để tránh quantity bị nhân lên theo
+    // số lượng ảnh
     @Query("SELECT new com.example.shop.domain.dto.TopProductDTO(" +
             "p.id, " +
             "p.name, " +
-            "MIN(i.imageUrl), " +
+            "(SELECT MIN(img.imageUrl) FROM ProductImage img WHERE img.product.id = p.id), " +
             "SUM(od.quantity), " +
             "SUM(od.price * od.quantity), " +
-            "p.active) " + // Thêm tham số active vào constructor
+            "p.active) " +
             "FROM OrderDetail od " +
             "JOIN od.product p " +
-            "LEFT JOIN p.images i " +
             "JOIN od.order o " +
-            "WHERE o.status = 'COMPLETED' " +
-            "GROUP BY p.id, p.name, p.active " + // Thêm p.active vào Group By
+            "WHERE o.status <> 'CANCELLED' " + // Loại bỏ các đơn hàng đã bị Hủy
+            "GROUP BY p.id, p.name, p.active " +
             "ORDER BY SUM(od.quantity) DESC")
     List<TopProductDTO> findBestSellingProducts(Pageable pageable);
 

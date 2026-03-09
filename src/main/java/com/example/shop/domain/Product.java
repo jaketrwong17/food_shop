@@ -2,7 +2,7 @@ package com.example.shop.domain;
 
 import jakarta.persistence.*;
 import java.io.Serializable;
-import java.util.Date; // Cần thêm import này để so sánh ngày tháng
+import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 import org.hibernate.annotations.Formula;
@@ -58,43 +58,48 @@ public class Product implements Serializable {
     @Formula("(SELECT COUNT(r.id) FROM reviews r WHERE r.product_id = id)")
     private int reviewCount;
 
-    public Product() {
-    }
-
-    // ... các code cũ ở trên
-
     // --- LIÊN KẾT VỚI BẢNG BRAND (HÃNG SẢN XUẤT) ---
     @ManyToOne
     @JoinColumn(name = "brand_id")
     private Brand brand;
     private String origin;
 
-    // ... các code cũ ở dưới
+    public Product() {
+    }
+
     // --- LOGIC TÍNH GIÁ KHUYẾN MÃI (Transient: Không lưu vào DB) ---
 
     // Tính giá thực tế sau khi giảm (Dùng để bán và hiển thị)
     @Transient
     public double getDiscountedPrice() {
         double currentPrice = this.price;
-        // Nếu không có khuyến mãi nào thì trả về giá gốc
-        if (this.promotions == null || this.promotions.isEmpty()) {
-            return currentPrice;
-        }
-
-        Date now = new Date();
         double maxDiscount = 0;
+        Date now = new Date();
 
-        // Duyệt qua các khuyến mãi, tìm cái nào đang hoạt động và có mức giảm cao nhất
-        for (Promotion p : this.promotions) {
-            if (p.isActive() && p.getStartDate().before(now) && p.getEndDate().after(now)) {
-                if (p.getDiscountRate() > maxDiscount) {
-                    maxDiscount = p.getDiscountRate();
+        // 1. Kiểm tra Khuyến mãi áp dụng TRỰC TIẾP lên Sản phẩm
+        if (this.promotions != null && !this.promotions.isEmpty()) {
+            for (Promotion p : this.promotions) {
+                if (p.isActive() && p.getStartDate().before(now) && p.getEndDate().after(now)) {
+                    if (p.getDiscountRate() > maxDiscount) {
+                        maxDiscount = p.getDiscountRate();
+                    }
                 }
             }
         }
 
+        // 2. Kiểm tra Khuyến mãi áp dụng cho THƯƠNG HIỆU (Hãng)
+        if (this.brand != null && this.brand.getPromotions() != null && !this.brand.getPromotions().isEmpty()) {
+            for (Promotion p : this.brand.getPromotions()) {
+                if (p.isActive() && p.getStartDate().before(now) && p.getEndDate().after(now)) {
+                    if (p.getDiscountRate() > maxDiscount) {
+                        maxDiscount = p.getDiscountRate();
+                    }
+                }
+            }
+        }
+
+        // 3. Tính giá trị cuối cùng nếu có giảm giá (lấy mức giảm sâu nhất)
         if (maxDiscount > 0) {
-            // Giá sau giảm = Giá gốc - (Giá gốc * %giảm / 100)
             return currentPrice - (currentPrice * maxDiscount / 100.0);
         }
 

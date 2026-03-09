@@ -108,4 +108,18 @@ public class Promotion implements Serializable {
     public void setProducts(List<Product> products) {
         this.products = products;
     }
+
+    // Thêm vào class Promotion
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "brand_promotion", joinColumns = @JoinColumn(name = "promotion_id"), inverseJoinColumns = @JoinColumn(name = "brand_id"))
+    private List<Brand> brands; // Đừng quên tạo getter/setter cho thuộc tính này
+
+    public List<Brand> getBrands() {
+        return brands;
+    }
+
+    public void setBrands(List<Brand> brands) {
+        this.brands = brands;
+    }
+
 }

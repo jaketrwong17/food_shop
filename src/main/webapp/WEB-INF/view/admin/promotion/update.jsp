@@ -11,7 +11,6 @@
                     <title>Cập nhật khuyến mãi</title>
                     <jsp:include page="../layout/header.jsp" />
                     <style>
-                        /* (Giữ nguyên CSS) */
                         .product-scroll-area {
                             max-height: 450px;
                             overflow-y: auto;
@@ -119,11 +118,10 @@
                                                     <div class="mb-3">
                                                         <label class="form-label fw-bold small">Bắt đầu (Ngày -
                                                             Giờ)</label>
-                                                        <%-- Pattern có chữ T ở giữa là bắt buộc --%>
-                                                            <fmt:formatDate value="${newPromotion.startDate}"
-                                                                pattern="yyyy-MM-dd'T'HH:mm" var="fmtStartDate" />
-                                                            <input type="datetime-local" name="startDate"
-                                                                class="form-control" value="${fmtStartDate}" required />
+                                                        <fmt:formatDate value="${newPromotion.startDate}"
+                                                            pattern="yyyy-MM-dd'T'HH:mm" var="fmtStartDate" />
+                                                        <input type="datetime-local" name="startDate"
+                                                            class="form-control" value="${fmtStartDate}" required />
                                                     </div>
                                                     <div class="mb-3">
                                                         <label class="form-label fw-bold small">Kết thúc (Ngày -
@@ -156,13 +154,14 @@
                                             <div class="card shadow-sm border-0 rounded-3 h-100">
                                                 <div
                                                     class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                                                    <h6 class="m-0 fw-bold text-primary">PHẠM VI ÁP DỤNG</h6>
+                                                    <h6 class="m-0 fw-bold text-primary">PHẠM VI ÁP DỤNG SẢN PHẨM</h6>
                                                     <span class="badge bg-primary rounded-pill">Đã chọn: <span
                                                             id="selectedCount">0</span></span>
                                                 </div>
                                                 <div class="card-body bg-white">
+
                                                     <div class="row g-2 mb-3">
-                                                        <div class="col-md-4">
+                                                        <div class="col-md-3">
                                                             <select id="categoryFilter"
                                                                 class="form-select form-select-sm">
                                                                 <option value="all">-- Tất cả danh mục --</option>
@@ -171,7 +170,15 @@
                                                                 </c:forEach>
                                                             </select>
                                                         </div>
-                                                        <div class="col-md-8">
+                                                        <div class="col-md-3">
+                                                            <select id="brandFilter" class="form-select form-select-sm">
+                                                                <option value="all">-- Tất cả thương hiệu --</option>
+                                                                <c:forEach var="b" items="${brands}">
+                                                                    <option value="${b.id}">${b.name}</option>
+                                                                </c:forEach>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-6">
                                                             <input type="text" id="productSearch"
                                                                 class="form-control form-control-sm"
                                                                 placeholder="Tìm tên hoặc ID sản phẩm...">
@@ -194,15 +201,20 @@
                                                     <div class="product-scroll-area">
                                                         <c:forEach var="p" items="${products}">
                                                             <c:set var="isSelected" value="false" />
-                                                            <c:forEach var="promotedP" items="${newPromotion.products}">
-                                                                <c:if test="${promotedP.id == p.id}">
-                                                                    <c:set var="isSelected" value="true" />
-                                                                </c:if>
-                                                            </c:forEach>
+                                                            <c:if test="${newPromotion.products != null}">
+                                                                <c:forEach var="promotedP"
+                                                                    items="${newPromotion.products}">
+                                                                    <c:if test="${promotedP.id == p.id}">
+                                                                        <c:set var="isSelected" value="true" />
+                                                                    </c:if>
+                                                                </c:forEach>
+                                                            </c:if>
 
                                                             <div class="product-item d-flex align-items-center ${isSelected ? 'selected-bg' : ''}"
                                                                 data-category-id="${p.category.id}"
+                                                                data-brand-id="${not empty p.brand ? p.brand.id : 'none'}"
                                                                 data-product-name="${p.name.toLowerCase()}">
+
                                                                 <div style="width: 50px;" class="text-center">
                                                                     <input
                                                                         class="form-check-input big-checkbox product-checkbox"
@@ -216,7 +228,9 @@
                                                                 <div class="flex-grow-1 ps-2">
                                                                     <div class="fw-bold text-dark small">${p.name}</div>
                                                                     <div class="text-muted" style="font-size: 0.75rem;">
-                                                                        #${p.id} | ${p.category.name}</div>
+                                                                        #${p.id} | ${p.category.name} | ${not empty
+                                                                        p.brand ? p.brand.name : 'No Brand'}
+                                                                    </div>
                                                                 </div>
                                                                 <div style="width: 100px;"
                                                                     class="text-end fw-bold text-primary small">
@@ -236,7 +250,7 @@
                                                         </c:forEach>
                                                         <div id="noResultMsg"
                                                             class="text-center py-4 text-muted hidden-item">Không tìm
-                                                            thấy sản phẩm.</div>
+                                                            thấy sản phẩm phù hợp với bộ lọc.</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -251,24 +265,31 @@
                     <script>
                         document.addEventListener("DOMContentLoaded", function () {
                             const categoryFilter = document.getElementById('categoryFilter');
+                            const brandFilter = document.getElementById('brandFilter');
                             const productSearch = document.getElementById('productSearch');
                             const productItems = document.querySelectorAll('.product-item');
                             const selectAllHeader = document.getElementById('selectAllHeader');
                             const noResultMsg = document.getElementById('noResultMsg');
                             const selectedCountSpan = document.getElementById('selectedCount');
 
+                            // Cập nhật hàm lọc để so sánh cả 3 yếu tố: Category, Brand, Tên
                             function filterProducts() {
                                 const selectedCatId = categoryFilter.value;
+                                const selectedBrandId = brandFilter.value;
                                 const keyword = productSearch.value.toLowerCase().trim();
                                 let visibleCount = 0;
 
                                 productItems.forEach(item => {
                                     const itemCatId = item.getAttribute('data-category-id');
+                                    const itemBrandId = item.getAttribute('data-brand-id');
                                     const itemName = item.getAttribute('data-product-name');
+
                                     const matchCategory = (selectedCatId === 'all') || (selectedCatId === itemCatId);
+                                    const matchBrand = (selectedBrandId === 'all') || (selectedBrandId === itemBrandId);
                                     const matchKeyword = itemName.includes(keyword);
 
-                                    if (matchCategory && matchKeyword) {
+                                    // Phải thỏa mãn cả 3 điều kiện lọc
+                                    if (matchCategory && matchBrand && matchKeyword) {
                                         item.classList.remove('hidden-item');
                                         item.classList.add('visible-item');
                                         visibleCount++;
@@ -300,7 +321,9 @@
                                 selectedCountSpan.textContent = document.querySelectorAll('.product-checkbox:checked').length;
                             }
 
+                            // Gọi bộ lọc khi có thay đổi trên bất kỳ field nào
                             categoryFilter.addEventListener('change', filterProducts);
+                            brandFilter.addEventListener('change', filterProducts);
                             productSearch.addEventListener('keyup', filterProducts);
 
                             selectAllHeader.addEventListener('click', function () {

@@ -4,6 +4,8 @@ import com.example.shop.config.VnPayConfig;
 import com.example.shop.domain.Cart;
 import com.example.shop.domain.CartItem;
 import com.example.shop.domain.Order;
+import com.example.shop.domain.OrderDetail;
+import com.example.shop.domain.Product;
 import com.example.shop.domain.User;
 import com.example.shop.domain.Voucher;
 import com.example.shop.service.CategoryService;
@@ -186,7 +188,24 @@ public class OrderController {
                 vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + vnp_TxnRef);
                 vnp_Params.put("vnp_OrderType", "other");
                 vnp_Params.put("vnp_Locale", "vn");
-                vnp_Params.put("vnp_ReturnUrl", VnPayConfig.vnp_ReturnUrl);
+
+                // ====================================================================
+                // ĐÃ SỬA: Lấy Domain tự động (Hỗ trợ cả Localhost lẫn Cloudflare)
+                // ====================================================================
+                String host = request.getHeader("X-Forwarded-Host");
+                if (host == null) {
+                    host = request.getHeader("Host");
+                }
+
+                String scheme = request.getHeader("X-Forwarded-Proto");
+                if (scheme == null) {
+                    scheme = request.getScheme();
+                }
+
+                String dynamicReturnUrl = scheme + "://" + host + "/vnpay-return";
+                vnp_Params.put("vnp_ReturnUrl", dynamicReturnUrl);
+                // ====================================================================
+
                 vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
                 Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
@@ -345,6 +364,24 @@ public class OrderController {
             Order order = orderOptional.get();
             if (order.getStatus().equals("PENDING")) {
                 order.setStatus("CANCELLED");
+
+                // === BẮT ĐẦU SỬA: Hoàn lại số lượng kho và trừ lượt bán ===
+                if (order.getOrderDetails() != null) {
+                    for (OrderDetail detail : order.getOrderDetails()) {
+                        Product p = detail.getProduct();
+
+                        // 1. Trả lại số lượng vào kho
+                        p.setQuantity(p.getQuantity() + detail.getQuantity());
+
+                        // 2. Trừ đi lượt bán (đảm bảo không bị âm)
+                        long newSold = p.getSold() - detail.getQuantity();
+                        p.setSold(newSold < 0 ? 0 : newSold);
+
+                        productService.handleSaveProduct(p);
+                    }
+                }
+                // === KẾT THÚC SỬA ===
+
                 orderService.handleSaveOrder(order);
             }
         }

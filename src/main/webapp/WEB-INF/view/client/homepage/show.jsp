@@ -315,6 +315,47 @@
                     .d-none-custom {
                         display: none !important;
                     }
+
+                    /* === STYLE CHO BẢNG LỌC XUẤT XỨ (MEGA DROPDOWN) === */
+                    .filter-panel-dropdown {
+                        width: 600px !important;
+                        /* Độ rộng của bảng, có thể chỉnh tùy ý */
+                        max-width: 90vw;
+                        /* Tránh bị tràn màn hình trên điện thoại */
+                        padding: 20px !important;
+                        border-radius: 12px !important;
+                    }
+
+                    .filter-box-item {
+                        border: 1px solid #e0e0e0;
+                        border-radius: 6px;
+                        padding: 8px 16px;
+                        color: #333;
+                        text-decoration: none;
+                        font-size: 0.9rem;
+                        transition: all 0.2s ease-in-out;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        background: #fff;
+                        margin-bottom: 5px;
+                    }
+
+                    .filter-box-item:hover {
+                        border-color: #3c8a2e;
+                        /* Màu xanh của theme */
+                        color: #3c8a2e;
+                        background: #f8f9fa;
+                    }
+
+                    .filter-box-item.active {
+                        border-color: #3c8a2e;
+                        color: #3c8a2e;
+                        font-weight: 600;
+                        background: #eef5eb;
+                        box-shadow: 0 0 0 1px #3c8a2e;
+                        /* Làm viền đậm hơn một chút khi active */
+                    }
                 </style>
             </head>
 
@@ -509,40 +550,59 @@
                             <div class="d-flex gap-2">
                                 <div class="dropdown">
                                     <button class="btn btn-outline-secondary rounded-pill btn-sm dropdown-toggle px-3"
-                                        type="button" data-bs-toggle="dropdown">
+                                        type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside">
                                         Thương hiệu
                                     </button>
-                                    <ul class="dropdown-menu shadow-sm border-0">
-                                        <c:forEach var="b" items="${brands}">
-                                            <li><a class="dropdown-item ${param.brandId == b.id ? 'active' : ''}"
-                                                    href="?brandId=${b.id}&origin=${param.origin}&sort=${param.sort}&categoryId=${param.categoryId}#danh-sach-san-pham">${b.name}</a>
-                                            </li>
-                                        </c:forEach>
-                                    </ul>
+                                    <div class="dropdown-menu shadow-lg border-0 filter-panel-dropdown mt-2">
+                                        <div
+                                            class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                                            <h6 class="mb-0 fw-bold text-dark">Tất cả thương hiệu</h6>
+                                            <button type="button" class="btn-close" style="font-size: 0.75rem;"
+                                                onclick="this.closest('.dropdown-menu').classList.remove('show')"></button>
+                                        </div>
+
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <c:forEach var="b" items="${brands}">
+                                                <a class="filter-box-item ${param.brandId == b.id ? 'active' : ''} d-flex align-items-center gap-2"
+                                                    href="?brandId=${b.id}&origin=${param.origin}&sort=${param.sort}&categoryId=${param.categoryId}#danh-sach-san-pham">
+
+                                                    <div class="bg-white rounded-circle border d-flex justify-content-center align-items-center"
+                                                        style="width: 25px; height: 25px; overflow: hidden;">
+                                                        <img src="/images/${not empty b.logoUrl ? b.logoUrl : 'default-brand.png'}"
+                                                            alt="${b.name}"
+                                                            style="width: 100%; height: 100%; object-fit: contain;">
+                                                    </div>
+
+                                                    <span>${b.name}</span>
+                                                </a>
+                                            </c:forEach>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="dropdown">
                                     <button class="btn btn-outline-secondary rounded-pill btn-sm dropdown-toggle px-3"
-                                        type="button" data-bs-toggle="dropdown">
+                                        type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside">
                                         Xuất xứ
                                     </button>
-                                    <ul class="dropdown-menu shadow-sm border-0">
-                                        <li><a class="dropdown-item ${param.origin == 'Việt Nam' ? 'active' : ''}"
-                                                href="?origin=Việt Nam&brandId=${param.brandId}&sort=${param.sort}&categoryId=${param.categoryId}#danh-sach-san-pham">Việt
-                                                Nam</a></li>
-                                        <li><a class="dropdown-item ${param.origin == 'Mỹ' ? 'active' : ''}"
-                                                href="?origin=Mỹ&brandId=${param.brandId}&sort=${param.sort}&categoryId=${param.categoryId}#danh-sach-san-pham">Mỹ</a>
-                                        </li>
-                                        <li><a class="dropdown-item ${param.origin == 'Đức' ? 'active' : ''}"
-                                                href="?origin=Đức&brandId=${param.brandId}&sort=${param.sort}&categoryId=${param.categoryId}#danh-sach-san-pham">Đức</a>
-                                        </li>
-                                        <li><a class="dropdown-item ${param.origin == 'Hàn Quốc' ? 'active' : ''}"
-                                                href="?origin=Hàn Quốc&brandId=${param.brandId}&sort=${param.sort}&categoryId=${param.categoryId}#danh-sach-san-pham">Hàn
-                                                Quốc</a></li>
-                                        <li><a class="dropdown-item ${param.origin == 'Nhật Bản' ? 'active' : ''}"
-                                                href="?origin=Nhật Bản&brandId=${param.brandId}&sort=${param.sort}&categoryId=${param.categoryId}#danh-sach-san-pham">Nhật
-                                                Bản</a></li>
-                                    </ul>
+
+                                    <div class="dropdown-menu shadow-lg border-0 filter-panel-dropdown mt-2">
+                                        <div
+                                            class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                                            <h6 class="mb-0 fw-bold text-dark">Tất cả xuất xứ</h6>
+                                            <button type="button" class="btn-close" style="font-size: 0.75rem;"
+                                                onclick="this.closest('.dropdown-menu').classList.remove('show')"></button>
+                                        </div>
+
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <c:forEach var="org" items="${origins}">
+                                                <a class="filter-box-item ${param.origin == org ? 'active' : ''}"
+                                                    href="?origin=${org}&brandId=${param.brandId}&sort=${param.sort}&categoryId=${param.categoryId}#danh-sach-san-pham">
+                                                    ${org}
+                                                </a>
+                                            </c:forEach>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 

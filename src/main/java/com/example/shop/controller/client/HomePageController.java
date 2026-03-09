@@ -3,7 +3,7 @@ package com.example.shop.controller.client;
 import com.example.shop.domain.Product;
 import com.example.shop.domain.Voucher;
 import com.example.shop.domain.dto.TopProductDTO;
-import com.example.shop.service.BannerService; // IMPORT THÊM BANNER SERVICE
+import com.example.shop.service.BannerService;
 import com.example.shop.service.BrandService;
 import com.example.shop.service.CategoryService;
 import com.example.shop.service.ProductService;
@@ -18,6 +18,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -27,9 +29,8 @@ public class HomePageController {
     private final CategoryService categoryService;
     private final VoucherService voucherService;
     private final BrandService brandService;
-    private final BannerService bannerService; // KHAI BÁO THÊM BIẾN
+    private final BannerService bannerService;
 
-    // BỔ SUNG BANNER SERVICE VÀO CONSTRUCTOR
     public HomePageController(ProductService productService,
             CategoryService categoryService,
             VoucherService voucherService,
@@ -69,13 +70,32 @@ public class HomePageController {
         List<Voucher> vouchers = voucherService.getAllVouchers();
         List<TopProductDTO> bestSellingProducts = productService.getBestSellingProducts(10);
 
+        // --- TẠO DANH SÁCH QUỐC GIA (XUẤT XỨ) ---
+        List<String> origins = Arrays.asList(
+                // Châu Á (Phổ biến)
+                "Việt Nam", "Thái Lan", "Nhật Bản", "Hàn Quốc", "Đài Loan", "Trung Quốc", "Ấn Độ", "Indonesia",
+                "Malaysia",
+                // Châu Mỹ (Nông sản, thịt, trái cây)
+                "Mỹ", "Canada", "Brazil", "Argentina", "Chile", "Colombia", "Peru",
+                // Châu Âu (Sữa, bánh kẹo, rượu, đồ hộp)
+                "Đức", "Pháp", "Ý", "Anh", "Hà Lan", "Tây Ban Nha", "Bỉ", "Thụy Sĩ", "Nga",
+                // Châu Đại Dương (Thịt, sữa)
+                "Úc", "New Zealand",
+                // Châu Phi & Trung Phi (Cà phê, ca cao, hạt điều, chè...)
+                "Nam Phi", "Ai Cập", "Kenya", "Cộng hòa Dân chủ Congo", "Cameroon", "Bờ Biển Ngà", "Ghana", "Ethiopia",
+                "Nigeria", "Uganda");
+
+        // Sắp xếp list theo thứ tự bảng chữ cái để user dễ tìm
+        Collections.sort(origins);
+
+        model.addAttribute("origins", origins); // Đẩy xuống JSP
+        // ----------------------------------------
+
         model.addAttribute("bestSellingProducts", bestSellingProducts);
         model.addAttribute("products", products);
         model.addAttribute("categories", categoryService.getAllCategories(null));
         model.addAttribute("brands", brandService.getAllBrands());
         model.addAttribute("vouchers", vouchers);
-
-        // DÒNG NÀY RẤT QUAN TRỌNG ĐỂ HIỂN THỊ BANNER RA NGOÀI TRANG CHỦ
         model.addAttribute("banners", bannerService.getActiveBanners());
 
         return "client/homepage/show";

@@ -131,6 +131,43 @@
                     color: inherit;
                     opacity: 0.8;
                 }
+
+                /* === STYLE CHO BẢNG MEGA MENU (DANH MỤC) === */
+                .filter-panel-dropdown {
+                    width: 600px !important;
+                    max-width: 90vw;
+                    padding: 20px !important;
+                    border-radius: 12px !important;
+                }
+
+                .filter-box-item {
+                    border: 1px solid #e0e0e0;
+                    border-radius: 6px;
+                    padding: 8px 16px;
+                    color: #333;
+                    text-decoration: none;
+                    font-size: 0.9rem;
+                    transition: all 0.2s ease-in-out;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    background: #fff;
+                    margin-bottom: 5px;
+                }
+
+                .filter-box-item:hover {
+                    border-color: #3c8a2e;
+                    color: #3c8a2e;
+                    background: #f8f9fa;
+                }
+
+                .filter-box-item.active {
+                    border-color: #3c8a2e;
+                    color: #3c8a2e;
+                    font-weight: 600;
+                    background: #eef5eb;
+                    box-shadow: 0 0 0 1px #3c8a2e;
+                }
             </style>
 
             <header class="navbar navbar-expand-lg navbar-dark py-3 sticky-top" style="background-color: #3c8a2e;">
@@ -150,19 +187,28 @@
                             <div class="dropdown me-2">
                                 <button class="btn bg-theme border-white dropdown-toggle rounded-pill w-100"
                                     type="button" id="dropdownMenuCategory" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
+                                    aria-expanded="false" data-bs-auto-close="outside">
                                     <i class="fas fa-bars me-2"></i>Danh mục
                                 </button>
-                                <ul class="dropdown-menu shadow border-0" aria-labelledby="dropdownMenuCategory"
-                                    style="min-width: 250px; padding: 0.5rem 0;">
+
+                                <div class="dropdown-menu shadow-lg border-0 filter-panel-dropdown mt-2"
+                                    aria-labelledby="dropdownMenuCategory">
+                                    <div
+                                        class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                                        <h6 class="mb-0 fw-bold text-dark">Tất cả danh mục</h6>
+                                        <button type="button" class="btn-close" style="font-size: 0.75rem;"
+                                            onclick="this.closest('.dropdown-menu').classList.remove('show')"></button>
+                                    </div>
+
                                     <c:choose>
                                         <c:when test="${not empty categories}">
-                                            <c:forEach var="cat" items="${categories}">
-                                                <li>
-                                                    <a class="dropdown-item py-2 d-flex align-items-center"
+                                            <div class="d-flex flex-wrap gap-2">
+                                                <c:forEach var="cat" items="${categories}">
+                                                    <a class="filter-box-item ${param.categoryId == cat.id ? 'active' : ''} d-flex align-items-center gap-2"
                                                         href="/?categoryId=${cat.id}#danh-sach-san-pham">
-                                                        <div class="me-3 d-flex align-items-center justify-content-center"
-                                                            style="width: 30px; height: 30px;">
+
+                                                        <div class="d-flex align-items-center justify-content-center"
+                                                            style="width: 25px; height: 25px;">
                                                             <c:choose>
                                                                 <c:when test="${not empty cat.image}">
                                                                     <img src="/images/${cat.image}" alt="${cat.name}"
@@ -176,18 +222,17 @@
                                                                 </c:otherwise>
                                                             </c:choose>
                                                         </div>
-                                                        <span class="fw-normal"
-                                                            style="font-size: 0.95rem;">${cat.name}</span>
+
+                                                        <span class="fw-normal">${cat.name}</span>
                                                     </a>
-                                                </li>
-                                            </c:forEach>
+                                                </c:forEach>
+                                            </div>
                                         </c:when>
                                         <c:otherwise>
-                                            <li><a class="dropdown-item disabled text-muted" href="#">Chưa có danh
-                                                    mục</a></li>
+                                            <div class="text-muted small px-2">Chưa có danh mục nào</div>
                                         </c:otherwise>
                                     </c:choose>
-                                </ul>
+                                </div>
                             </div>
 
                             <form class="flex-grow-1 d-flex position-relative" action="/" method="GET">

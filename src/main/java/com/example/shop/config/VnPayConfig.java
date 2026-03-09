@@ -9,7 +9,11 @@ import java.net.URLEncoder;
 
 public class VnPayConfig {
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
+
+    // Để lại localhost làm mặc định (Từ giờ hệ thống sẽ tự động bắt link trong
+    // Controller)
     public static String vnp_ReturnUrl = "http://localhost:8080/vnpay-return";
+
     public static String vnp_TmnCode = "UAP7IJD6";
     public static String vnp_HashSecret = "Y7IWQFJFWWSMKGF9ZH3VNDG8XKUZC2UM";
     public static String vnp_Version = "2.1.0";
@@ -47,7 +51,6 @@ public class VnPayConfig {
         }
         return ipAdress;
     }
-    // Thêm vào VnPayConfig.java
 
     public static String getRandomNumber(int len) {
         Random rnd = new Random();

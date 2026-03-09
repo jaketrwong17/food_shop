@@ -10,16 +10,15 @@ public class Banner {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String name; // Tên gợi nhớ (VD: Banner sale Tết)
+    private String name;
 
-    private String imageUrl; // Tên file ảnh
+    private String imageUrl;
 
-    private String link; // Đường dẫn khi khách click vào banner (Tuỳ chọn)
+    private String link;
 
     @Column(columnDefinition = "boolean default true")
-    private boolean active = true; // Trạng thái hiển thị (Bật/Tắt)
+    private boolean active = true;
 
-    // --- GETTER & SETTER ---
     public long getId() {
         return id;
     }
