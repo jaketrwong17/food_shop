@@ -13,4 +13,4 @@ COPY --from=build /app/target/food.war food.war
 
 EXPOSE 8080
 
-ENTRYPOINT ["java","-jar","food.war"]
+ENTRYPOINT ["java", "-Dserver.port=${PORT:8080}", "-jar", "food.war"]
